@@ -27,7 +27,7 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
       setError(res.error)
       setLoading(false)
     } else {
-      setSuccessMsg(`Un code à 6 chiffres a été envoyé à ${email}`)
+      setSuccessMsg(`Un code de sécurité a été envoyé à ${email}`)
       setStep('otp')
       setLoading(false)
     }
@@ -98,7 +98,7 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
         <form onSubmit={handleVerifyOtp} className="space-y-6">
           <div>
             <Label htmlFor="code" className="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
-              <KeyRound className="w-5 h-5 text-slate-500" /> Code à 6 chiffres
+              <KeyRound className="w-5 h-5 text-slate-500" /> Code de sécurité
             </Label>
             <Input
               id="code"
@@ -106,8 +106,8 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
               value={code}
               onChange={(e) => setCode(e.target.value)}
               required
-              placeholder="123456"
-              maxLength={6}
+              placeholder="12345678"
+              maxLength={8}
               className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-blue-500"
             />
           </div>
