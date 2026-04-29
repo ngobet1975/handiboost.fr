@@ -40,20 +40,16 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch gap-6 pt-4">
-                <Link href="/pratiquants" className="flex-1">
-                  <Button size="lg" className="w-full bg-blue-800 hover:bg-blue-900 text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-transform border-4 border-transparent hover:border-blue-300">
-                    <span className="text-5xl">🙋‍♀️</span>
-                    <span className="text-3xl">Je suis pratiquant</span>
-                    <span className="text-xl font-medium text-blue-100 text-center leading-snug tracking-wide">Trouver une activité, un événement ou une aide financière.</span>
-                  </Button>
+                <Link href="/pratiquants" className="flex-1 w-full bg-blue-800 hover:bg-blue-900 text-white text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-all border-4 border-transparent hover:border-blue-300 no-underline text-center">
+                  <span className="text-5xl">🙋‍♀️</span>
+                  <span className="text-3xl font-bold">Je suis pratiquant</span>
+                  <span className="text-xl font-medium text-blue-100 text-center leading-snug tracking-wide">Trouver une activité, un événement ou une aide financière.</span>
                 </Link>
                 
-                <Link href="/professionnels" className="flex-1">
-                  <Button size="lg" className="w-full bg-purple-700 hover:bg-purple-800 text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-transform border-4 border-transparent hover:border-purple-300">
-                    <span className="text-5xl">🩺</span>
-                    <span className="text-3xl">Je suis professionnel</span>
-                    <span className="text-xl font-medium text-purple-100 text-center leading-snug tracking-wide">Accéder aux ressources, outils et au Guide Booster.</span>
-                  </Button>
+                <Link href="/professionnels" className="flex-1 w-full bg-purple-700 hover:bg-purple-800 text-white text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-all border-4 border-transparent hover:border-purple-300 no-underline text-center">
+                  <span className="text-5xl">🩺</span>
+                  <span className="text-3xl font-bold">Je suis professionnel</span>
+                  <span className="text-xl font-medium text-purple-100 text-center leading-snug tracking-wide">Accéder aux ressources, outils et au Guide Booster.</span>
                 </Link>
               </div>
             </div>
