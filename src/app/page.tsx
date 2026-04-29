@@ -20,7 +20,7 @@ export default function Home() {
                 💙 Association loi 1901
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
-                L'Activité Physique Adaptée,{' '}
+                L'Activité Physique Adaptée,<br />
                 <span className="bg-gradient-to-r from-blue-700 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                   pour la santé de tous.
                 </span>
