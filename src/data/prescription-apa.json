@@ -1,0 +1,57 @@
+[
+  {
+    "id": "modele-ordonnance-apa",
+    "title": "Le modèle d'ordonnance type",
+    "description": "Formulaire d'aide à la prescription d'Activité Physique Adaptée (APA).",
+    "category": "telechargement",
+    "source": "Ministère chargé des Sports",
+    "format": "PDF",
+    "fileUrl": "https://www.sports.gouv.fr/IMG/pdf/formulaire_prescription_apa_1.pdf",
+    "status": "to-review",
+    "oldUrls": ["/les-outils-pour-la-prescription-dapa/"]
+  },
+  {
+    "id": "guide-has-prescription",
+    "title": "Guide de promotion, consultation et prescription HAS",
+    "description": "Guide complet de la Haute Autorité de Santé concernant la consultation et la prescription médicale d'Activité Physique.",
+    "category": "recommandation",
+    "source": "Haute Autorité de Santé (HAS)",
+    "url": "https://www.has-sante.fr/jcms/p_3389650/fr/guide-promotion-consultation-et-prescription-medicale-d-activite-physique-et-sportive-pour-la-sante",
+    "format": "Lien",
+    "status": "to-review",
+    "oldUrls": ["/les-outils-pour-la-prescription-dapa/"]
+  },
+  {
+    "id": "fiche-has-neurologique",
+    "title": "Fiche prescription : Pathologies neurologiques",
+    "description": "Fiche d'aide à la prescription d'Activité Physique Adaptée pour les pathologies neurologiques.",
+    "category": "prescription",
+    "source": "Haute Autorité de Santé (HAS)",
+    "fileUrl": "https://www.has-sante.fr/upload/docs/application/pdf/2022-10/fiche_ap_patho_neurologiques.pdf",
+    "format": "PDF",
+    "status": "to-review",
+    "oldUrls": ["/fiche-daide-a-la-prescription-dapa-selon-la-pathologie/"]
+  },
+  {
+    "id": "fiche-has-cancer",
+    "title": "Fiche prescription : Cancers",
+    "description": "Fiche d'aide à la prescription d'Activité Physique Adaptée pour les patients atteints de cancer.",
+    "category": "prescription",
+    "source": "Haute Autorité de Santé (HAS)",
+    "fileUrl": "https://www.has-sante.fr/upload/docs/application/pdf/2022-09/fiche_ap_cancers.pdf",
+    "format": "PDF",
+    "status": "to-review",
+    "oldUrls": ["/fiche-daide-a-la-prescription-dapa-selon-la-pathologie/"]
+  },
+  {
+    "id": "fiche-has-cardio",
+    "title": "Fiche prescription : Maladies cardiovasculaires",
+    "description": "Fiche d'aide à la prescription d'Activité Physique Adaptée pour les maladies cardiovasculaires.",
+    "category": "prescription",
+    "source": "Haute Autorité de Santé (HAS)",
+    "fileUrl": "https://www.has-sante.fr/upload/docs/application/pdf/2022-10/fiche_ap_cardio.pdf",
+    "format": "PDF",
+    "status": "to-review",
+    "oldUrls": ["/fiche-daide-a-la-prescription-dapa-selon-la-pathologie/"]
+  }
+]

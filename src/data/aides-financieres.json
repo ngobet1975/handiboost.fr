@@ -1,0 +1,97 @@
+[
+  {
+    "id": "aide-pch-sport",
+    "title": "Aide de la PCH pour la pratique sportive",
+    "slug": "aide-pch-pratique-sportive",
+    "description": "La Prestation de Compensation du Handicap (PCH) peut participer au financement des surcoûts liés à la pratique d'une activité sportive, notamment pour l'achat de matériel spécifique.",
+    "amount": "Variable selon votre situation et sur dossier (MDPH)",
+    "conditions": [
+      "Être éligible à la PCH",
+      "Justifier du surcoût lié au handicap pour la pratique sportive"
+    ],
+    "resources": [
+      {
+        "label": "Consulter les démarches MDPH",
+        "url": "https://www.monparcourshandicap.gouv.fr/aides/la-prestation-de-compensation-du-handicap-pch",
+        "type": "link"
+      }
+    ],
+    "oldUrls": ["/aides-au-financement-de-la-pratique/", "/actu-sport-et-handicap-la-pch-elargit-ses-aides/"]
+  },
+  {
+    "id": "aide-mutuelles-apa",
+    "title": "Prise en charge de l'APA par les mutuelles",
+    "slug": "prise-en-charge-apa-mutuelles",
+    "description": "De plus en plus de mutuelles proposent des forfaits annuels pour la prise en charge de séances d'Activité Physique Adaptée (APA) sur prescription médicale.",
+    "amount": "Selon votre contrat (ex: forfait annuel ou par séance)",
+    "conditions": [
+      "Avoir une prescription médicale d'APA",
+      "Séances dispensées par un professionnel qualifié (ex: Enseignant APA)"
+    ],
+    "resources": [
+      {
+        "label": "Voir le listing des mutuelles (Azur Sport Santé)",
+        "url": "https://azursportsante.fr/les-mutuelles-qui-remboursent-le-sport-sante/",
+        "type": "link"
+      }
+    ],
+    "oldUrls": ["/actu-soutien-des-mutuelles-dans-lactivite-physique/"]
+  },
+  {
+    "id": "aide-cancer-sein",
+    "title": "Soutien financier pour les personnes ayant un cancer du sein",
+    "slug": "soutien-financier-cancer-sein-apa",
+    "description": "Certaines associations et dispositifs spécifiques (ex: Ligue contre le Cancer) peuvent aider au financement de séances d'APA pour les personnes touchées par un cancer du sein.",
+    "amount": "Variable sur étude de dossier",
+    "conditions": [
+      "Être concerné(e) par un cancer du sein",
+      "Dossier à constituer auprès des comités départementaux"
+    ],
+    "resources": [
+      {
+        "label": "Plus d'informations sur la Ligue contre le Cancer",
+        "url": "https://www.ligue-cancer.net/",
+        "type": "link"
+      }
+    ],
+    "oldUrls": ["/4651-2/"]
+  },
+  {
+    "id": "remboursement-fauteuils",
+    "title": "Prise en charge intégrale des fauteuils roulants",
+    "slug": "prise-en-charge-integrale-fauteuils-roulants",
+    "description": "Prise en charge à 100 % des fauteuils roulants par l'Assurance maladie et les mutuelles (entrée en vigueur prévue fin 2025). Cela inclut certains modèles adaptés à la mobilité et la vie quotidienne.",
+    "amount": "Prise en charge à 100% selon la nomenclature de la Sécurité Sociale",
+    "conditions": [
+      "Prescription médicale obligatoire",
+      "Concerne les modèles inscrits à la liste des produits et prestations (LPP)"
+    ],
+    "resources": [
+      {
+        "label": "Lire l'actualité gouvernementale",
+        "url": "https://handicap.gouv.fr/remboursement-integral-des-fauteuils-roulants",
+        "type": "link"
+      }
+    ],
+    "oldUrls": ["/actu-fauteuils-roulants-rembourses-a-100-des-decembre-2025/"]
+  },
+  {
+    "id": "aides-bilan-apa",
+    "title": "Aides au bilan en Activité Physique Adaptée (APA)",
+    "slug": "aides-au-bilan-en-activite-physique-adaptee",
+    "description": "Certaines structures (Maisons Sport-Santé, Réseaux de soins) ou collectivités locales peuvent prendre en charge tout ou partie du coût du bilan initial en APA.",
+    "amount": "Bilan parfois gratuit ou partiellement pris en charge",
+    "conditions": [
+      "S'adresser à une structure labellisée (Maison Sport-Santé)",
+      "Variable selon votre département/région"
+    ],
+    "resources": [
+      {
+        "label": "Contacter une Maison Sport-Santé",
+        "url": "https://www.sports.gouv.fr/les-maisons-sport-sante-67",
+        "type": "link"
+      }
+    ],
+    "oldUrls": ["/aides-au-bilan-en-activite-physique-adaptee-apa/"]
+  }
+]

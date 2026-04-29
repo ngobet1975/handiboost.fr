@@ -1,0 +1,108 @@
+[
+  {
+    "id": "sclerose-en-plaques",
+    "slug": "sclerose-en-plaques",
+    "title": "Sclérose en plaques",
+    "description": "Sclérose en plaques : pourquoi pratiquer une activité physique adaptée ? Article initialement réalisé par Estelle Durand, Enseignante en APA.",
+    "benefits": [
+      "Améliore la condition physique générale",
+      "Aide à lutter contre la fatigue (à faire valider médicalement)"
+    ],
+    "precautions": [
+      "Adapter l'intensité selon l'état de fatigue du jour",
+      "Éviter la pratique en cas de forte chaleur"
+    ],
+    "recommendedActivities": [
+      "Marche, renforcement musculaire doux (à préciser par le médecin)"
+    ],
+    "resources": [
+      {
+        "label": "Consulter un médecin pour un avis personnalisé",
+        "url": "/professionnels",
+        "type": "link"
+      }
+    ],
+    "validationStatus": "to-review",
+    "oldUrls": ["/sclerose-en-plaque/"]
+  },
+  {
+    "id": "paralysie-cerebrale",
+    "slug": "paralysie-cerebrale",
+    "title": "Paralysie Cérébrale",
+    "description": "Pourquoi pratiquer ? La pratique d’une activité physique régulière et adaptée a des effets bénéfiques sur l’état de santé des personnes ayant une paralysie cérébrale.",
+    "benefits": [
+      "Maintien de la mobilité articulaire",
+      "Amélioration de la fonction motrice"
+    ],
+    "precautions": [
+      "Prendre en compte la spasticité",
+      "Éviter les sur-sollicitations articulaires"
+    ],
+    "recommendedActivities": [
+      "Natation, activités en apesanteur, boccia"
+    ],
+    "resources": [],
+    "validationStatus": "to-review",
+    "oldUrls": ["/paralysie-cerebrale/"]
+  },
+  {
+    "id": "troubles-comportement-alimentaire",
+    "slug": "troubles-comportement-alimentaire",
+    "title": "Troubles du comportement alimentaire (TCA)",
+    "description": "Pourquoi pratiquer ? L’activité physique régulière et adaptée peut avoir des effets bénéfiques sur la santé des personnes concernées par les TCA, lorsqu'elle est bien encadrée.",
+    "benefits": [
+      "Réappropriation corporelle",
+      "Amélioration de l'estime de soi"
+    ],
+    "precautions": [
+      "Encadrement strict pour éviter l'hyperactivité physique",
+      "Validation médicale obligatoire avant la reprise"
+    ],
+    "recommendedActivities": [
+      "Activités douces centrées sur le ressenti (yoga, danse adaptée)"
+    ],
+    "resources": [],
+    "validationStatus": "to-review",
+    "oldUrls": ["/activites-physiques-et-tca/"]
+  },
+  {
+    "id": "pathologies-cerebelleuses",
+    "slug": "pathologies-cerebelleuses",
+    "title": "Pathologies cérébelleuses",
+    "description": "La pratique d’une activité physique régulière et adaptée a des effets bénéfiques sur l’état de santé des personnes atteintes de pathologies touchant le cervelet.",
+    "benefits": [
+      "Travail de l'équilibre et de la coordination",
+      "Maintien de l'autonomie au quotidien"
+    ],
+    "precautions": [
+      "Prévention des chutes primordiale",
+      "Adapter l'environnement de pratique"
+    ],
+    "recommendedActivities": [
+      "Exercices d'équilibre sécurisés, renforcement musculaire"
+    ],
+    "resources": [],
+    "validationStatus": "to-review",
+    "oldUrls": ["/activites-physiques-et-pathologies-cerebelleuses/", "/activites-physiques-et-maladies-cerebelleuses/"]
+  },
+  {
+    "id": "maladies-neuromusculaires",
+    "slug": "maladies-neuromusculaires",
+    "title": "Maladies neuromusculaires",
+    "description": "La pratique d’une activité physique régulière et adaptée permet de maintenir les capacités physiques des personnes atteintes de maladies neuromusculaires.",
+    "benefits": [
+      "Maintien de la force musculaire résiduelle",
+      "Amélioration de la fonction respiratoire"
+    ],
+    "precautions": [
+      "Éviter la fatigue excessive et la douleur musculaire",
+      "Respecter les temps de récupération"
+    ],
+    "recommendedActivities": [
+      "Mobilisations douces, travail respiratoire, balnéothérapie"
+    ],
+    "resources": [],
+    "validationStatus": "to-review",
+    "oldUrls": ["/maladies-neuromusculaires/", "/activites-physiques-et-maladies-neuromusculaires/"]
+  }
+]

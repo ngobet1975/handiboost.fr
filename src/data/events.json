@@ -1,0 +1,67 @@
+[
+  {
+    "id": "event-golden-euroleague-volley",
+    "title": "Golden Euroleague de volley assis",
+    "slug": "golden-euroleague-volley-assis",
+    "excerpt": "L’ASUL Lyon Volley organise la Golden Euroleague de volley assis, une compétition internationale de haut niveau.",
+    "content": "L’ASUL Lyon Volley organise la Golden Euroleague de volley assis, une compétition internationale. \n\nVenez assister aux matchs et découvrir le volley assis au plus haut niveau européen. L'événement est ouvert au public et accessible à tous.",
+    "eventDate": "2026-02-15T14:00:00Z",
+    "location": "Lyon",
+    "organizer": "ASUL Lyon Volley",
+    "coverImage": "https://handiboost.fr/wp-content/uploads/2026/02/affiche-volley-assis-1-1-819x1024.png",
+    "status": "archived",
+    "oldUrls": ["/evenements-hiver-2026/"]
+  },
+  {
+    "id": "event-jeux-avenir-valence",
+    "title": "Jeux de l’avenir 2026",
+    "slug": "jeux-avenir-2026-valence",
+    "excerpt": "Après une édition régionale réussie à Annecy, les Jeux Nationaux de l’avenir reviennent à Valence.",
+    "content": "Jeux de l’avenir 2026 Valence\n\nAprès une édition régionale réussie à Annecy en avril 2025, les Jeux Nationaux de l’avenir reviennent cette année dans la Drôme, à Valence.\nCes jeux rassemblent des jeunes sportifs en situation de handicap autour de nombreuses disciplines sportives adaptées. Venez les encourager !",
+    "eventDate": "2026-05-15T09:00:00Z",
+    "location": "Valence",
+    "organizer": "Fédération Française Handisport",
+    "coverImage": "https://handiboost.fr/wp-content/uploads/2026/01/Automne19-1-1000x563.png",
+    "status": "published",
+    "oldUrls": ["/evenements-printemps-2026/"]
+  },
+  {
+    "id": "event-decouverte-hand-adapte",
+    "title": "Découverte du hand adapté",
+    "slug": "decouverte-hand-adapte-lyon",
+    "excerpt": "Dans le cadre de la manifestation « La Quinzaine des handicaps », découvrez la pratique du handball adapté.",
+    "content": "Découverte du hand adapté\n\nDans le cadre de la manifestation « La Quinzaine des handicaps » proposée par la Ville de Lyon, le HBC Lyon organise une journée de découverte et d'initiation au handball adapté.\nCette journée est ouverte à tous, quel que soit votre niveau. Matériel fourni sur place.",
+    "eventDate": "2025-11-20T10:00:00Z",
+    "location": "Lyon",
+    "organizer": "HBC Lyon",
+    "coverImage": "https://handiboost.fr/wp-content/uploads/2025/12/Decouverte-du-Hand-Adapte-au-HBC-LYON-Samedi-13-Decembre-2025_page-0001-725x1024.jpg",
+    "status": "archived",
+    "oldUrls": ["/evenements-automne-2025/"]
+  },
+  {
+    "id": "event-championnat-foot-fauteuil",
+    "title": "Championnat de France de Division 1 de foot fauteuil",
+    "slug": "championnat-france-d1-foot-fauteuil",
+    "excerpt": "Journée accessible à tous et entrée libre ! Venez assistez au championnat de France de foot fauteuil.",
+    "content": "Championnat de France de Division 1 de foot fauteuil\n\nJournée accessible à tous et entrée libre ! \nVenez assistez au championnat de France de Division 1 de foot fauteuil. Un spectacle sportif impressionnant qui met en lumière les compétences techniques et tactiques des joueurs de foot fauteuil.",
+    "eventDate": "2024-11-15T09:00:00Z",
+    "location": "Région AURA",
+    "organizer": "Ligue AURA Handisport",
+    "coverImage": "https://handiboost.fr/wp-content/uploads/2024/09/Affiche-foot-fauteuil-D1-112024-1-724x1024.png",
+    "status": "archived",
+    "oldUrls": ["/evenements-novembre-2024/"]
+  },
+  {
+    "id": "event-lou-tennis",
+    "title": "Évènement Lou Tennis",
+    "slug": "evenement-lou-tennis",
+    "excerpt": "Le Lou Tennis Parc est heureux de vous inviter à une journée d’initiation au tennis fauteuil et tennis adapté.",
+    "content": "Évènement Lou Tennis\n\nLe Lou Tennis Parc est heureux de vous inviter à une journée d’initiation au tennis fauteuil et tennis adapté.\nQue vous soyez débutant ou que vous ayez déjà pratiqué, des professionnels seront présents pour vous accompagner et vous faire découvrir les joies du tennis adapté.",
+    "eventDate": "2025-03-25T14:00:00Z",
+    "location": "Lou Tennis Parc",
+    "organizer": "Lou Tennis",
+    "coverImage": "https://handiboost.fr/wp-content/uploads/2025/01/Affiche-torball.png",
+    "status": "archived",
+    "oldUrls": ["/evenements-mars-2025/"]
+  }
+]

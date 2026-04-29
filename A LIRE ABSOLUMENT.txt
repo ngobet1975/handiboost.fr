@@ -1,0 +1,42 @@
+Étape 1
+
+Ouvre README.md et adapte-le au projet BYBIT.
+
+Étape 2
+
+Adapte ces 3 fichiers au contexte du projet :
+
+standards/project-rules.md
+
+docs/architecture/architecture-baseline.md
+
+docs/security/security-baseline.md
+
+Étape 3
+
+Dans Antigravity, envoie un prompt de démarrage comme celui-ci :
+
+This is a new project called BYBIT.
+
+First:
+1. read standards/project-rules.md
+2. read docs/architecture/architecture-baseline.md
+3. read docs/security/security-baseline.md
+4. summarize the delivery workflow you will follow
+5. propose the initial project setup checklist
+
+Do not implement business features yet.
+Start with project framing, architecture, and security baseline adaptation.
+Ce qu’on attend
+
+L’agent doit :
+
+cadrer le projet
+
+proposer une checklist de démarrage
+
+parler architecture
+
+parler sécurité
+
+ne pas partir directement dans du code métier

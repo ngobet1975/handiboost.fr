@@ -1,0 +1,57 @@
+[
+  {
+    "id": "outil-bilan-moteur",
+    "title": "Grille d'évaluation motrice et d'autonomie",
+    "description": "Fiche de test pour évaluer les capacités physiques et l'autonomie d'un patient avant de commencer un programme d'APA.",
+    "category": "bilan",
+    "format": "pdf",
+    "fileUrl": "/documents/grille_evaluation_motrice.pdf",
+    "sourceName": "SFP-APA",
+    "lastVerifiedAt": "2025-09-10",
+    "status": "published"
+  },
+  {
+    "id": "outil-questionnaire-ricci-gagnon",
+    "title": "Questionnaire de Ricci & Gagnon",
+    "description": "Test simple permettant d'évaluer le niveau d'activité physique habituel d'un individu.",
+    "category": "bilan",
+    "format": "pdf",
+    "fileUrl": "/documents/questionnaire_ricci_gagnon.pdf",
+    "sourceName": "Outil standardisé",
+    "lastVerifiedAt": "2026-01-01",
+    "status": "published"
+  },
+  {
+    "id": "outil-pedagogique-fiches-exercices",
+    "title": "Banque d'exercices sur chaise",
+    "description": "Recueil d'exercices illustrés pour les personnes à mobilité réduite ou en fauteuil.",
+    "category": "pedagogie",
+    "format": "pdf",
+    "fileUrl": "/documents/banque_exercices_chaise.pdf",
+    "sourceName": "Fédération Française Handisport",
+    "lastVerifiedAt": "2026-03-20",
+    "status": "published"
+  },
+  {
+    "id": "outil-livret-suivi",
+    "title": "Livret de suivi patient en APA",
+    "description": "Un carnet de bord à remettre au pratiquant pour qu'il note ses progrès, son ressenti et ses séances.",
+    "category": "pedagogie",
+    "format": "pdf",
+    "fileUrl": "/documents/livret_suivi_apa.pdf",
+    "sourceName": "Réseau Handiboost",
+    "lastVerifiedAt": "2026-04-10",
+    "status": "published"
+  },
+  {
+    "id": "outil-guide-inclusion",
+    "title": "Guide : Inclure le handicap dans son club",
+    "description": "Manuel à destination des éducateurs sportifs souhaitant ouvrir une section de sport adapté ou parasport.",
+    "category": "recommandation",
+    "format": "lien-externe",
+    "externalUrl": "https://www.sports.gouv.fr/",
+    "sourceName": "Ministère des Sports",
+    "lastVerifiedAt": "2025-12-05",
+    "status": "published"
+  }
+]

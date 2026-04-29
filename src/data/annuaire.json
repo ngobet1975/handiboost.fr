@@ -1,0 +1,112 @@
+[
+  {
+    "id": "annuaire-sport-adapte",
+    "name": "Annuaire Sport Adapté",
+    "provider": "Fédération Française du Sport Adapté (FFSA)",
+    "description": "Annuaire des clubs affiliés proposant une pratique pour les personnes en situation de handicap mental et/ou psychique.",
+    "url": "https://sportadapte.fr/ou-pratiquer/",
+    "scope": "national",
+    "type": "club",
+    "status": "published",
+    "oldUrls": ["/les-annuaires-nationaux/"]
+  },
+  {
+    "id": "annuaire-handisport",
+    "name": "Annuaire Handisport",
+    "provider": "Fédération Française Handisport (FFH)",
+    "description": "Où pratiquer ? Trouvez un club affilié à la Fédération Française Handisport près de chez vous (handicap moteur et sensoriel).",
+    "url": "https://www.handisport.org/ou-pratiquer/",
+    "scope": "national",
+    "type": "club",
+    "status": "published",
+    "oldUrls": ["/les-annuaires-nationaux/"]
+  },
+  {
+    "id": "annuaire-cros-aura",
+    "name": "Annuaire des clubs de parasport AURA",
+    "provider": "CROS Auvergne-Rhône-Alpes",
+    "description": "Recherchez un club de parasport en Auvergne-Rhône-Alpes avec cet annuaire régional officiel.",
+    "url": "https://auvergnerhonealpes.franceolympique.com/",
+    "scope": "regional",
+    "type": "club",
+    "status": "published",
+    "oldUrls": ["/trouver-un-club-dans-la-region-aura/"]
+  },
+  {
+    "id": "annuaire-sfp-apa",
+    "name": "Annuaire des Enseignant·e·s en APA",
+    "provider": "SFP-APA",
+    "description": "L'annuaire national de la Société Française des Professionnels en Activité Physique Adaptée (SFP-APA).",
+    "url": "https://www.sfp-apa.fr/annuaire/",
+    "scope": "national",
+    "type": "professional",
+    "status": "published",
+    "oldUrls": ["/trouver-un-enseignant-en-apa/"]
+  },
+  {
+    "id": "annuaire-kine-ordre",
+    "name": "Annuaire des masseurs-kinésithérapeutes",
+    "provider": "Ordre des masseurs-kinésithérapeutes",
+    "description": "Annuaire national officiel des masseurs-kinésithérapeutes inscrits à l'Ordre.",
+    "url": "https://www.ordremk.fr/je-suis-patient/trouver-un-kinesitherapeute/",
+    "scope": "national",
+    "type": "professional",
+    "status": "published",
+    "oldUrls": ["/trouver-un-kinesitherapeute/"]
+  },
+  {
+    "id": "annuaire-kine-rhone",
+    "name": "Annuaire des kinésithérapeutes du Rhône",
+    "provider": "Conseil Départemental du Rhône de l'Ordre des Masseurs-Kinésithérapeutes",
+    "description": "Retrouvez la liste des praticiens exerçant dans le département du Rhône.",
+    "url": "https://rhone.ordremk.fr/annuaire/",
+    "scope": "regional",
+    "type": "professional",
+    "status": "published",
+    "oldUrls": ["/trouver-un-kinesitherapeute/"]
+  },
+  {
+    "id": "annuaire-mss",
+    "name": "Carte des Maisons Sport-Santé",
+    "provider": "Ministère des Sports",
+    "description": "Carte interactive permettant de trouver la Maison Sport-Santé la plus proche de chez vous.",
+    "url": "https://www.sports.gouv.fr/les-maisons-sport-sante-67",
+    "scope": "national",
+    "type": "institution",
+    "status": "published",
+    "oldUrls": ["/les-annuaires-nationaux/"]
+  },
+  {
+    "id": "annuaire-prescri-mouv",
+    "name": "Prescri'Mouv (Grand Est)",
+    "provider": "Réseau Sport Santé Grand Est",
+    "description": "Exemple d'annuaire régional pour la prescription d'exercice physique pour la santé (si applicable).",
+    "url": "https://prescrimouv.fr/",
+    "scope": "regional",
+    "type": "institution",
+    "status": "published",
+    "oldUrls": []
+  },
+  {
+    "id": "annuaire-guide-sports-cpsf",
+    "name": "Trouve ton parasport",
+    "provider": "Comité Paralympique et Sportif Français (CPSF)",
+    "description": "Le CPSF propose un outil pour trouver les sports adaptés selon ses envies et ses capacités.",
+    "url": "https://france-paralympique.fr/trouver-son-sport/",
+    "scope": "national",
+    "type": "institution",
+    "status": "published",
+    "oldUrls": ["/les-annuaires-nationaux/"]
+  },
+  {
+    "id": "annuaire-sport-sante-aura",
+    "name": "Portail Sport Santé AURA",
+    "provider": "Réseau Sport Santé Auvergne-Rhône-Alpes",
+    "description": "Plateforme régionale permettant d'identifier les offres de pratique sport santé de la région.",
+    "url": "https://sport-sante-aura.fr/",
+    "scope": "regional",
+    "type": "institution",
+    "status": "published",
+    "oldUrls": ["/trouver-un-club-dans-la-region-aura/"]
+  }
+]

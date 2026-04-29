@@ -1,0 +1,17 @@
+{
+    "name": "modele-i-mcp",
+    "version": "1.0.0",
+    "description": "OpenAI bridge for Antigravity",
+    "main": "server.js",
+    "type": "commonjs",
+    "private": true,
+    "scripts": {
+        "start": "node server.js",
+        "arch": "node server.js architecture",
+        "sec": "node server.js security"
+    },
+    "dependencies": {
+        "dotenv": "^17.3.1",
+        "openai": "^6.6.0"
+    }
+}
