@@ -5,18 +5,34 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
 
-export async function login(formData: FormData) {
+export async function sendOtp(email: string) {
   const supabase = await createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false, // Prevent public signups if that's the policy
+    }
+  })
 
   if (error) {
-    redirect('/login?message=Identifiants incorrects')
+    return { error: error.message }
+  }
+
+  return { success: true }
+}
+
+export async function verifyOtp(email: string, token: string) {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.verifyOtp({
+    email,
+    token,
+    type: 'email'
+  })
+
+  if (error) {
+    return { error: 'Code incorrect ou expiré.' }
   }
 
   revalidatePath('/', 'layout')
