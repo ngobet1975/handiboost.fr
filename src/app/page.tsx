@@ -9,14 +9,24 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-slate-50 py-10 lg:py-14 px-6 border-b-4 border-slate-200">
-          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10">
+        <section className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 py-12 lg:py-16 px-6 border-b-4 border-slate-200 overflow-hidden">
+          {/* Decorative background elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
+          
+          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 relative z-10">
             <div className="flex-1 space-y-6">
-              <h1 className="text-5xl md:text-6xl font-black text-slate-900 leading-tight">
-                L'Activité Physique Adaptée, <span className="text-blue-800 underline decoration-blue-300 decoration-8 underline-offset-8">pour la santé de tous</span>.
+              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-5 py-2 rounded-full font-bold text-lg mb-2">
+                💙 Association loi 1901
+              </div>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
+                L'Activité Physique Adaptée,{' '}
+                <span className="bg-gradient-to-r from-blue-700 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  pour la santé de tous.
+                </span>
               </h1>
-              <p className="text-2xl lg:text-3xl text-slate-800 max-w-2xl leading-normal font-medium">
-                Bienvenue sur Handiboost. Que vous cherchiez une activité pour vous-même, pour un proche, ou des ressources pour accompagner vos publics, choisissez votre profil :
+              <p className="text-2xl lg:text-3xl text-slate-700 max-w-2xl leading-normal font-medium">
+                Que vous cherchiez une activité pour vous-même, pour un proche, ou des ressources professionnelles — choisissez votre profil :
               </p>
               
               <div className="w-full max-w-2xl bg-white p-6 rounded-3xl shadow-xl border-4 border-slate-100 flex flex-col gap-4 relative z-10">
