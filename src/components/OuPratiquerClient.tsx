@@ -37,87 +37,113 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
     <div className="max-w-7xl mx-auto">
       
       {/* Zone de Recherche et Filtres */}
-      <section className="bg-white rounded-[2rem] p-6 md:p-8 shadow-xl border-4 border-slate-100 mb-12 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+      <section className="bg-white rounded-[2rem] p-8 md:p-10 shadow-xl border-2 border-slate-200 mb-12 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
           <Filter className="w-64 h-64" />
         </div>
         
-        <h2 className="text-3xl font-extrabold text-slate-800 mb-8 relative z-10">Affiner votre recherche</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-10 relative z-10">🔍 Affiner votre recherche</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-          {/* Recherche Textuelle */}
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-              <Search className="w-4 h-4" /> Mots-clés
-            </label>
+        {/* Search bar - full width */}
+        <div className="mb-8 relative z-10">
+          <label htmlFor="ou-pratiquer-search" className="block text-xl font-bold text-slate-700 mb-3 flex items-center gap-2">
+            <Search className="w-5 h-5 text-slate-500" /> Mots-clés
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+              <Search className="w-6 h-6 text-slate-400" />
+            </div>
             <Input 
-              placeholder="Ex: Club, Gym, Lyon..." 
+              id="ou-pratiquer-search"
+              placeholder="Ex : handisport, natation, Lyon, kinésithérapeute..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-14 text-lg bg-slate-50 border-2 border-slate-200 focus-visible:ring-blue-500 rounded-xl"
+              className="h-16 text-xl pl-14 bg-slate-50 border-3 border-slate-200 focus-visible:ring-blue-500 rounded-2xl font-medium placeholder:text-slate-400"
             />
           </div>
+        </div>
 
+        {/* Filters grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
           {/* Filtre Catégorie */}
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-              <Activity className="w-4 h-4" /> Que cherchez-vous ?
+          <div>
+            <label className="block text-xl font-bold text-slate-700 mb-3 flex items-center gap-2">
+              <Activity className="w-5 h-5 text-slate-500" /> Que cherchez-vous ?
             </label>
             <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v || "all")}>
-              <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
+              <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
                 <SelectValue placeholder="Tous les types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les types</SelectItem>
-                <SelectItem value="club">Un sport en club</SelectItem>
-                <SelectItem value="maison">Pratique à la maison</SelectItem>
-                <SelectItem value="enseignant-apa">Un enseignant APA</SelectItem>
-                <SelectItem value="kine">Un kinésithérapeute</SelectItem>
+                <SelectItem value="all" className="text-lg py-3 font-medium">🏠 Tous les types</SelectItem>
+                <SelectItem value="club" className="text-lg py-3 font-medium">⚽ Un sport en club</SelectItem>
+                <SelectItem value="maison" className="text-lg py-3 font-medium">🏡 Pratique à la maison</SelectItem>
+                <SelectItem value="enseignant-apa" className="text-lg py-3 font-medium">🎓 Un enseignant APA</SelectItem>
+                <SelectItem value="kine" className="text-lg py-3 font-medium">🩺 Un kinésithérapeute</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Filtre Région */}
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-              <MapPin className="w-4 h-4" /> Région
+          <div>
+            <label className="block text-xl font-bold text-slate-700 mb-3 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-slate-500" /> Région
             </label>
             <Select value={regionFilter} onValueChange={(v) => setRegionFilter(v || "all")}>
-              <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
+              <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
                 <SelectValue placeholder="Toutes les régions" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Toutes les régions</SelectItem>
-                <SelectItem value="Auvergne-Rhône-Alpes">Auvergne-Rhône-Alpes</SelectItem>
-                <SelectItem value="Bretagne">Bretagne</SelectItem>
-                <SelectItem value="Île-de-France">Île-de-France</SelectItem>
-                <SelectItem value="Nouvelle-Aquitaine">Nouvelle-Aquitaine</SelectItem>
-                <SelectItem value="Occitanie">Occitanie</SelectItem>
-                {/* D'autres régions seront ajoutées dynamiquement plus tard */}
+                <SelectItem value="all" className="text-lg py-3 font-medium">🇫🇷 Toutes les régions</SelectItem>
+                <SelectItem value="Auvergne-Rhône-Alpes" className="text-lg py-3 font-medium">📍 Auvergne-Rhône-Alpes</SelectItem>
+                <SelectItem value="Bretagne" className="text-lg py-3 font-medium">📍 Bretagne</SelectItem>
+                <SelectItem value="Île-de-France" className="text-lg py-3 font-medium">📍 Île-de-France</SelectItem>
+                <SelectItem value="Nouvelle-Aquitaine" className="text-lg py-3 font-medium">📍 Nouvelle-Aquitaine</SelectItem>
+                <SelectItem value="Occitanie" className="text-lg py-3 font-medium">📍 Occitanie</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Filtre Public */}
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-              <Users className="w-4 h-4" /> Public concerné
+          <div>
+            <label className="block text-xl font-bold text-slate-700 mb-3 flex items-center gap-2">
+              <Users className="w-5 h-5 text-slate-500" /> Public concerné
             </label>
             <Select value={publicFilter} onValueChange={(v) => setPublicFilter(v || "all")}>
-              <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
+              <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
                 <SelectValue placeholder="Tous les publics" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tous les publics</SelectItem>
-                <SelectItem value="enfant">Enfant</SelectItem>
-                <SelectItem value="adulte">Adulte</SelectItem>
-                <SelectItem value="senior">Senior</SelectItem>
-                <SelectItem value="personne en situation de handicap">En situation de handicap</SelectItem>
-                <SelectItem value="maladie chronique / ALD">Maladie chronique / ALD</SelectItem>
+                <SelectItem value="all" className="text-lg py-3 font-medium">👥 Tous les publics</SelectItem>
+                <SelectItem value="enfant" className="text-lg py-3 font-medium">👶 Enfant</SelectItem>
+                <SelectItem value="adulte" className="text-lg py-3 font-medium">🧑 Adulte</SelectItem>
+                <SelectItem value="senior" className="text-lg py-3 font-medium">👴 Senior</SelectItem>
+                <SelectItem value="personne en situation de handicap" className="text-lg py-3 font-medium">♿ En situation de handicap</SelectItem>
+                <SelectItem value="maladie chronique / ALD" className="text-lg py-3 font-medium">🏥 Maladie chronique / ALD</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
+
+        {/* Reset button */}
+        {(searchTerm || categoryFilter !== "all" || regionFilter !== "all" || publicFilter !== "all") && (
+          <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
+            <p className="text-lg font-medium text-slate-500">
+              Filtres actifs
+            </p>
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setCategoryFilter("all");
+                setRegionFilter("all");
+                setPublicFilter("all");
+              }}
+              className="text-lg text-red-600 font-bold hover:underline px-4 py-2 rounded-lg hover:bg-red-50 transition-colors"
+            >
+              ✕ Tout effacer
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Résultats de la recherche */}
