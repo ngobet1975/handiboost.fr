@@ -32,7 +32,7 @@ export function Header() {
         <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
       </nav>
       <div className="flex items-center gap-6 hidden xl:flex">
-        <Link href="/don">
+        <Link href="/dons">
           <Button variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">❤️ Faire un don</Button>
         </Link>
         <Link href="/login">

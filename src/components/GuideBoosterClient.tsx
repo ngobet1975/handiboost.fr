@@ -48,69 +48,88 @@ export function GuideBoosterClient({ entries }: { entries: GuideEntry[] }) {
 
   return (
     <div>
-      {/* Search Bar */}
-      <div className="relative max-w-2xl mx-auto mb-8">
-        <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-          <Search className="w-6 h-6 text-slate-400" />
-        </div>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-white border-3 border-slate-200 rounded-2xl py-5 pl-14 pr-6 text-xl font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400 shadow-sm"
-          placeholder="Rechercher un annuaire, une fédération..."
-        />
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-        <div className="flex items-center gap-2 text-sm font-bold text-slate-500">
-          <Filter className="w-4 h-4" /> Filtrer :
-        </div>
-
-        {/* Type filters */}
-        <div className="flex flex-wrap justify-center gap-2">
-          {Object.entries(TYPE_CONFIG).map(([key, conf]) => (
-            <button
-              key={key}
-              onClick={() => setTypeFilter(typeFilter === key ? null : key)}
-              className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-base border-2 transition-all ${
-                typeFilter === key
-                  ? `${conf.bg} ${conf.border} ${conf.color} shadow-md scale-105`
-                  : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-              }`}
-            >
-              {conf.icon} {conf.label}
-            </button>
-          ))}
+      {/* Search + Filters Block */}
+      <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-md p-6 md:p-10 mb-10">
+        
+        {/* Search Bar */}
+        <div className="relative mb-8">
+          <label htmlFor="guide-search" className="block text-xl font-bold text-slate-800 mb-3">
+            🔍 Rechercher par mot-clé
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+              <Search className="w-7 h-7 text-slate-400" />
+            </div>
+            <input
+              type="text"
+              id="guide-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-slate-50 border-3 border-slate-200 rounded-2xl py-5 pl-16 pr-6 text-xl font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400"
+              placeholder="Ex : handisport, kinésithérapeute, sport santé..."
+            />
+          </div>
         </div>
 
-        <div className="hidden sm:block w-px h-8 bg-slate-200" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Type filters */}
+          <div>
+            <p className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+              <Users className="w-5 h-5 text-slate-500" /> Que cherchez-vous ?
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {Object.entries(TYPE_CONFIG).map(([key, conf]) => (
+                <button
+                  key={key}
+                  onClick={() => setTypeFilter(typeFilter === key ? null : key)}
+                  className={`inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-bold text-lg border-3 transition-all cursor-pointer ${
+                    typeFilter === key
+                      ? `${conf.bg} ${conf.border} ${conf.color} shadow-lg scale-105 ring-2 ring-offset-2 ring-blue-300`
+                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm'
+                  }`}
+                >
+                  {conf.icon} {conf.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {/* Scope filters */}
-        <div className="flex gap-2">
-          {Object.entries(SCOPE_CONFIG).map(([key, conf]) => (
-            <button
-              key={key}
-              onClick={() => setScopeFilter(scopeFilter === key ? null : key)}
-              className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-base border-2 transition-all ${
-                scopeFilter === key
-                  ? 'bg-slate-800 border-slate-800 text-white shadow-md scale-105'
-                  : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-              }`}
-            >
-              {conf.emoji} {conf.label}
-            </button>
-          ))}
+          {/* Scope filters */}
+          <div>
+            <p className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-slate-500" /> Portée géographique
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {Object.entries(SCOPE_CONFIG).map(([key, conf]) => (
+                <button
+                  key={key}
+                  onClick={() => setScopeFilter(scopeFilter === key ? null : key)}
+                  className={`inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-bold text-lg border-3 transition-all cursor-pointer ${
+                    scopeFilter === key
+                      ? 'bg-slate-800 border-slate-800 text-white shadow-lg scale-105 ring-2 ring-offset-2 ring-slate-400'
+                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm'
+                  }`}
+                >
+                  <span className="text-2xl">{conf.emoji}</span> {conf.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
+        {/* Active filters / reset */}
         {activeFilters > 0 && (
-          <button
-            onClick={() => { setTypeFilter(null); setScopeFilter(null); setSearch(''); }}
-            className="text-sm text-red-600 font-bold hover:underline"
-          >
-            ✕ Effacer les filtres
-          </button>
+          <div className="mt-6 pt-6 border-t border-slate-200 flex items-center justify-between">
+            <p className="text-base font-medium text-slate-500">
+              {activeFilters} filtre{activeFilters > 1 ? 's' : ''} actif{activeFilters > 1 ? 's' : ''}
+            </p>
+            <button
+              onClick={() => { setTypeFilter(null); setScopeFilter(null); setSearch(''); }}
+              className="text-lg text-red-600 font-bold hover:underline px-4 py-2 rounded-lg hover:bg-red-50 transition-colors"
+            >
+              ✕ Tout effacer
+            </button>
+          </div>
         )}
       </div>
 
