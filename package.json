@@ -9,7 +9,7 @@
     "lint": "eslint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "pages:build": "opennextjs-cloudflare build && cp .open-next/worker.js .open-next/assets/_worker.js"
+    "pages:build": "opennextjs-cloudflare build && mv .open-next/worker.js .open-next/_worker.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
