@@ -98,7 +98,9 @@ export default function Home() {
                     Trouver une activité, une aide financière ou une ressource près de chez vous.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Trouver une activité</Button>
+                     <Link href="/pratiquants">
+                       <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Trouver une activité</Button>
+                     </Link>
                   </div>
                 </Card>
 
@@ -115,7 +117,9 @@ export default function Home() {
                     Voir les ateliers, rencontres et événements sportifs adaptés.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-orange-200 text-orange-700 hover:bg-orange-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Voir l'Agenda</Button>
+                     <Link href="/pratiquants/evenements">
+                       <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-orange-200 text-orange-700 hover:bg-orange-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Voir l'Agenda</Button>
+                     </Link>
                   </div>
                 </Card>
 
@@ -132,7 +136,9 @@ export default function Home() {
                     Lire les nouvelles de l'association et de l'APA.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-pink-200 text-pink-700 hover:bg-pink-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Lire les actualités</Button>
+                     <Link href="/actualites">
+                       <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-pink-200 text-pink-700 hover:bg-pink-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Lire les actualités</Button>
+                     </Link>
                   </div>
                 </Card>
 
@@ -149,9 +155,11 @@ export default function Home() {
                     Ressources et outils pour les professionnels du sport et de la santé.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                    <Button size="lg" className="w-full text-xl xl:text-2xl font-bold bg-purple-700 hover:bg-purple-800 rounded-2xl py-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
-                      Espace Professionnels
-                    </Button>
+                    <Link href="/professionnels">
+                      <Button size="lg" className="w-full text-xl xl:text-2xl font-bold bg-purple-700 hover:bg-purple-800 rounded-2xl py-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
+                        Espace Professionnels
+                      </Button>
+                    </Link>
                   </div>
                 </Card>
              </div>
@@ -175,17 +183,19 @@ export default function Home() {
                   { title: "Nouveaux financements pour l'équipement sportif", date: "05 Octobre 2026", color: "bg-sky-500", label: "Info Pratique", image: "24.05.2023_Foot-Americain.jpg"},
                   { title: "Retour sur la course inclusive régionale", date: "28 Septembre 2026", color: "bg-pink-600", label: "Événement", image: "IMG-20240407-WA0016-1024x683.jpg"}
                 ].map((actu, i) => (
-                  <div key={i} className="bg-white rounded-[2rem] border-4 border-slate-100 shadow-xl overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col">
-                    <div className="h-64 relative overflow-hidden bg-slate-100 border-b-4 border-slate-100">
-                       <img src={`/photos/${actu.image}`} alt={actu.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-80"></div>
-                       <div className={`absolute bottom-4 left-6 px-4 py-2 font-extrabold text-sm rounded-full ${actu.color} text-white shadow-lg`}>{actu.label}</div>
+                  <Link key={i} href="/actualites">
+                    <div className="bg-white rounded-[2rem] border-4 border-slate-100 shadow-xl overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col h-full">
+                      <div className="h-64 relative overflow-hidden bg-slate-100 border-b-4 border-slate-100">
+                         <img src={`/photos/${actu.image}`} alt={actu.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-80"></div>
+                         <div className={`absolute bottom-4 left-6 px-4 py-2 font-extrabold text-sm rounded-full ${actu.color} text-white shadow-lg`}>{actu.label}</div>
+                      </div>
+                      <div className="p-8 flex-1 flex flex-col">
+                        <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-4 group-hover:text-blue-800">{actu.title}</h3>
+                        <p className="text-xl font-medium text-slate-500 mt-auto">{actu.date}</p>
+                      </div>
                     </div>
-                    <div className="p-8 flex-1 flex flex-col">
-                      <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-4 group-hover:text-blue-800">{actu.title}</h3>
-                      <p className="text-xl font-medium text-slate-500 mt-auto">{actu.date}</p>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -245,6 +255,7 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-center">
             <Link href="/association" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">À propos</Link>
             <Link href="/mentions-legales" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Mentions légales</Link>
+            <Link href="/politique-de-confidentialite" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Confidentialité</Link>
             <Link href="/contact" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Nous contacter</Link>
           </div>
         </div>
