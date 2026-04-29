@@ -3,36 +3,54 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PathologyCard, PathologyData } from "@/components/PathologyCard";
-import pathologiesData from "@/data/pathologies.json";
-
-const getPathologies = (): PathologyData[] => {
-  return pathologiesData.map((item: any) => ({
-    ...item,
-    whenToAskDoctor: item.whenToAskDoctor || "En cas de douleur inhabituelle ou de doute, consultez votre médecin traitant.",
-    status: item.status || "published"
-  }));
-};
+import { PathologyCard } from "@/components/PathologyCard";
+import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const patho = getPathologies().find(p => p.slug === resolvedParams.slug);
+  const supabase = await createClient();
+  const { data: patho } = await supabase
+    .from("pathologies")
+    .select("title, description")
+    .eq("slug", resolvedParams.slug)
+    .single();
   
   if (!patho) return { title: "Fiche introuvable | Handiboost" };
 
   return {
-    title: patho.seoTitle || `${patho.title} et Sport | Handiboost`,
-    description: patho.seoDescription || patho.description,
+    title: `${patho.title} et Sport | Handiboost`,
+    description: patho.description,
   };
 }
 
 export default async function PathologiePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const patho = getPathologies().find(p => p.slug === resolvedParams.slug);
+  const supabase = await createClient();
+  const { data: raw } = await supabase
+    .from("pathologies")
+    .select("*")
+    .eq("slug", resolvedParams.slug)
+    .eq("status", "published")
+    .eq("validation_status", "validated")
+    .single();
 
-  if (!patho || patho.status !== "published") {
+  if (!raw) {
     notFound();
   }
+
+  const patho = {
+    id: raw.id,
+    slug: raw.slug,
+    title: raw.title,
+    description: raw.description ?? "",
+    benefits: raw.benefits ?? [],
+    precautions: raw.precautions ?? [],
+    recommendedActivities: raw.recommended_activities ?? [],
+    resources: raw.resources ?? [],
+    validationStatus: raw.validation_status,
+    whenToAskDoctor: "En cas de douleur inhabituelle ou de doute, consultez votre médecin traitant.",
+    status: raw.status,
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">

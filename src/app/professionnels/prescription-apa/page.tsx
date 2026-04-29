@@ -3,15 +3,33 @@ import Link from "next/link";
 import { ChevronLeft, FileText, CheckCircle2, AlertCircle, ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProResourceCard, ProResource } from "@/components/ProResourceCard";
-import resourcesData from "@/data/prescription-apa.json";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Aide à la Prescription APA | Espace Professionnels Handiboost",
   description: "Ressources, cadre légal et fiches pratiques pour accompagner les médecins dans la prescription d'Activité Physique Adaptée.",
 };
 
-export default function PrescriptionApaPage() {
-  const resources = resourcesData as ProResource[];
+export default async function PrescriptionApaPage() {
+  const supabase = await createClient();
+  const { data: rawResources } = await supabase
+    .from("professional_resources")
+    .select("*")
+    .eq("status", "published")
+    .eq("validation_status", "validated")
+    .in("category", ["telechargement", "prescription", "recommandation"]);
+
+  const resources: ProResource[] = (rawResources ?? []).map((r) => ({
+    id: r.id,
+    title: r.title,
+    description: r.description ?? "",
+    category: r.category ?? "prescription",
+    format: r.format ?? "pdf",
+    fileUrl: r.file_url ?? undefined,
+    externalUrl: r.url ?? undefined,
+    sourceName: r.source ?? "",
+    status: r.status ?? "published",
+  }));
   
   // Grouper les ressources
   const downloads = resources.filter(r => r.category === "telechargement");

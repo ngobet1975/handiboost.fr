@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { EvenementsClient } from '@/components/EvenementsClient';
-import evenementsData from '@/data/evenements.json';
 import { EventData } from '@/components/EventCard';
+import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Agenda & Événements Sportifs | Handiboost',
@@ -13,8 +13,30 @@ export const metadata: Metadata = {
   }
 };
 
-export default function EvenementsPage() {
-  const data = evenementsData as EventData[];
+export default async function EvenementsPage() {
+  const supabase = await createClient();
+  const { data: rawEvents } = await supabase
+    .from("events")
+    .select("*")
+    .eq("status", "published")
+    .order("event_date", { ascending: true });
+
+  // Map DB data to EventData interface expected by EventCard component
+  const data: EventData[] = (rawEvents ?? []).map((evt) => ({
+    id: evt.id,
+    title: evt.title,
+    slug: evt.slug,
+    description: evt.excerpt ?? evt.content ?? "",
+    startDate: evt.event_date ?? "",
+    endDate: evt.event_date ?? "",
+    eventType: "sport" as const,
+    practiceTypes: [],
+    publics: ["tous publics"],
+    locationName: evt.location?.split(",")[0] ?? "",
+    city: evt.location?.split(",")[1]?.trim() ?? "",
+    status: evt.status as "published",
+    featured: false,
+  }));
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">

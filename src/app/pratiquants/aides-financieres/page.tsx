@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import aidesData from '@/data/aides-financieres.json';
 import { AideCard, AideData } from '@/components/AideCard';
 import { Button } from '@/components/ui/button';
 import { Landmark, ShieldPlus, Heart, Building, Users } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Aides Financières pour le Sport Adapté | Handiboost',
@@ -22,15 +22,24 @@ const CATEGORIES = [
   { id: 'association', title: 'Aides Associatives et Clubs', icon: <Users className="w-8 h-8 text-pink-700" />, desc: "Fonds de dotation et aides internes des fédérations." }
 ];
 
-export default function AidesFinancieresPage() {
-  const allAides: AideData[] = aidesData.map((item: any) => ({
-    ...item,
-    category: item.category || "etat",
-    eligibility: item.conditions || [],
+export default async function AidesFinancieresPage() {
+  const supabase = await createClient();
+  const { data: rawAides } = await supabase
+    .from("financial_aids")
+    .select("*")
+    .eq("status", "published");
+
+  const allAides: AideData[] = (rawAides ?? []).map((item) => ({
+    id: item.id,
+    title: item.title,
+    slug: item.slug,
+    description: item.description ?? "",
+    category: "etat",
+    eligibility: item.conditions ?? [],
     amountLabel: item.amount,
-    externalUrl: item.resources?.[0]?.url,
-    officialSourceName: item.resources?.[0]?.label,
-    status: item.status || "published"
+    externalUrl: (item.resources as any)?.[0]?.url,
+    officialSourceName: (item.resources as any)?.[0]?.label,
+    status: item.status ?? "published"
   }));
 
   // Regroupement des aides par catégorie

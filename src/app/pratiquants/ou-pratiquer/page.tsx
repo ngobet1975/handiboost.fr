@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { OuPratiquerClient } from '@/components/OuPratiquerClient';
-import annuaireData from '@/data/annuaire.json';
 import { DirectoryData } from '@/components/DirectoryCard';
+import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Où pratiquer ? Annuaire Handiboost',
@@ -13,17 +13,20 @@ export const metadata: Metadata = {
   }
 };
 
-export default function OuPratiquerPage() {
-  // Map the new flat JSON schema to the frontend component expectations
-  const data: DirectoryData[] = annuaireData.map((item: any) => ({
-    id: item.id || Math.random().toString(),
+export default async function OuPratiquerPage() {
+  const supabase = await createClient();
+  const { data: rawDirectories } = await supabase
+    .from("directories")
+    .select("*")
+    .eq("status", "published");
+
+  const data: DirectoryData[] = (rawDirectories ?? []).map((item) => ({
+    id: item.id,
     title: item.name,
     description: item.description || '',
-    category: "club", // Par défaut pour la V1 (à adapter selon les vraies catégories plus tard)
-    resourceType: item.type?.toLowerCase().includes("national") || item.scope === "National" 
-      ? "annuaire-national" 
-      : "ressource-locale",
-    regions: item.scope === "National" ? ["Toutes les régions"] : [item.scope || "Auvergne-Rhône-Alpes"],
+    category: "club",
+    resourceType: item.scope === "national" ? "annuaire-national" : "ressource-locale",
+    regions: item.scope === "national" ? ["Toutes les régions"] : [item.scope || "Auvergne-Rhône-Alpes"],
     publics: ["tous publics"],
     externalUrl: item.url,
   }));

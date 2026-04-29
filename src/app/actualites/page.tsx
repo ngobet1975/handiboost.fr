@@ -2,23 +2,38 @@ import React from "react";
 import Link from "next/link";
 import { ChevronRight, Newspaper } from "lucide-react";
 import { ArticleCard, ArticleData } from "@/components/ArticleCard";
-import actualitesData from "@/data/actualites.json";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Actualités | Handiboost",
   description: "Retrouvez toutes les actualités, rapports et événements autour du sport adapté et du parasport.",
 };
 
-export default function ActualitesPage() {
-  const articles = (actualitesData as ArticleData[]).filter(a => a.status === "published");
-  
-  // Sort by date (newest first)
-  const sortedArticles = [...articles].sort((a, b) => 
-    new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
+export default async function ActualitesPage() {
+  const supabase = await createClient();
+  const { data: rawArticles } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
 
-  const featuredArticles = sortedArticles.filter(a => a.featured);
-  const regularArticles = sortedArticles.filter(a => !a.featured);
+  // Map DB snake_case to component camelCase
+  const articles: ArticleData[] = (rawArticles ?? []).map((a) => ({
+    id: a.id,
+    title: a.title,
+    slug: a.slug,
+    excerpt: a.excerpt ?? "",
+    content: a.content ?? "",
+    category: a.category ?? "info-apa",
+    coverImage: a.cover_image ?? "",
+    publishedAt: a.published_at ?? "",
+    featured: a.featured ?? false,
+    showOnHomepage: a.show_on_homepage ?? false,
+    status: a.status,
+  }));
+
+  const featuredArticles = articles.filter(a => a.featured);
+  const regularArticles = articles.filter(a => !a.featured);
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">

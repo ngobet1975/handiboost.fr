@@ -1,0 +1,107 @@
+-- =============================================================
+-- SEED DATA for Handiboost
+-- Run this in Supabase SQL Editor after the initial schema
+-- =============================================================
+
+-- 1. ARTICLES (actualites.json)
+INSERT INTO articles (title, slug, excerpt, content, category, cover_image, published_at, featured, show_on_homepage, status) VALUES
+('Stratégie nationale sport et handicap 2030', 'strategie-nationale-sport-et-handicap-2030', 'Le Gouvernement a présenté la stratégie nationale « Sport et Handicaps » 2025-2030, visant à développer l''accès à la pratique sportive pour toutes et tous.', 'Le 30 janvier, le Gouvernement a présenté sa stratégie nationale sport et handicap 2025-2030.
+
+Cette stratégie repose sur 4 axes majeurs :
+- Développer la pratique sportive à l''école, l''université et dans le monde professionnel.
+- Accompagner les clubs pour un accueil plus inclusif.
+- Former davantage les professionnels de l''encadrement sportif au handicap.
+- Améliorer l''accessibilité des équipements sportifs.
+
+Handiboost s''inscrit pleinement dans cette dynamique en facilitant la mise en relation entre pratiquants et structures d''accueil.', 'info-apa', 'https://handiboost.fr/wp-content/uploads/2026/02/Capture-decran-2026-02-23-104106.png', '2026-02-23T09:00:00Z', true, true, 'published'),
+
+('Fauteuils roulants remboursés à 100 % dès décembre 2025', 'fauteuils-roulants-rembourses-a-100-des-decembre-2025', 'Une excellente nouvelle pour l''accessibilité : la prise en charge intégrale des fauteuils roulants, y compris manuels et électriques, est confirmée pour décembre 2025.', 'Fauteuils roulants : une prise en charge intégrale dès décembre 2025.
+
+Le gouvernement a officialisé la prise en charge à 100 % des fauteuils roulants par l''Assurance maladie et les mutuelles, avec une entrée en vigueur prévue au plus tard en décembre 2025.
+
+Cette mesure concerne une large gamme de fauteuils, manuels ou électriques. Elle permettra de lever un frein financier majeur pour de nombreuses personnes en situation de handicap, facilitant ainsi la mobilité au quotidien et l''accès à la pratique sportive.', 'info-apa', 'https://handiboost.fr/wp-content/uploads/2025/09/Capture-decran-2025-09-25-112743.png', '2025-09-25T10:00:00Z', false, true, 'published'),
+
+('L''APA reconnue en hospitalisation à domicile !', 'apa-reconnue-en-hospitalisation-a-domicile', 'L''Activité Physique Adaptée fait une entrée officielle dans le cadre de l''Hospitalisation à Domicile (HAD), une victoire pour la reconnaissance de la discipline.', 'L''Activité Physique Adaptée enfin reconnue en Hospitalisation à Domicile !
+
+Bonne nouvelle pour le développement du sport-santé : l''intervention en Activité Physique Adaptée est désormais officiellement intégrée aux soins remboursables dans le cadre de l''Hospitalisation à Domicile (HAD).
+
+C''est une reconnaissance importante de la plus-value de l''APA pour maintenir l''autonomie et améliorer la qualité de vie des patients à leur domicile.', 'info-apa', 'https://handiboost.fr/wp-content/uploads/2025/10/Capture-decran-2025-10-16-162449.png', '2025-10-16T14:30:00Z', false, false, 'published'),
+
+('Journée Handiboost du 4 juin 2025', 'journee-handiboost-4-juin-2025', 'Rejoignez-nous pour la 4ème édition de la Journée Handiboost ! Un événement unique pour découvrir et partager autour du sport adapté.', 'Journée Handiboost 2025 !
+
+Venez participer à la 4-ème édition de la journée Handiboost !
+Un événement qui rassemble pratiquants, professionnels de santé, associations et clubs pour promouvoir l''activité physique adaptée.
+
+Au programme :
+- Des initiations sportives (basket fauteuil, sarbacane, escrime...)
+- Des conférences animées par des experts médicaux
+- Des rencontres et échanges avec les associations de la région
+
+L''événement est entièrement gratuit et ouvert à tous, quel que soit le type de handicap.', 'journee-handiboost', 'https://handiboost.fr/wp-content/uploads/2025/03/Affiche-journee-2025-1-1000x563.png', '2025-03-07T08:00:00Z', true, true, 'published'),
+
+('Journée Handiboost du 8 juin 2022', 'journee-handiboost-8-juin-2022', 'Retour sur la première édition marquante de la Journée Handiboost visant à sensibiliser aux bénéfices du sport santé.', 'Cette journée a été pensée avec la volonté de sensibiliser les professionnels de santé et le grand public aux bénéfices d''une pratique sportive régulière.
+
+Merci à tous les participants, intervenants et clubs sportifs présents lors de cette édition fondatrice de la dynamique Handiboost !', 'journee-handiboost', 'https://handiboost.fr/wp-content/uploads/2022/06/Affiche-journee-2022-1000x563.png', '2022-06-08T09:00:00Z', false, false, 'archived');
+
+-- 2. PATHOLOGIES
+INSERT INTO pathologies (title, slug, description, benefits, precautions, recommended_activities, resources, status, validation_status) VALUES
+('Sclérose en plaques', 'sclerose-en-plaques', 'Sclérose en plaques : pourquoi pratiquer une activité physique adaptée ? Article initialement réalisé par Estelle Durand, Enseignante en APA.', '["Améliore la condition physique générale", "Aide à lutter contre la fatigue (à faire valider médicalement)"]'::jsonb, '["Adapter l''intensité selon l''état de fatigue du jour", "Éviter la pratique en cas de forte chaleur"]'::jsonb, '["Marche, renforcement musculaire doux (à préciser par le médecin)"]'::jsonb, '[{"label": "Consulter un médecin pour un avis personnalisé", "url": "/professionnels", "type": "link"}]'::jsonb, 'published', 'validated'),
+
+('Paralysie Cérébrale', 'paralysie-cerebrale', 'Pourquoi pratiquer ? La pratique d''une activité physique régulière et adaptée a des effets bénéfiques sur l''état de santé des personnes ayant une paralysie cérébrale.', '["Maintien de la mobilité articulaire", "Amélioration de la fonction motrice"]'::jsonb, '["Prendre en compte la spasticité", "Éviter les sur-sollicitations articulaires"]'::jsonb, '["Natation, activités en apesanteur, boccia"]'::jsonb, '[]'::jsonb, 'published', 'validated'),
+
+('Troubles du comportement alimentaire (TCA)', 'troubles-comportement-alimentaire', 'Pourquoi pratiquer ? L''activité physique régulière et adaptée peut avoir des effets bénéfiques sur la santé des personnes concernées par les TCA, lorsqu''elle est bien encadrée.', '["Réappropriation corporelle", "Amélioration de l''estime de soi"]'::jsonb, '["Encadrement strict pour éviter l''hyperactivité physique", "Validation médicale obligatoire avant la reprise"]'::jsonb, '["Activités douces centrées sur le ressenti (yoga, danse adaptée)"]'::jsonb, '[]'::jsonb, 'published', 'validated'),
+
+('Pathologies cérébelleuses', 'pathologies-cerebelleuses', 'La pratique d''une activité physique régulière et adaptée a des effets bénéfiques sur l''état de santé des personnes atteintes de pathologies touchant le cervelet.', '["Travail de l''équilibre et de la coordination", "Maintien de l''autonomie au quotidien"]'::jsonb, '["Prévention des chutes primordiale", "Adapter l''environnement de pratique"]'::jsonb, '["Exercices d''équilibre sécurisés, renforcement musculaire"]'::jsonb, '[]'::jsonb, 'published', 'validated'),
+
+('Maladies neuromusculaires', 'maladies-neuromusculaires', 'La pratique d''une activité physique régulière et adaptée permet de maintenir les capacités physiques des personnes atteintes de maladies neuromusculaires.', '["Maintien de la force musculaire résiduelle", "Amélioration de la fonction respiratoire"]'::jsonb, '["Éviter la fatigue excessive et la douleur musculaire", "Respecter les temps de récupération"]'::jsonb, '["Mobilisations douces, travail respiratoire, balnéothérapie"]'::jsonb, '[]'::jsonb, 'published', 'validated');
+
+-- 3. DIRECTORIES (annuaire.json)
+INSERT INTO directories (name, provider, description, url, scope, type, status) VALUES
+('Annuaire Sport Adapté', 'Fédération Française du Sport Adapté (FFSA)', 'Annuaire des clubs affiliés proposant une pratique pour les personnes en situation de handicap mental et/ou psychique.', 'https://sportadapte.fr/ou-pratiquer/', 'national', 'club', 'published'),
+('Annuaire Handisport', 'Fédération Française Handisport (FFH)', 'Où pratiquer ? Trouvez un club affilié à la Fédération Française Handisport près de chez vous (handicap moteur et sensoriel).', 'https://www.handisport.org/ou-pratiquer/', 'national', 'club', 'published'),
+('Annuaire des clubs de parasport AURA', 'CROS Auvergne-Rhône-Alpes', 'Recherchez un club de parasport en Auvergne-Rhône-Alpes avec cet annuaire régional officiel.', 'https://auvergnerhonealpes.franceolympique.com/', 'regional', 'club', 'published'),
+('Annuaire des Enseignant·e·s en APA', 'SFP-APA', 'L''annuaire national de la Société Française des Professionnels en Activité Physique Adaptée (SFP-APA).', 'https://www.sfp-apa.fr/annuaire/', 'national', 'professional', 'published'),
+('Annuaire des masseurs-kinésithérapeutes', 'Ordre des masseurs-kinésithérapeutes', 'Annuaire national officiel des masseurs-kinésithérapeutes inscrits à l''Ordre.', 'https://www.ordremk.fr/je-suis-patient/trouver-un-kinesitherapeute/', 'national', 'professional', 'published'),
+('Annuaire des kinésithérapeutes du Rhône', 'Conseil Départemental du Rhône de l''Ordre des Masseurs-Kinésithérapeutes', 'Retrouvez la liste des praticiens exerçant dans le département du Rhône.', 'https://rhone.ordremk.fr/annuaire/', 'regional', 'professional', 'published'),
+('Carte des Maisons Sport-Santé', 'Ministère des Sports', 'Carte interactive permettant de trouver la Maison Sport-Santé la plus proche de chez vous.', 'https://www.sports.gouv.fr/les-maisons-sport-sante-67', 'national', 'institution', 'published'),
+('Prescri''Mouv (Grand Est)', 'Réseau Sport Santé Grand Est', 'Exemple d''annuaire régional pour la prescription d''exercice physique pour la santé (si applicable).', 'https://prescrimouv.fr/', 'regional', 'institution', 'published'),
+('Trouve ton parasport', 'Comité Paralympique et Sportif Français (CPSF)', 'Le CPSF propose un outil pour trouver les sports adaptés selon ses envies et ses capacités.', 'https://france-paralympique.fr/trouver-son-sport/', 'national', 'institution', 'published'),
+('Portail Sport Santé AURA', 'Réseau Sport Santé Auvergne-Rhône-Alpes', 'Plateforme régionale permettant d''identifier les offres de pratique sport santé de la région.', 'https://sport-sante-aura.fr/', 'regional', 'institution', 'published');
+
+-- 4. FINANCIAL AIDS (aides-financieres.json)
+INSERT INTO financial_aids (title, slug, description, amount, conditions, resources, status) VALUES
+('Aide de la PCH pour la pratique sportive', 'aide-pch-pratique-sportive', 'La Prestation de Compensation du Handicap (PCH) peut participer au financement des surcoûts liés à la pratique d''une activité sportive, notamment pour l''achat de matériel spécifique.', 'Variable selon votre situation et sur dossier (MDPH)', '["Être éligible à la PCH", "Justifier du surcoût lié au handicap pour la pratique sportive"]'::jsonb, '[{"label": "Consulter les démarches MDPH", "url": "https://www.monparcourshandicap.gouv.fr/aides/la-prestation-de-compensation-du-handicap-pch", "type": "link"}]'::jsonb, 'published'),
+
+('Prise en charge de l''APA par les mutuelles', 'prise-en-charge-apa-mutuelles', 'De plus en plus de mutuelles proposent des forfaits annuels pour la prise en charge de séances d''Activité Physique Adaptée (APA) sur prescription médicale.', 'Selon votre contrat (ex: forfait annuel ou par séance)', '["Avoir une prescription médicale d''APA", "Séances dispensées par un professionnel qualifié (ex: Enseignant APA)"]'::jsonb, '[{"label": "Voir le listing des mutuelles (Azur Sport Santé)", "url": "https://azursportsante.fr/les-mutuelles-qui-remboursent-le-sport-sante/", "type": "link"}]'::jsonb, 'published'),
+
+('Soutien financier pour les personnes ayant un cancer du sein', 'soutien-financier-cancer-sein-apa', 'Certaines associations et dispositifs spécifiques (ex: Ligue contre le Cancer) peuvent aider au financement de séances d''APA pour les personnes touchées par un cancer du sein.', 'Variable sur étude de dossier', '["Être concerné(e) par un cancer du sein", "Dossier à constituer auprès des comités départementaux"]'::jsonb, '[{"label": "Plus d''informations sur la Ligue contre le Cancer", "url": "https://www.ligue-cancer.net/", "type": "link"}]'::jsonb, 'published'),
+
+('Prise en charge intégrale des fauteuils roulants', 'prise-en-charge-integrale-fauteuils-roulants', 'Prise en charge à 100 % des fauteuils roulants par l''Assurance maladie et les mutuelles (entrée en vigueur prévue fin 2025). Cela inclut certains modèles adaptés à la mobilité et la vie quotidienne.', 'Prise en charge à 100% selon la nomenclature de la Sécurité Sociale', '["Prescription médicale obligatoire", "Concerne les modèles inscrits à la liste des produits et prestations (LPP)"]'::jsonb, '[{"label": "Lire l''actualité gouvernementale", "url": "https://handicap.gouv.fr/remboursement-integral-des-fauteuils-roulants", "type": "link"}]'::jsonb, 'published'),
+
+('Aides au bilan en Activité Physique Adaptée (APA)', 'aides-au-bilan-en-activite-physique-adaptee', 'Certaines structures (Maisons Sport-Santé, Réseaux de soins) ou collectivités locales peuvent prendre en charge tout ou partie du coût du bilan initial en APA.', 'Bilan parfois gratuit ou partiellement pris en charge', '["S''adresser à une structure labellisée (Maison Sport-Santé)", "Variable selon votre département/région"]'::jsonb, '[{"label": "Contacter une Maison Sport-Santé", "url": "https://www.sports.gouv.fr/les-maisons-sport-sante-67", "type": "link"}]'::jsonb, 'published');
+
+-- 5. PROFESSIONAL RESOURCES (outils-accompagnement.json + prescription-apa.json)
+INSERT INTO professional_resources (title, description, category, source, url, file_url, format, status, validation_status) VALUES
+-- Outils accompagnement
+('Grille d''évaluation motrice et d''autonomie', 'Fiche de test pour évaluer les capacités physiques et l''autonomie d''un patient avant de commencer un programme d''APA.', 'bilan', 'SFP-APA', NULL, '/documents/grille_evaluation_motrice.pdf', 'pdf', 'published', 'validated'),
+('Questionnaire de Ricci & Gagnon', 'Test simple permettant d''évaluer le niveau d''activité physique habituel d''un individu.', 'bilan', 'Outil standardisé', NULL, '/documents/questionnaire_ricci_gagnon.pdf', 'pdf', 'published', 'validated'),
+('Banque d''exercices sur chaise', 'Recueil d''exercices illustrés pour les personnes à mobilité réduite ou en fauteuil.', 'pedagogie', 'Fédération Française Handisport', NULL, '/documents/banque_exercices_chaise.pdf', 'pdf', 'published', 'validated'),
+('Livret de suivi patient en APA', 'Un carnet de bord à remettre au pratiquant pour qu''il note ses progrès, son ressenti et ses séances.', 'pedagogie', 'Réseau Handiboost', NULL, '/documents/livret_suivi_apa.pdf', 'pdf', 'published', 'validated'),
+('Guide : Inclure le handicap dans son club', 'Manuel à destination des éducateurs sportifs souhaitant ouvrir une section de sport adapté ou parasport.', 'recommandation', 'Ministère des Sports', 'https://www.sports.gouv.fr/', NULL, 'lien-externe', 'published', 'validated'),
+-- Prescription APA
+('Le modèle d''ordonnance type', 'Formulaire d''aide à la prescription d''Activité Physique Adaptée (APA).', 'telechargement', 'Ministère chargé des Sports', NULL, 'https://www.sports.gouv.fr/IMG/pdf/formulaire_prescription_apa_1.pdf', 'PDF', 'published', 'validated'),
+('Guide de promotion, consultation et prescription HAS', 'Guide complet de la Haute Autorité de Santé concernant la consultation et la prescription médicale d''Activité Physique.', 'recommandation', 'Haute Autorité de Santé (HAS)', 'https://www.has-sante.fr/jcms/p_3389650/fr/guide-promotion-consultation-et-prescription-medicale-d-activite-physique-et-sportive-pour-la-sante', NULL, 'Lien', 'published', 'validated'),
+('Fiche prescription : Pathologies neurologiques', 'Fiche d''aide à la prescription d''Activité Physique Adaptée pour les pathologies neurologiques.', 'prescription', 'Haute Autorité de Santé (HAS)', NULL, 'https://www.has-sante.fr/upload/docs/application/pdf/2022-10/fiche_ap_patho_neurologiques.pdf', 'PDF', 'published', 'validated'),
+('Fiche prescription : Cancers', 'Fiche d''aide à la prescription d''Activité Physique Adaptée pour les patients atteints de cancer.', 'prescription', 'Haute Autorité de Santé (HAS)', NULL, 'https://www.has-sante.fr/upload/docs/application/pdf/2022-09/fiche_ap_cancers.pdf', 'PDF', 'published', 'validated'),
+('Fiche prescription : Maladies cardiovasculaires', 'Fiche d''aide à la prescription d''Activité Physique Adaptée pour les maladies cardiovasculaires.', 'prescription', 'Haute Autorité de Santé (HAS)', NULL, 'https://www.has-sante.fr/upload/docs/application/pdf/2022-10/fiche_ap_cardio.pdf', 'PDF', 'published', 'validated');
+
+-- 6. EVENTS (evenements.json) — using the events table
+INSERT INTO events (title, slug, excerpt, content, event_date, location, organizer, status) VALUES
+('Journée Découverte Handisport', 'journee-decouverte-handisport-2026', 'Venez découvrir différentes pratiques sportives adaptées lors de cette journée d''initiation ouverte à tous.', 'Venez découvrir différentes pratiques sportives adaptées lors de cette journée d''initiation ouverte à tous.', '2026-05-15T09:00:00Z', 'Stade de Gerland, Lyon', 'Fédération Handisport', 'published'),
+('Atelier APA - Prévention des chutes', 'atelier-apa-prevention-chutes', 'Un atelier pratique encadré par un enseignant APA pour apprendre à prévenir les chutes à domicile.', 'Un atelier pratique encadré par un enseignant APA pour apprendre à prévenir les chutes à domicile.', '2026-04-30T14:00:00Z', 'Salle Polyvalente, Villeurbanne', NULL, 'published'),
+('Rencontre Nationale Sport Santé', 'rencontre-nationale-sport-sante', 'Une journée d''échanges et de conférences autour du sport-santé, organisée avec nos partenaires institutionnels.', 'Une journée d''échanges et de conférences autour du sport-santé, organisée avec nos partenaires institutionnels.', '2026-06-10T10:00:00Z', 'Palais des Congrès, Paris', NULL, 'published'),
+('Initiation Para Natation', 'initiation-para-natation', 'Séance découverte de la natation adaptée. L''occasion de tester l''activité dans un bassin aménagé.', 'Séance découverte de la natation adaptée. L''occasion de tester l''activité dans un bassin aménagé.', '2025-11-20T14:00:00Z', 'Piscine Municipale, Bordeaux', NULL, 'published'),
+('Journée Handiboost en Famille', 'journee-handiboost-famille', 'L''événement annuel de notre association ! Au programme : jeux, défis sportifs et convivialité.', 'L''événement annuel de notre association ! Au programme : jeux, défis sportifs et convivialité.', '2026-09-05T09:00:00Z', 'Parc de la Tête d''Or, Lyon', NULL, 'published'),
+('Atelier en Ligne - Sport et Diabète', 'atelier-en-ligne-sport-diabete', 'Visioconférence animée par un médecin du sport sur l''importance de l''activité physique avec un diabète.', 'Visioconférence animée par un médecin du sport sur l''importance de l''activité physique avec un diabète.', '2026-05-25T18:00:00Z', 'En ligne (Visioconférence)', NULL, 'published'),
+('Championnat Régional d''Escrime Fauteuil', 'championnat-regional-escrime-fauteuil', 'Venez assister ou participer au championnat régional d''escrime fauteuil.', 'Venez assister ou participer au championnat régional d''escrime fauteuil.', '2026-07-12T09:00:00Z', 'Complexe Sportif, Rennes', NULL, 'published'),
+('Marche Nordique Adaptée - Session Hiver', 'marche-nordique-adaptee-hiver', 'Un cycle de marche nordique adaptée pour lutter contre la sédentarité pendant l''hiver.', 'Un cycle de marche nordique adaptée pour lutter contre la sédentarité pendant l''hiver.', '2025-12-01T10:00:00Z', 'Forêt de Soignes, Grenoble', NULL, 'published');

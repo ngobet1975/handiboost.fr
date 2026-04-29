@@ -3,12 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Calendar, Tag, Info, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArticleData } from "@/components/ArticleCard";
-import actualitesData from "@/data/actualites.json";
+import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const article = (actualitesData as ArticleData[]).find(a => a.slug === resolvedParams.slug);
+  const supabase = await createClient();
+  const { data: article } = await supabase
+    .from("articles")
+    .select("title, excerpt")
+    .eq("slug", resolvedParams.slug)
+    .single();
   
   if (!article) return { title: "Article introuvable | Handiboost" };
 
@@ -20,13 +24,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const article = (actualitesData as ArticleData[]).find(a => a.slug === resolvedParams.slug);
+  const supabase = await createClient();
+  const { data: article } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("slug", resolvedParams.slug)
+    .eq("status", "published")
+    .single();
 
-  if (!article || article.status !== "published") {
+  if (!article) {
     notFound();
   }
 
-  const formattedDate = new Date(article.publishedAt).toLocaleDateString('fr-FR', {
+  const formattedDate = new Date(article.published_at).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -70,7 +80,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </span>
             <span className="text-slate-500 text-sm font-medium flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
-              Publié le <time dateTime={article.publishedAt}>{formattedDate}</time>
+              Publié le <time dateTime={article.published_at}>{formattedDate}</time>
             </span>
           </div>
 
@@ -78,11 +88,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             {article.title}
           </h1>
 
-          {article.coverImage && (
+          {article.cover_image && (
             <div className="w-full aspect-video bg-slate-200 rounded-3xl overflow-hidden shadow-lg mb-10 relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
-                src={article.coverImage} 
+                src={article.cover_image} 
                 alt={article.title} 
                 className="w-full h-full object-cover"
               />
@@ -101,11 +111,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div 
             className="prose prose-lg md:prose-xl prose-slate max-w-none prose-headings:font-bold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
           >
-            {/* 
-              Dans une V2 avec MDX ou un parser Markdown, on utiliserait <ReactMarkdown>{article.content}</ReactMarkdown>. 
-              Pour l'instant, on gère les retours à la ligne basiques si le contenu est du texte enrichi.
-            */}
-            {article.content.split('\n').map((paragraph, index) => (
+            {article.content.split('\n').map((paragraph: string, index: number) => (
               paragraph.trim() === '' ? <br key={index} /> : 
               paragraph.startsWith('## ') ? <h2 key={index}>{paragraph.replace('## ', '')}</h2> :
               paragraph.startsWith('### ') ? <h3 key={index}>{paragraph.replace('### ', '')}</h3> :
@@ -114,31 +120,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <p key={index}>{paragraph}</p>
             ))}
           </div>
-
-          {/* Source Footer */}
-          {article.sourceName && (
-            <div className="mt-12 pt-8 border-t border-slate-100">
-              <div className="bg-slate-50 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3 text-slate-700">
-                  <Info className="w-6 h-6 text-blue-600 shrink-0" />
-                  <div>
-                    <span className="font-bold block">Source de l'information :</span>
-                    <span>{article.sourceName}</span>
-                  </div>
-                </div>
-                {article.sourceUrl && (
-                  <Button 
-                    nativeButton={false}
-                    variant="outline"
-                    render={<a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" />}
-                    className="shrink-0 bg-white"
-                  >
-                    Consulter la source <ExternalLink className="w-4 h-4 ml-2" />
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
       </article>

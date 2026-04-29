@@ -3,15 +3,33 @@ import Link from "next/link";
 import { ChevronLeft, Wrench, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProResourceCard, ProResource } from "@/components/ProResourceCard";
-import resourcesData from "@/data/outils-accompagnement.json";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Outils d'Accompagnement APA | Espace Professionnels Handiboost",
   description: "Ressources, bilans, tests et supports pédagogiques pour les professionnels du sport adapté et de la santé.",
 };
 
-export default function OutilsAccompagnementPage() {
-  const resources = resourcesData as ProResource[];
+export default async function OutilsAccompagnementPage() {
+  const supabase = await createClient();
+  const { data: rawResources } = await supabase
+    .from("professional_resources")
+    .select("*")
+    .eq("status", "published")
+    .eq("validation_status", "validated")
+    .in("category", ["bilan", "pedagogie", "recommandation"]);
+
+  const resources: ProResource[] = (rawResources ?? []).map((r) => ({
+    id: r.id,
+    title: r.title,
+    description: r.description ?? "",
+    category: r.category ?? "bilan",
+    format: r.format ?? "pdf",
+    fileUrl: r.file_url ?? undefined,
+    externalUrl: r.url ?? undefined,
+    sourceName: r.source ?? "",
+    status: r.status ?? "published",
+  }));
   
   // Categorization
   const bilans = resources.filter(r => r.category === "bilan");

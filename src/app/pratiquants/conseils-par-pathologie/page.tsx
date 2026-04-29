@@ -3,19 +3,32 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Stethoscope, HeartPulse, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { PathologyData } from "@/components/PathologyCard";
-import pathologiesData from "@/data/pathologies.json";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Conseils santé et Activité Physique Adaptée par pathologie | Handiboost",
   description: "Retrouvez nos fiches cliniques pour comprendre les bénéfices du sport adapté selon votre pathologie : SEP, endométriose, diabète, etc.",
 };
 
-export default function PathologiesPage() {
-  const pathologies: PathologyData[] = pathologiesData.map((item: any) => ({
-    ...item,
-    whenToAskDoctor: item.whenToAskDoctor || "En cas de douleur inhabituelle ou de doute, consultez votre médecin traitant.",
-    status: item.status || "published"
+export default async function PathologiesPage() {
+  const supabase = await createClient();
+  const { data: rawPathologies } = await supabase
+    .from("pathologies")
+    .select("*")
+    .eq("status", "published")
+    .eq("validation_status", "validated");
+
+  const pathologies = (rawPathologies ?? []).map((item) => ({
+    id: item.id,
+    slug: item.slug,
+    title: item.title,
+    description: item.description ?? "",
+    benefits: item.benefits ?? [],
+    precautions: item.precautions ?? [],
+    recommendedActivities: item.recommended_activities ?? [],
+    resources: item.resources ?? [],
+    validationStatus: item.validation_status,
+    status: item.status,
   }));
 
   return (
@@ -66,11 +79,6 @@ export default function PathologiesPage() {
                 className="group block h-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-600 rounded-2xl"
               >
                 <Card className="h-full border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 rounded-2xl overflow-hidden bg-white flex flex-col relative">
-                  {patho.validationStatus === "to-review" && (
-                    <div className="absolute top-4 right-4 bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full z-10">
-                      À valider
-                    </div>
-                  )}
                   <CardHeader className="p-6 pb-4 bg-slate-50/50 border-b border-slate-100">
                     <div className="w-12 h-12 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all">
                       <Activity className="w-6 h-6" />
