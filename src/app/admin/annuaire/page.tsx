@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, Plus, Pencil, Trash2, Save, X, ExternalLink } from 'lucide-react'
+import { ChevronLeft, Plus, Pencil, Trash2, Save, X, ExternalLink, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 
@@ -15,6 +15,7 @@ interface Directory {
   scope: string | null
   type: string | null
   status: string
+  verified_at: string | null
 }
 
 export default function AdminAnnuairePage() {
@@ -37,7 +38,7 @@ export default function AdminAnnuairePage() {
     setIsNew(true)
     setEditing({
       id: '', name: '', provider: '', description: '', url: '',
-      scope: 'national', type: 'club', status: 'draft',
+      scope: 'national', type: 'club', status: 'draft', verified_at: null,
     })
   }
 
@@ -58,6 +59,11 @@ export default function AdminAnnuairePage() {
   async function deleteEntry(id: string) {
     if (!confirm('Supprimer cette entrée ?')) return
     await supabase.from('directories').delete().eq('id', id)
+    loadEntries()
+  }
+
+  async function verifyEntry(id: string) {
+    await supabase.from('directories').update({ verified_at: new Date().toISOString() }).eq('id', id)
     loadEntries()
   }
 
@@ -181,7 +187,10 @@ export default function AdminAnnuairePage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1">
+                        <button onClick={() => verifyEntry(entry.id)} className={`p-2 rounded-lg ${(entry as any).verified_at ? 'text-green-500 hover:text-green-700 hover:bg-green-50' : 'text-slate-300 hover:text-green-600 hover:bg-green-50'}`} title="Marquer comme vérifié">
+                          <CheckCircle2 className="w-4 h-4" />
+                        </button>
                         {entry.url && (
                           <a href={entry.url} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-blue-50" title="Ouvrir le lien">
                             <ExternalLink className="w-4 h-4" />

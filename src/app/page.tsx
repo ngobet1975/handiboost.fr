@@ -40,7 +40,7 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch gap-6 pt-4">
-                <Link href="#pratiquants" className="flex-1">
+                <Link href="/pratiquants" className="flex-1">
                   <Button size="lg" className="w-full bg-blue-800 hover:bg-blue-900 text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-transform border-4 border-transparent hover:border-blue-300">
                     <span className="text-5xl">🙋‍♀️</span>
                     <span className="text-3xl">Je suis pratiquant</span>

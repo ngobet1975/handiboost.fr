@@ -73,8 +73,7 @@ export default function MentionsLegalesPage() {
 
           <h2>Crédits</h2>
           <p>
-            Développement : Antigravity<br />
-            Design et UX : Antigravity<br />
+            Développement : <strong>ITSynchronic</strong> — <a href="https://www.ITSynchronic.com" target="_blank" rel="noopener noreferrer">www.ITSynchronic.com</a> — Tél : <a href="tel:+33788505267">+33 7 88 50 52 67</a><br />
             Photos : Association Handiboost, fédérations partenaires
           </p>
         </div>

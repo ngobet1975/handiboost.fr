@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { ArrowLeft, MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight } from 'lucide-react';
+import { MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight, Activity, Heart, Brain, Bone, Eye, Dumbbell, Smile, Ribbon } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Espace Pratiquants | Handiboost',
@@ -11,7 +12,33 @@ export const metadata: Metadata = {
   }
 };
 
-export default function PratiquantsHubPage() {
+// Couleurs alternées pour les cartes pathologies (style ancien site)
+const PATHO_COLORS = [
+  { bg: 'bg-amber-400', hover: 'hover:bg-amber-500' },
+  { bg: 'bg-pink-500', hover: 'hover:bg-pink-600' },
+  { bg: 'bg-cyan-400', hover: 'hover:bg-cyan-500' },
+  { bg: 'bg-purple-500', hover: 'hover:bg-purple-600' },
+];
+
+const PATHO_ICONS = [
+  <Activity className="w-12 h-12 text-white" key="1" />,
+  <Heart className="w-12 h-12 text-white" key="2" />,
+  <Dumbbell className="w-12 h-12 text-white" key="3" />,
+  <Brain className="w-12 h-12 text-white" key="4" />,
+  <Bone className="w-12 h-12 text-white" key="5" />,
+  <Smile className="w-12 h-12 text-white" key="6" />,
+  <Ribbon className="w-12 h-12 text-white" key="7" />,
+  <Eye className="w-12 h-12 text-white" key="8" />,
+];
+
+export default async function PratiquantsHubPage() {
+  const supabase = await createClient();
+  const { data: pathologies } = await supabase
+    .from('pathologies')
+    .select('id, title, slug')
+    .eq('status', 'published')
+    .eq('validation_status', 'validated');
+
   const cards = [
     {
       title: "Trouver une activité",
@@ -68,7 +95,7 @@ export default function PratiquantsHubPage() {
 
       <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16">
         
-        {/* Hero Section Minimaliste */}
+        {/* Hero Section */}
         <section className="mb-16 text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-black text-slate-900 mb-6">
             Espace Pratiquants
@@ -78,32 +105,80 @@ export default function PratiquantsHubPage() {
           </p>
         </section>
 
-        {/* Grille de Cartes */}
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
-          {cards.map((card, idx) => (
-            <Link 
-              key={idx} 
-              href={card.href}
-              className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg border-b-8 transition-all hover:-translate-y-2 hover:shadow-2xl ${card.colorClass}`}
-            >
-              <div>
-                <div className="mb-8">
-                  {card.icon}
+        {/* ═══════════════════════════════════════════════ */}
+        {/* Section Pathologies — Grille colorée à la WordPress */}
+        {/* ═══════════════════════════════════════════════ */}
+        {pathologies && pathologies.length > 0 && (
+          <section className="mb-20">
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 text-center">
+              Découvrez les activités physiques adaptées
+            </h2>
+            <p className="text-xl text-slate-600 font-medium text-center mb-10 max-w-3xl mx-auto">
+              Sélectionnez votre pathologie pour découvrir les activités recommandées, les précautions et les bénéfices du sport adapté.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {pathologies.map((patho, idx) => {
+                const colorSet = PATHO_COLORS[idx % PATHO_COLORS.length];
+                const icon = PATHO_ICONS[idx % PATHO_ICONS.length];
+
+                return (
+                  <Link
+                    key={patho.id}
+                    href={`/pratiquants/conseils-par-pathologie/${patho.slug}`}
+                    className={`group relative rounded-3xl overflow-hidden shadow-lg ${colorSet.bg} ${colorSet.hover} transition-all hover:-translate-y-2 hover:shadow-2xl`}
+                  >
+                    {/* Icon area */}
+                    <div className="flex items-center justify-center h-36 relative">
+                      <div className="opacity-90 group-hover:scale-110 transition-transform">
+                        {icon}
+                      </div>
+                    </div>
+                    
+                    {/* Title */}
+                    <div className="px-4 pb-5 text-center">
+                      <h3 className="text-lg font-black text-white uppercase tracking-wide leading-tight">
+                        {patho.title}
+                      </h3>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* ═══════════════════════════════════════════════ */}
+        {/* Grille de Cartes Navigation */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Accès rapide</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+            {cards.map((card, idx) => (
+              <Link 
+                key={idx} 
+                href={card.href}
+                className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg border-b-8 transition-all hover:-translate-y-2 hover:shadow-2xl ${card.colorClass}`}
+              >
+                <div>
+                  <div className="mb-8">
+                    {card.icon}
+                  </div>
+                  <h2 className={`text-3xl font-extrabold mb-4 ${card.textColor}`}>
+                    {card.title}
+                  </h2>
+                  <p className={`text-xl font-medium opacity-90 ${card.textColor}`}>
+                    {card.description}
+                  </p>
                 </div>
-                <h2 className={`text-3xl font-extrabold mb-4 ${card.textColor}`}>
-                  {card.title}
-                </h2>
-                <p className={`text-xl font-medium opacity-90 ${card.textColor}`}>
-                  {card.description}
-                </p>
-              </div>
-              <div className={`mt-10 flex justify-end ${card.textColor}`}>
-                <div className="bg-white/20 p-4 rounded-full group-hover:bg-white/40 transition-colors">
-                  <ArrowRight className="h-8 w-8" />
+                <div className={`mt-10 flex justify-end ${card.textColor}`}>
+                  <div className="bg-white/20 p-4 rounded-full group-hover:bg-white/40 transition-colors">
+                    <ArrowRight className="h-8 w-8" />
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </section>
 
       </div>
