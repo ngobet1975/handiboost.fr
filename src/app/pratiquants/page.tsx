@@ -44,41 +44,56 @@ export default async function PratiquantsHubPage() {
       title: "Trouver une activité",
       description: "Trouver une activité, un club ou un enseignant en APA près de chez vous.",
       href: "/pratiquants/ou-pratiquer",
-      icon: <MapPin className="h-10 w-10 text-white" />,
-      colorClass: "bg-blue-800 hover:bg-blue-900 border-blue-900",
-      textColor: "text-white"
+      icon: <MapPin className="h-8 w-8" />,
+      theme: {
+        iconBg: "bg-blue-100 text-blue-700",
+        hoverBorder: "hover:border-blue-400",
+        hoverArrow: "group-hover:bg-blue-600 group-hover:text-white"
+      }
     },
     {
       title: "Lire les conseils",
       description: "Lire nos fiches santé pour pratiquer en toute sécurité.",
       href: "/pratiquants/conseils-par-pathologie",
-      icon: <Stethoscope className="h-10 w-10 text-white" />,
-      colorClass: "bg-purple-700 hover:bg-purple-800 border-purple-800",
-      textColor: "text-white"
+      icon: <Stethoscope className="h-8 w-8" />,
+      theme: {
+        iconBg: "bg-purple-100 text-purple-700",
+        hoverBorder: "hover:border-purple-400",
+        hoverArrow: "group-hover:bg-purple-600 group-hover:text-white"
+      }
     },
     {
       title: "Voir les aides",
       description: "Comprendre comment financer votre pratique sportive.",
       href: "/pratiquants/aides-financieres",
-      icon: <Coins className="h-10 w-10 text-white" />,
-      colorClass: "bg-sky-600 hover:bg-sky-700 border-sky-700",
-      textColor: "text-white"
+      icon: <Coins className="h-8 w-8" />,
+      theme: {
+        iconBg: "bg-sky-100 text-sky-700",
+        hoverBorder: "hover:border-sky-400",
+        hoverArrow: "group-hover:bg-sky-600 group-hover:text-white"
+      }
     },
     {
       title: "Voir les événements",
       description: "Découvrir les ateliers, rencontres et événements sportifs à venir.",
       href: "/pratiquants/evenements",
-      icon: <Calendar className="h-10 w-10 text-white" />,
-      colorClass: "bg-orange-600 hover:bg-orange-700 border-orange-700",
-      textColor: "text-white"
+      icon: <Calendar className="h-8 w-8" />,
+      theme: {
+        iconBg: "bg-orange-100 text-orange-700",
+        hoverBorder: "hover:border-orange-400",
+        hoverArrow: "group-hover:bg-orange-600 group-hover:text-white"
+      }
     },
     {
       title: "Faire le quiz",
       description: "Faire le quiz pour tout savoir sur l'Activité Physique Adaptée.",
       href: "/pratiquants/tester-ses-connaissances",
-      icon: <Lightbulb className="h-10 w-10 text-white" />,
-      colorClass: "bg-pink-600 hover:bg-pink-700 border-pink-700",
-      textColor: "text-white"
+      icon: <Lightbulb className="h-8 w-8" />,
+      theme: {
+        iconBg: "bg-pink-100 text-pink-700",
+        hoverBorder: "hover:border-pink-400",
+        hoverArrow: "group-hover:bg-pink-600 group-hover:text-white"
+      }
     }
   ];
 
@@ -158,21 +173,21 @@ export default async function PratiquantsHubPage() {
               <Link 
                 key={idx} 
                 href={card.href}
-                className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg border-b-8 transition-all hover:-translate-y-2 hover:shadow-2xl ${card.colorClass}`}
+                className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] bg-white border-2 border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${card.theme.hoverBorder}`}
               >
                 <div>
-                  <div className="mb-8">
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${card.theme.iconBg}`}>
                     {card.icon}
                   </div>
-                  <h2 className={`text-3xl font-extrabold mb-4 ${card.textColor}`}>
+                  <h2 className="text-2xl md:text-3xl font-extrabold mb-4 text-slate-900 group-hover:text-slate-950 transition-colors">
                     {card.title}
                   </h2>
-                  <p className={`text-xl font-medium opacity-90 ${card.textColor}`}>
+                  <p className="text-lg md:text-xl font-medium text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
                     {card.description}
                   </p>
                 </div>
-                <div className={`mt-10 flex justify-end ${card.textColor}`}>
-                  <div className="bg-white/20 p-4 rounded-full group-hover:bg-white/40 transition-colors">
+                <div className="mt-10 flex justify-end">
+                  <div className={`p-4 rounded-full bg-slate-50 text-slate-400 transition-all duration-300 shadow-sm ${card.theme.hoverArrow}`}>
                     <ArrowRight className="h-8 w-8" />
                   </div>
                 </div>
