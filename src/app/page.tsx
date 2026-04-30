@@ -59,7 +59,7 @@ export default function Home() {
                 <span className="text-4xl flex-shrink-0">🙋‍♀️</span>
                 <div>
                   <span className="block text-2xl font-bold">Je suis pratiquant</span>
-                  <span className="block text-base font-medium text-blue-200 mt-1">Activités, événements, aides financières</span>
+                  <span className="block text-sm font-medium text-blue-200 mt-1">Activités, événements, aides financières</span>
                 </div>
               </Link>
               
@@ -67,7 +67,7 @@ export default function Home() {
                 <span className="text-4xl flex-shrink-0">🩺</span>
                 <div>
                   <span className="block text-2xl font-bold">Je suis professionnel</span>
-                  <span className="block text-base font-medium text-purple-200 mt-1">Ressources, outils, Guide Booster</span>
+                  <span className="block text-sm font-medium text-purple-200 mt-1">Ressources, outils, Guide Booster</span>
                 </div>
               </Link>
             </div>
