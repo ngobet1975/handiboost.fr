@@ -99,9 +99,7 @@ export default function Home() {
                     Trouver une activité, une aide financière ou une ressource près de chez vous.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/pratiquants">
-                       <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Trouver une activité</Button>
-                     </Link>
+                     <Link href="/pratiquants" className="block w-full text-center text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 py-4 rounded-2xl transition-all no-underline">Trouver une activité</Link>
                   </div>
                 </Card>
 
@@ -118,9 +116,7 @@ export default function Home() {
                     Voir les ateliers, rencontres et événements sportifs adaptés.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/pratiquants/evenements">
-                       <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-orange-200 text-orange-700 hover:bg-orange-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Voir l'Agenda</Button>
-                     </Link>
+                     <Link href="/pratiquants/evenements" className="block w-full text-center text-2xl font-extrabold border-4 border-orange-200 text-orange-700 hover:bg-orange-50 py-4 rounded-2xl transition-all no-underline">Voir l&apos;Agenda</Link>
                   </div>
                 </Card>
 
@@ -137,9 +133,7 @@ export default function Home() {
                     Lire les nouvelles de l'association et de l'APA.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/actualites">
-                       <Button variant="outline" className="w-full text-2xl font-extrabold border-4 border-pink-200 text-pink-700 hover:bg-pink-50 h-auto py-4 whitespace-normal rounded-2xl transition-all">Lire les actualités</Button>
-                     </Link>
+                     <Link href="/actualites" className="block w-full text-center text-2xl font-extrabold border-4 border-pink-200 text-pink-700 hover:bg-pink-50 py-4 rounded-2xl transition-all no-underline">Lire les actualités</Link>
                   </div>
                 </Card>
 
@@ -156,10 +150,8 @@ export default function Home() {
                     Ressources et outils pour les professionnels du sport et de la santé.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                    <Link href="/professionnels">
-                      <Button size="lg" className="w-full text-xl xl:text-2xl font-bold bg-purple-700 hover:bg-purple-800 rounded-2xl py-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
-                        Espace Professionnels
-                      </Button>
+                    <Link href="/professionnels" className="block w-full text-center text-xl xl:text-2xl font-bold bg-purple-700 hover:bg-purple-800 text-white rounded-2xl py-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 no-underline">
+                      Espace Professionnels
                     </Link>
                   </div>
                 </Card>
