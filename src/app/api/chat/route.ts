@@ -43,7 +43,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error in chat API route:', error);
     return NextResponse.json(
-      { error: 'Une erreur est survenue lors de la communication avec l\\'assistant.' },
+      { error: "Une erreur est survenue lors de la communication avec l'assistant." },
       { status: 500 }
     );
   }

@@ -15,7 +15,7 @@ export function AIChatbot() {
     {
       id: 'welcome',
       role: 'model',
-      text: 'Bonjour ! Je suis l\\'Assistant Handiboost. Je suis là pour répondre à vos questions sur le sport adapté, l\\'accessibilité, ou le fonctionnement de la plateforme. Comment puis-je vous aider aujourd\\'hui ?'
+      text: "Bonjour ! Je suis l'Assistant Handiboost. Je suis là pour répondre à vos questions sur le sport adapté, l'accessibilité, ou le fonctionnement de la plateforme. Comment puis-je vous aider aujourd'hui ?"
     }
   ]);
   const [input, setInput] = useState('');
@@ -58,7 +58,7 @@ export function AIChatbot() {
       });
 
       if (!response.ok) {
-        throw new Error('Erreur de communication avec l\\'API');
+        throw new Error("Erreur de communication avec l'API");
       }
 
       const data = await response.json();
@@ -66,7 +66,7 @@ export function AIChatbot() {
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'model',
-        text: data.text || 'Désolé, je n\\'ai pas pu générer de réponse.',
+        text: data.text || "Désolé, je n'ai pas pu générer de réponse.",
       };
 
       setMessages((prev) => [...prev, botMessage]);
