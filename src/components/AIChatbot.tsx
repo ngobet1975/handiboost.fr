@@ -89,40 +89,47 @@ export function AIChatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-blue-800 hover:bg-blue-900 text-white rounded-full p-4 shadow-xl border-4 border-white transition-transform hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          className="fixed bottom-6 right-6 z-50 bg-blue-800 hover:bg-blue-900 text-white rounded-full py-3 px-4 shadow-2xl border-4 border-white transition-all hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(30,64,175,0.3)] flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-blue-300 group"
           aria-label="Ouvrir l'assistant Handiboost"
         >
-          <Bot className="w-8 h-8" />
-          <span className="hidden md:inline font-bold text-lg pr-2">Une question ?</span>
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-blue-100 shadow-inner relative">
+            <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center opacity-90 group-hover:scale-110 transition-transform duration-500" />
+          </div>
+          <span className="hidden md:inline font-black text-xl pr-2 tracking-wide">Une question ?</span>
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full md:w-[400px] h-[100dvh] md:h-[600px] max-h-[100dvh] bg-white md:rounded-2xl shadow-2xl flex flex-col border border-slate-200 overflow-hidden animate-in slide-in-from-bottom-8 duration-300">
+        <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full md:w-[420px] h-[100dvh] md:h-[650px] max-h-[100dvh] bg-white md:rounded-[2rem] shadow-2xl flex flex-col border-4 border-blue-100 overflow-hidden animate-in slide-in-from-bottom-8 duration-300">
           
           {/* Header */}
-          <div className="bg-blue-800 text-white p-4 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-lg">
-                <Sparkles className="w-6 h-6 text-yellow-300" />
+          <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 text-white p-5 flex items-center justify-between shrink-0 overflow-hidden">
+            {/* Playful Background Pattern */}
+            <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:200%_auto] opacity-20 mix-blend-screen pointer-events-none" />
+            
+            <div className="relative z-10 flex items-center gap-4">
+              <div className="w-14 h-14 bg-white rounded-2xl shadow-lg border-2 border-blue-200 flex items-center justify-center overflow-hidden relative">
+                 <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center" />
               </div>
               <div>
-                <h3 className="font-bold text-lg leading-tight">Assistant Handiboost</h3>
-                <p className="text-blue-200 text-sm font-medium">Réponses propulsées par IA</p>
+                <h3 className="font-black text-2xl leading-tight drop-shadow-md">Assistant IA</h3>
+                <p className="text-blue-100 text-sm font-bold flex items-center gap-1.5 mt-0.5">
+                  <Sparkles className="w-4 h-4 text-yellow-400 animate-pulse" /> Pose-moi tes questions !
+                </p>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-blue-100 hover:text-white hover:bg-white/10 p-2 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+              className="relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white"
               aria-label="Fermer"
             >
-              <X className="w-6 h-6" />
+              <X className="w-7 h-7" />
             </button>
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+          <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-slate-50/80">
             {messages.map((msg) => (
               <div
                 key={msg.id}
