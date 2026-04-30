@@ -13,11 +13,7 @@ export default function Home() {
           {/* Decorative background elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
-          {/* Decorative illustration - top right */}
-          <div className="absolute top-6 right-6 lg:top-10 lg:right-16 w-32 h-32 lg:w-48 lg:h-48 opacity-[0.12] pointer-events-none">
-            <div className="w-full h-full bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center bg-no-repeat" />
-          </div>
-          
+
           <div className="max-w-5xl mx-auto relative z-10">
             {/* Badge + Titre */}
             <div className="text-center mb-10">
@@ -90,8 +86,7 @@ export default function Home() {
                 <Card className="border-4 border-sky-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-sky-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-sky-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm overflow-hidden border-2 border-sky-100 relative">
-                       <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:600%_auto] bg-[5%_20%] opacity-90 mix-blend-multiply" />
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-sky-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-sky-100">
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Infos Pratiques</CardTitle>
                   </CardHeader>
@@ -107,8 +102,7 @@ export default function Home() {
                 <Card className="border-4 border-orange-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-orange-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-orange-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm overflow-hidden border-2 border-orange-100 relative">
-                       <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:600%_auto] bg-[90%_20%] opacity-90 mix-blend-multiply" />
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-orange-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-orange-100">
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Événements</CardTitle>
                   </CardHeader>
@@ -124,8 +118,7 @@ export default function Home() {
                 <Card className="border-4 border-pink-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-pink-600 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-pink-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm overflow-hidden border-2 border-pink-100 relative">
-                       <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:600%_auto] bg-[40%_20%] opacity-90 mix-blend-multiply" />
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-pink-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-pink-100">
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Actualités</CardTitle>
                   </CardHeader>
@@ -141,8 +134,7 @@ export default function Home() {
                 <Card className="border-4 border-purple-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-purple-700 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-purple-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm overflow-hidden border-2 border-purple-100 relative">
-                       <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:600%_auto] bg-[75%_20%] opacity-90 mix-blend-multiply" />
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-purple-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-purple-100">
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Professionnels</CardTitle>
                   </CardHeader>

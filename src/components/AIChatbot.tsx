@@ -138,7 +138,7 @@ export function AIChatbot() {
           aria-label="Ouvrir l'assistant Handiboost"
         >
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-blue-100 shadow-inner relative">
-            <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center opacity-90 group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute inset-0 bg-[url('/mascotte-ia.png')] bg-cover bg-center group-hover:scale-110 transition-transform duration-500" />
           </div>
           <span className="hidden md:inline font-black text-xl pr-2 tracking-wide">Une question ?</span>
         </button>
@@ -150,12 +150,10 @@ export function AIChatbot() {
           
           {/* Header */}
           <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 text-white p-5 flex items-center justify-between shrink-0 overflow-hidden">
-            {/* Playful Background Pattern */}
-            <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:200%_auto] opacity-20 mix-blend-screen pointer-events-none" />
             
             <div className="relative z-10 flex items-center gap-4">
               <div className="w-14 h-14 bg-white rounded-2xl shadow-lg border-2 border-blue-200 flex items-center justify-center overflow-hidden relative">
-                 <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center" />
+                 <div className="absolute inset-0 bg-[url('/mascotte-ia.png')] bg-cover bg-center" />
               </div>
               <div>
                 <h3 className="font-black text-2xl leading-tight drop-shadow-md">Assistant IA</h3>
