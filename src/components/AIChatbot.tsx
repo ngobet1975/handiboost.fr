@@ -83,6 +83,51 @@ export function AIChatbot() {
     }
   };
 
+  const formatMessageText = (text: string, role: 'user' | 'model') => {
+    if (role === 'user') {
+      return text.split('\n').map((line, i) => (
+        <React.Fragment key={i}>
+          {line}
+          {i !== text.split('\n').length - 1 && <br />}
+        </React.Fragment>
+      ));
+    }
+
+    const parseFormattedText = (str: string) => {
+      const parts = str.split(/(\*\*.*?\*\*)/g);
+      return parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={i} className="font-extrabold text-blue-700">{part.slice(2, -2)}</strong>;
+        }
+        return part;
+      });
+    };
+
+    // Add newlines before lists if they are inline
+    const formattedText = text.replace(/([^\n])(\* |- |\d+\. )/g, '$1\n$2');
+
+    return formattedText.split('\n').map((line, i) => {
+      if (line.trim() === '') return null;
+      
+      const match = line.trim().match(/^([\*|-] |\d+\. )/);
+      if (match) {
+        const isBullet = match[1].includes('*') || match[1].includes('-');
+        return (
+          <div key={i} className="flex gap-2 my-2 ml-1 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50 shadow-sm">
+            <span className="text-blue-600 font-bold shrink-0">{isBullet ? '•' : match[1]}</span>
+            <span className="text-slate-700">{parseFormattedText(line.trim().substring(match[1].length))}</span>
+          </div>
+        );
+      }
+      
+      return (
+        <p key={i} className="mb-3 last:mb-0 text-slate-800 leading-relaxed">
+          {parseFormattedText(line)}
+        </p>
+      );
+    });
+  };
+
   return (
     <>
       {/* Floating Button */}
@@ -133,27 +178,21 @@ export function AIChatbot() {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
+                className={`flex gap-3 max-w-[90%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
               >
                 <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-1 ${msg.role === 'user' ? 'bg-slate-200 text-slate-600' : 'bg-blue-100 text-blue-800'}`}>
                   {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                 </div>
                 
                 <div
-                  className={`p-3.5 rounded-2xl text-[15px] leading-relaxed shadow-sm ${
+                  className={`p-4 rounded-2xl text-[15px] shadow-sm ${
                     msg.role === 'user'
                       ? 'bg-blue-800 text-white rounded-tr-none'
                       : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none'
                   }`}
                   style={{ wordBreak: 'break-word' }}
                 >
-                  {/* Basic markdown parsing for links and bold if needed, but plain text for now */}
-                  {msg.text.split('\\n').map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      {i !== msg.text.split('\\n').length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
+                  {formatMessageText(msg.text, msg.role)}
                 </div>
               </div>
             ))}
