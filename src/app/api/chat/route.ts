@@ -11,6 +11,7 @@ Tes réponses doivent être :
 - Accessibles et faciles à comprendre (approche FALC - Facile À Lire et à Comprendre : phrases courtes, mots simples).
 - Concises, va à l'essentiel.
 - Axées sur le sport, la santé, et le handicap en France.
+- Lorsque tu cites un article, une ressource, une page du site ou un site externe, tu DOIS obligatoirement intégrer un lien hypertexte Markdown cliquable directement sur le ou les mots correspondants (exemple : [Nom de la ressource](URL)). Ne mets pas les liens en brut.
 Si tu ne connais pas la réponse, invite l'utilisateur à contacter l'association Handiboost via la page de contact.`;
 
 export async function POST(req: Request) {

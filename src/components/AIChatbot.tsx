@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, Sparkles, User, Loader2, Maximize2, Minimize2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessage {
   id: string;
@@ -84,50 +85,7 @@ export function AIChatbot() {
     }
   };
 
-  const formatMessageText = (text: string, role: 'user' | 'model') => {
-    if (role === 'user') {
-      return text.split('\n').map((line, i) => (
-        <React.Fragment key={i}>
-          {line}
-          {i !== text.split('\n').length - 1 && <br />}
-        </React.Fragment>
-      ));
-    }
 
-    const parseFormattedText = (str: string) => {
-      const parts = str.split(/(\*\*.*?\*\*)/g);
-      return parts.map((part, i) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          return <strong key={i} className="font-extrabold text-blue-700">{part.slice(2, -2)}</strong>;
-        }
-        return part;
-      });
-    };
-
-    // Add newlines before lists if they are inline
-    const formattedText = text.replace(/([^\n])(\* |- |\d+\. )/g, '$1\n$2');
-
-    return formattedText.split('\n').map((line, i) => {
-      if (line.trim() === '') return null;
-      
-      const match = line.trim().match(/^([\*|-] |\d+\. )/);
-      if (match) {
-        const isBullet = match[1].includes('*') || match[1].includes('-');
-        return (
-          <div key={i} className="flex gap-2 my-2 ml-1 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50 shadow-sm">
-            <span className="text-blue-600 font-bold shrink-0">{isBullet ? '•' : match[1]}</span>
-            <span className="text-slate-700">{parseFormattedText(line.trim().substring(match[1].length))}</span>
-          </div>
-        );
-      }
-      
-      return (
-        <p key={i} className="mb-3 last:mb-0 text-slate-800 leading-relaxed">
-          {parseFormattedText(line)}
-        </p>
-      );
-    });
-  };
 
   return (
     <>
@@ -196,11 +154,20 @@ export function AIChatbot() {
                   className={`p-4 rounded-2xl text-[15px] shadow-sm ${
                     msg.role === 'user'
                       ? 'bg-blue-800 text-white rounded-tr-none'
-                      : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none'
+                      : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none prose prose-slate prose-p:leading-relaxed prose-strong:text-blue-700 prose-strong:font-extrabold prose-li:marker:text-blue-600 prose-li:marker:font-bold prose-ul:bg-blue-50/50 prose-ul:p-4 prose-ul:rounded-xl prose-ul:border prose-ul:border-blue-100/50 prose-ol:bg-blue-50/50 prose-ol:p-4 prose-ol:rounded-xl prose-ol:border prose-ol:border-blue-100/50 max-w-none'
                   }`}
                   style={{ wordBreak: 'break-word' }}
                 >
-                  {formatMessageText(msg.text, msg.role)}
+                  {msg.role === 'user' ? (
+                    msg.text.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        {i !== msg.text.split('\n').length - 1 && <br />}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  )}
                 </div>
               </div>
             ))}

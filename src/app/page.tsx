@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { HomeSearchBar } from '@/components/HomeSearchBar'
 
 export default function Home() {
   return (
@@ -32,22 +33,7 @@ export default function Home() {
             </div>
 
             {/* Barre de recherche */}
-            <div className="w-full max-w-2xl mx-auto bg-white p-5 rounded-2xl shadow-lg border-2 border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10">
-              <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-2xl">
-                  🔍
-                </div>
-                <input 
-                  type="text" 
-                  id="search"
-                  className="w-full bg-slate-50 border-2 border-slate-200 text-slate-900 rounded-xl py-4 pl-14 pr-6 text-lg font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400" 
-                  placeholder="Activité, aide, événement, ressource..." 
-                />
-              </div>
-              <Button className="bg-blue-800 hover:bg-blue-900 text-white text-lg font-bold rounded-xl px-8 h-14 sm:w-auto w-full transition-all shadow-md">
-                Chercher
-              </Button>
-            </div>
+            <HomeSearchBar />
 
             {/* CTA - Choix du profil */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
