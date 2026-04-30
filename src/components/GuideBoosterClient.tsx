@@ -228,11 +228,9 @@ export function GuideBoosterClient({ entries }: { entries: GuideEntry[] }) {
         <div className="bg-white border-2 border-slate-200 p-6 md:p-8 rounded-2xl text-center">
           <h3 className="text-xl font-bold text-slate-900 mb-2">Un lien ne fonctionne plus ? Une info est périmée ?</h3>
           <p className="text-slate-600 mb-4">Aidez-nous à maintenir cet outil à jour en nous signalant le problème.</p>
-          <Link href="/contact">
-            <Button className="bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 h-12 rounded-xl">
-              <AlertTriangle className="w-4 h-4 mr-2" /> Signaler un problème
-            </Button>
-          </Link>
+          <Button nativeButton={false} render={<Link href="/contact" />} className="bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 h-12 rounded-xl">
+            <AlertTriangle className="w-4 h-4 mr-2" /> Signaler un problème
+          </Button>
         </div>
       </div>
     </div>

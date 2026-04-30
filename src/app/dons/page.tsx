@@ -46,30 +46,26 @@ export default function DonsPage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-            <a
-              href="https://www.helloasso.com/associations/handiboost"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto"
+            <Button
+              nativeButton={false}
+              render={<a href="https://www.helloasso.com/associations/handiboost" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto" />}
+              size="lg" 
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 text-xl font-black h-auto py-5 px-10 rounded-2xl shadow-2xl hover:-translate-y-1 transition-all"
             >
-              <Button size="lg" className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 text-xl font-black h-auto py-5 px-10 rounded-2xl shadow-2xl hover:-translate-y-1 transition-all">
-                <Gift className="w-6 h-6 mr-3" />
-                Faire un don
-                <ExternalLink className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
-            <a
-              href="https://www.helloasso.com/associations/handiboost/adhesions/adhesion-1"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto"
+              <Gift className="w-6 h-6 mr-3" />
+              Faire un don
+              <ExternalLink className="w-5 h-5 ml-2" />
+            </Button>
+            <Button
+              nativeButton={false}
+              render={<a href="https://www.helloasso.com/associations/handiboost/adhesions/adhesion-1" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto" />}
+              size="lg" 
+              className="w-full bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white text-xl font-bold h-auto py-5 px-10 rounded-2xl border-2 border-white/30 hover:-translate-y-1 transition-all"
             >
-              <Button size="lg" className="w-full bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white text-xl font-bold h-auto py-5 px-10 rounded-2xl border-2 border-white/30 hover:-translate-y-1 transition-all">
-                <Users className="w-6 h-6 mr-3" />
-                Devenir adhérent
-                <ExternalLink className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+              <Users className="w-6 h-6 mr-3" />
+              Devenir adhérent
+              <ExternalLink className="w-5 h-5 ml-2" />
+            </Button>
           </div>
         </div>
       </section>
@@ -147,15 +143,13 @@ export default function DonsPage() {
                 <span>Paiement sécurisé HelloAsso</span>
               </li>
             </ul>
-            <a
-              href="https://www.helloasso.com/associations/handiboost"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              nativeButton={false}
+              render={<a href="https://www.helloasso.com/associations/handiboost" target="_blank" rel="noopener noreferrer" />}
+              className="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-black text-xl h-auto py-5 rounded-2xl shadow-lg hover:-translate-y-1 transition-all"
             >
-              <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-black text-xl h-auto py-5 rounded-2xl shadow-lg hover:-translate-y-1 transition-all">
-                Faire un don <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+              Faire un don <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
 
           {/* Adhésion */}
@@ -185,15 +179,13 @@ export default function DonsPage() {
                 <span>Contribuez à orienter les projets de l'association</span>
               </li>
             </ul>
-            <a
-              href="https://www.helloasso.com/associations/handiboost/adhesions/adhesion-1"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              nativeButton={false}
+              render={<a href="https://www.helloasso.com/associations/handiboost/adhesions/adhesion-1" target="_blank" rel="noopener noreferrer" />}
+              className="w-full bg-blue-700 hover:bg-blue-800 text-white font-black text-xl h-auto py-5 rounded-2xl shadow-lg hover:-translate-y-1 transition-all"
             >
-              <Button className="w-full bg-blue-700 hover:bg-blue-800 text-white font-black text-xl h-auto py-5 rounded-2xl shadow-lg hover:-translate-y-1 transition-all">
-                Adhérer à l'association <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </a>
+              Adhérer à l'association <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
         </section>
 

@@ -120,11 +120,9 @@ export default async function AidesFinancieresPage() {
           <p className="text-xl mb-8 max-w-3xl mx-auto text-blue-100">
             Les assistants sociaux de votre MDPH ou de votre Centre Communal d'Action Sociale (CCAS) peuvent vous accompagner gratuitement dans le montage d'un dossier de financement.
           </p>
-          <Link href="/contact">
-            <Button className="bg-white text-blue-900 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-xl">
-              Nous contacter pour un conseil
-            </Button>
-          </Link>
+          <Button nativeButton={false} render={<Link href="/contact" />} className="bg-white text-blue-900 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-xl">
+            Nous contacter pour un conseil
+          </Button>
         </section>
 
       </div>

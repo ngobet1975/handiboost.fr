@@ -28,29 +28,29 @@ export default async function AdminPage() {
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Link href="/admin/annuaire" className="block group">
-            <div className="p-6 border border-slate-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow h-full">
+            <div className="p-6 border border-slate-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow h-full flex flex-col">
               <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4 text-xl">🗺️</div>
               <h2 className="text-xl font-semibold mb-2 group-hover:text-blue-700 transition-colors">Guide Booster</h2>
-              <p className="text-gray-500 mb-6 text-sm">Administrez les structures APA, leurs fiches détaillées et importez depuis Excel.</p>
-              <Button className="w-full">Gérer l'annuaire</Button>
+              <p className="text-gray-500 mb-6 text-sm flex-1">Administrez les structures APA, leurs fiches détaillées et importez depuis Excel.</p>
+              <div className="w-full inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground h-9 px-4 py-2 text-sm font-medium">Gérer l'annuaire</div>
             </div>
           </Link>
           
           <Link href="/admin/articles" className="block group">
-            <div className="p-6 border border-slate-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow h-full">
+            <div className="p-6 border border-slate-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow h-full flex flex-col">
               <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-4 text-xl">📰</div>
               <h2 className="text-xl font-semibold mb-2 group-hover:text-emerald-700 transition-colors">Contenu Éditorial</h2>
-              <p className="text-gray-500 mb-6 text-sm">Rédigez les actualités, fixez les dates de péremption, et uploadez des ressources PDF.</p>
-              <Button variant="secondary" className="w-full">Ouvrir le CMS</Button>
+              <p className="text-gray-500 mb-6 text-sm flex-1">Rédigez les actualités, fixez les dates de péremption, et uploadez des ressources PDF.</p>
+              <div className="w-full inline-flex items-center justify-center rounded-lg bg-secondary text-secondary-foreground h-9 px-4 py-2 text-sm font-medium">Ouvrir le CMS</div>
             </div>
           </Link>
 
           <Link href="/admin/users" className="block group">
-            <div className="p-6 border border-slate-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow h-full">
+            <div className="p-6 border border-slate-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-shadow h-full flex flex-col">
               <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-4 text-xl">🔐</div>
               <h2 className="text-xl font-semibold mb-2 group-hover:text-purple-700 transition-colors">Professionnels</h2>
-              <p className="text-gray-500 mb-6 text-sm">Modérez les inscriptions des médecins et professionnels ayant demandé un accès.</p>
-              <Button variant="outline" className="w-full border-slate-300">Vérifier les comptes</Button>
+              <p className="text-gray-500 mb-6 text-sm flex-1">Modérez les inscriptions des médecins et professionnels ayant demandé un accès.</p>
+              <div className="w-full inline-flex items-center justify-center rounded-lg border border-slate-300 bg-background hover:bg-slate-100 text-slate-800 h-9 px-4 py-2 text-sm font-medium">Vérifier les comptes</div>
             </div>
           </Link>
         </div>

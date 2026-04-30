@@ -143,11 +143,9 @@ export function EventCard({ data }: { data: EventData }) {
       </CardContent>
 
       <CardFooter className="pt-4 pb-6 px-6 border-t border-slate-50 mt-auto">
-        <Link href={`/pratiquants/evenements/${data.slug}`} className="w-full">
-          <Button className="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold text-lg h-14 rounded-xl">
-            En savoir plus <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </Link>
+        <Button nativeButton={false} render={<Link href={`/pratiquants/evenements/${data.slug}`} />} className="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold text-lg h-14 rounded-xl">
+          En savoir plus <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
       </CardFooter>
     </Card>
   );

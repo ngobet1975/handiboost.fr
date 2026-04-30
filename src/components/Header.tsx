@@ -32,12 +32,12 @@ export function Header() {
         <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
       </nav>
       <div className="flex items-center gap-6 hidden xl:flex">
-        <Link href="/dons">
-          <Button variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">❤️ Faire un don</Button>
-        </Link>
-        <Link href="/login">
-          <Button className="bg-purple-700 hover:bg-purple-800 text-xl font-extrabold h-16 px-8 shadow-xl rounded-2xl transition-all text-white">Accès Guide Booster</Button>
-        </Link>
+        <Button nativeButton={false} render={<Link href="/dons" />} variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">
+          ❤️ Faire un don
+        </Button>
+        <Button nativeButton={false} render={<Link href="/login" />} className="bg-purple-700 hover:bg-purple-800 text-xl font-extrabold h-16 px-8 shadow-xl rounded-2xl transition-all text-white">
+          Accès Guide Booster
+        </Button>
       </div>
       {/* Mobile menu button */}
       <button className="xl:hidden p-2 text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 border-2 border-slate-300 transition-colors" aria-label="Menu">
