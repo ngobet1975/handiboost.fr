@@ -74,7 +74,7 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
               <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
                 <SelectValue placeholder="Tous les types" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="min-w-[280px]">
                 <SelectItem value="all" className="text-lg py-3 font-medium">🏠 Tous les types</SelectItem>
                 <SelectItem value="club" className="text-lg py-3 font-medium">⚽ Un sport en club</SelectItem>
                 <SelectItem value="maison" className="text-lg py-3 font-medium">🏡 Pratique à la maison</SelectItem>
@@ -93,7 +93,7 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
               <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
                 <SelectValue placeholder="Toutes les régions" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="min-w-[300px]">
                 <SelectItem value="all" className="text-lg py-3 font-medium">🇫🇷 Toutes les régions</SelectItem>
                 <SelectItem value="Auvergne-Rhône-Alpes" className="text-lg py-3 font-medium">📍 Auvergne-Rhône-Alpes</SelectItem>
                 <SelectItem value="Bretagne" className="text-lg py-3 font-medium">📍 Bretagne</SelectItem>
@@ -113,7 +113,7 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
               <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
                 <SelectValue placeholder="Tous les publics" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="min-w-[300px]">
                 <SelectItem value="all" className="text-lg py-3 font-medium">👥 Tous les publics</SelectItem>
                 <SelectItem value="enfant" className="text-lg py-3 font-medium">👶 Enfant</SelectItem>
                 <SelectItem value="adulte" className="text-lg py-3 font-medium">🧑 Adulte</SelectItem>
