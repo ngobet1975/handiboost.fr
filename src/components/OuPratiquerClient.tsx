@@ -4,8 +4,34 @@ import React, { useState, useMemo } from 'react';
 import { DirectoryCard, DirectoryData } from './DirectoryCard';
 import { Search, Filter, MapPin, Activity, Users, FolderOpen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+
+const categoryLabels: Record<string, string> = {
+  "all": "🏠 Tous les types",
+  "club": "⚽ Un sport en club",
+  "maison": "🏡 Pratique à la maison",
+  "enseignant-apa": "🎓 Un enseignant APA",
+  "kine": "🩺 Un kinésithérapeute"
+};
+
+const regionLabels: Record<string, string> = {
+  "all": "🇫🇷 Toutes les régions",
+  "Auvergne-Rhône-Alpes": "📍 Auvergne-Rhône-Alpes",
+  "Bretagne": "📍 Bretagne",
+  "Île-de-France": "📍 Île-de-France",
+  "Nouvelle-Aquitaine": "📍 Nouvelle-Aquitaine",
+  "Occitanie": "📍 Occitanie",
+};
+
+const publicLabels: Record<string, string> = {
+  "all": "👥 Tous les publics",
+  "enfant": "👶 Enfant",
+  "adulte": "🧑 Adulte",
+  "senior": "👴 Senior",
+  "personne en situation de handicap": "♿ En situation de handicap",
+  "maladie chronique / ALD": "🏥 Maladie chronique / ALD",
+};
 
 export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,7 +98,7 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
             </label>
             <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v || "all")}>
               <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
-                <SelectValue placeholder="Tous les types" />
+                <span data-slot="select-value" className="flex flex-1 text-left">{categoryLabels[categoryFilter] || "🏠 Tous les types"}</span>
               </SelectTrigger>
               <SelectContent className="min-w-[280px]">
                 <SelectItem value="all" className="text-lg py-3 font-medium">🏠 Tous les types</SelectItem>
@@ -91,7 +117,7 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
             </label>
             <Select value={regionFilter} onValueChange={(v) => setRegionFilter(v || "all")}>
               <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
-                <SelectValue placeholder="Toutes les régions" />
+                <span data-slot="select-value" className="flex flex-1 text-left">{regionLabels[regionFilter] || "🇫🇷 Toutes les régions"}</span>
               </SelectTrigger>
               <SelectContent className="min-w-[300px]">
                 <SelectItem value="all" className="text-lg py-3 font-medium">🇫🇷 Toutes les régions</SelectItem>
@@ -111,7 +137,7 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
             </label>
             <Select value={publicFilter} onValueChange={(v) => setPublicFilter(v || "all")}>
               <SelectTrigger className="h-16 text-xl bg-slate-50 border-3 border-slate-200 rounded-2xl font-medium">
-                <SelectValue placeholder="Tous les publics" />
+                <span data-slot="select-value" className="flex flex-1 text-left">{publicLabels[publicFilter] || "👥 Tous les publics"}</span>
               </SelectTrigger>
               <SelectContent className="min-w-[300px]">
                 <SelectItem value="all" className="text-lg py-3 font-medium">👥 Tous les publics</SelectItem>
