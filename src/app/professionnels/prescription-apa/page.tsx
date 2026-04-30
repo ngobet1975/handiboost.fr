@@ -148,7 +148,7 @@ export default async function PrescriptionApaPage() {
                     nativeButton={false}
                     key={resource.id}
                     variant="default"
-                    render={<a href={resource.fileUrl || "#"} target="_blank" rel="noopener noreferrer" />}
+                    render={<a href={resource.fileUrl || "#"} target="_blank" rel="noopener noreferrer" download={resource.format === 'pdf' ? true : undefined} />}
                     className="w-full h-auto py-4 whitespace-normal text-center flex flex-col items-center justify-center gap-1 bg-white hover:bg-slate-100 text-slate-900 rounded-xl"
                   >
                     <span className="font-bold text-base">Télécharger {resource.title.toLowerCase()}</span>

@@ -59,7 +59,7 @@ export function ProResourceCard({ resource }: { resource: ProResource }) {
       <CardFooter className="pt-4 pb-5 px-5 mt-auto flex flex-col items-start gap-3 border-t border-slate-50 bg-slate-50">
         <Button 
           nativeButton={false}
-          render={<a href={url} target="_blank" rel="noopener noreferrer" aria-label={`${isPdf ? 'Télécharger' : 'Consulter'} ${resource.title}`} />}
+          render={<a href={url} target="_blank" rel="noopener noreferrer" download={isPdf ? true : undefined} aria-label={`${isPdf ? 'Télécharger' : 'Consulter'} ${resource.title}`} />}
           className={`w-full font-bold text-sm h-12 rounded-lg flex items-center justify-center gap-2 whitespace-nowrap ${
             isPdf 
               ? "bg-slate-800 hover:bg-slate-900 text-white" 
