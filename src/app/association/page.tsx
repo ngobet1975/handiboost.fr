@@ -29,32 +29,32 @@ export default function AssociationPage() {
         
         {/* Mission Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300">
-            <div className="w-16 h-16 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center mb-6">
-              <Target className="w-8 h-8" />
+          <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '100ms' }}>
+            <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+              <Target className="w-10 h-10" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">Notre Mission</h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-blue-700 transition-colors">Notre Mission</h2>
+            <p className="text-lg text-slate-600 leading-relaxed font-medium">
               Faciliter l'accès au sport pour les personnes en situation de handicap ou atteintes de maladies chroniques.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300">
-            <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mb-6">
-              <Heart className="w-8 h-8" />
+          <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '300ms' }}>
+            <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500">
+              <Heart className="w-10 h-10" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">Nos Valeurs</h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-emerald-700 transition-colors">Nos Valeurs</h2>
+            <p className="text-lg text-slate-600 leading-relaxed font-medium">
               Inclusion, bienveillance et rigueur médicale. L'Activité Physique Adaptée doit être accessible et sécurisée.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300">
-            <div className="w-16 h-16 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mb-6">
-              <Handshake className="w-8 h-8" />
+          <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '500ms' }}>
+            <div className="w-20 h-20 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+              <Handshake className="w-10 h-10" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">Notre Réseau</h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-amber-700 transition-colors">Notre Réseau</h2>
+            <p className="text-lg text-slate-600 leading-relaxed font-medium">
               Nous fédérons des professionnels de santé, des enseignants en APA et des clubs sportifs engagés.
             </p>
           </div>

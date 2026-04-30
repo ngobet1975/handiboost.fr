@@ -166,7 +166,22 @@ export function AIChatbot() {
                       </React.Fragment>
                     ))
                   ) : (
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    <ReactMarkdown
+                      components={{
+                        a: ({ node, ...props }) => {
+                          const isExternal = props.href?.startsWith('http') && !props.href.includes('handiboost.fr');
+                          return (
+                            <a
+                              {...props}
+                              target={isExternal ? "_blank" : undefined}
+                              rel={isExternal ? "noopener noreferrer" : undefined}
+                            />
+                          );
+                        }
+                      }}
+                    >
+                      {msg.text}
+                    </ReactMarkdown>
                   )}
                 </div>
               </div>
