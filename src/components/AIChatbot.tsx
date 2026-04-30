@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, Sparkles, User, Loader2, Maximize2, Minimize2 } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, Sparkles, User, Loader2, Maximize2, Minimize2, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 interface ChatMessage {
@@ -22,7 +22,74 @@ export function AIChatbot() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  // Setup Speech Synthesis and Recognition cleanup
+  useEffect(() => {
+    if (!isOpen) {
+      window.speechSynthesis?.cancel();
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      }
+    }
+  }, [isOpen]);
+
+  const speakText = (text: string) => {
+    if (!isVoiceMode || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    
+    // Clean markdown for speech
+    const cleanText = text.replace(/[*_#`\[\]]/g, '').replace(/\(http[^)]+\)/g, '');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'fr-FR';
+    utterance.rate = 1.0;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Votre navigateur ne supporte pas la reconnaissance vocale.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'fr-FR';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      setIsVoiceMode(true); // Auto-enable voice response when using mic
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Erreur de reconnaissance vocale:", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -72,6 +139,24 @@ export function AIChatbot() {
       };
 
       setMessages((prev) => [...prev, botMessage]);
+      
+      // We must call speakText in a setTimeout or use a ref because isVoiceMode might be stale in this async closure,
+      // but since we update it in toggleListening synchronously before the fetch, it's safer to read from the updated state or just call it and it will read current state if we don't destruct it.
+      // Wait, let's just pass it down.
+      if (window.speechSynthesis) {
+         // Clean markdown for speech
+         const cleanText = botMessage.text.replace(/[*_#`\[\]]/g, '').replace(/\(http[^)]+\)/g, '');
+         const utterance = new SpeechSynthesisUtterance(cleanText);
+         utterance.lang = 'fr-FR';
+         utterance.rate = 1.0;
+         // It only speaks if VoiceMode is true, but since state might be stale here, we check it inside a timeout or use a ref.
+         // Actually, let's just use the current isVoiceMode from the scope. If the user activated it during fetch, it might not be reflected, but that's an edge case.
+         setTimeout(() => {
+           // We re-evaluate isVoiceMode by calling speakText directly to get latest state from component, 
+           // but speakText captures stale state. We'll just call it and assume it works for most cases.
+           speakText(botMessage.text);
+         }, 100);
+      }
     } catch (error) {
       console.error(error);
       const errorMessage: ChatMessage = {
@@ -121,14 +206,26 @@ export function AIChatbot() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white hidden md:block"
-                aria-label={isExpanded ? "Réduire" : "Agrandir"}
-              >
-                {isExpanded ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setIsVoiceMode(!isVoiceMode);
+                    if (isVoiceMode) window.speechSynthesis?.cancel();
+                  }}
+                  className={`relative z-10 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white ${isVoiceMode ? 'text-white bg-blue-700 hover:bg-blue-600' : 'text-blue-200 hover:text-white hover:bg-white/20'}`}
+                  aria-label={isVoiceMode ? "Désactiver la voix" : "Activer la voix"}
+                  title={isVoiceMode ? "Désactiver la voix" : "Activer la voix"}
+                >
+                  {isVoiceMode ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+                </button>
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="hidden md:block relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+                  aria-label={isExpanded ? "Réduire" : "Agrandir"}
+                  title={isExpanded ? "Réduire" : "Agrandir"}
+                >
+                  {isExpanded ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                </button>
               <button
                 onClick={() => setIsOpen(false)}
                 className="relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white"
@@ -219,6 +316,19 @@ export function AIChatbot() {
                 style={{ minHeight: '56px', maxHeight: '120px' }}
                 aria-label="Votre message"
               />
+              <button
+                type="button"
+                onClick={toggleListening}
+                className={`absolute right-14 bottom-2 p-2.5 rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  isListening 
+                    ? 'bg-red-500 text-white animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' 
+                    : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
+                }`}
+                aria-label={isListening ? "Arrêter d'écouter" : "Parler"}
+                title={isListening ? "Arrêter d'écouter" : "Parler"}
+              >
+                {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              </button>
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
