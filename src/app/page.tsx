@@ -64,19 +64,20 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex-1 w-full relative">
-              <div className="w-full max-w-lg mx-auto bg-white rounded-[3rem] overflow-hidden shadow-2xl flex flex-col text-center transform lg:rotate-2 hover:rotate-0 transition-transform duration-500 border-8 border-white relative group">
-                <div className="w-full h-80 bg-slate-50 relative overflow-hidden">
+            <div className="hidden lg:flex flex-1 w-full justify-center relative">
+              <div className="w-72 xl:w-80 bg-white rounded-3xl overflow-hidden shadow-lg flex flex-col text-center transform rotate-2 hover:rotate-0 transition-transform duration-500 border-4 border-slate-100 relative group">
+                <div className="w-full h-48 bg-slate-50 relative overflow-hidden">
                   <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-700 opacity-90 mix-blend-multiply" />
                 </div>
-                <div className="p-8 w-full bg-gradient-to-br from-blue-50 to-pink-50 border-t-4 border-slate-100">
-                  <h3 className="text-3xl font-extrabold text-slate-900 mb-2">Le sport pour tous</h3>
-                  <p className="text-lg text-slate-700 font-medium">
+                <div className="p-5 w-full bg-gradient-to-br from-blue-50 to-pink-50 border-t-2 border-slate-100">
+                  <h3 className="text-xl font-extrabold text-slate-900 mb-1">Le sport pour tous</h3>
+                  <p className="text-sm text-slate-600 font-medium">
                     Bouger, pratiquer, progresser ensemble.
                   </p>
                 </div>
               </div>
             </div>
+
           </div>
         </section>
 
