@@ -36,6 +36,7 @@ export async function POST(req: Request) {
       ],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
+        tools: [{ googleSearch: {} }],
       }
     });
 

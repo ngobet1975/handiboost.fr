@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, Sparkles, User, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, Sparkles, User, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 
 interface ChatMessage {
   id: string;
@@ -11,6 +11,7 @@ interface ChatMessage {
 
 export function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
@@ -146,7 +147,7 @@ export function AIChatbot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full md:w-[420px] h-[100dvh] md:h-[650px] max-h-[100dvh] bg-white md:rounded-[2rem] shadow-2xl flex flex-col border-4 border-blue-100 overflow-hidden animate-in slide-in-from-bottom-8 duration-300">
+        <div className={`fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full ${isExpanded ? 'md:w-[800px] md:h-[80vh]' : 'md:w-[420px] md:h-[650px]'} h-[100dvh] max-h-[100dvh] bg-white md:rounded-[2rem] shadow-2xl flex flex-col border-4 border-blue-100 overflow-hidden animate-in slide-in-from-bottom-8 duration-300 transition-all`}>
           
           {/* Header */}
           <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 text-white p-5 flex items-center justify-between shrink-0 overflow-hidden">
@@ -162,13 +163,22 @@ export function AIChatbot() {
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white"
-              aria-label="Fermer"
-            >
-              <X className="w-7 h-7" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white hidden md:block"
+                aria-label={isExpanded ? "Réduire" : "Agrandir"}
+              >
+                {isExpanded ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="relative z-10 text-blue-100 hover:text-white hover:bg-white/20 p-2.5 rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Fermer"
+              >
+                <X className="w-7 h-7" />
+              </button>
+            </div>
           </div>
 
           {/* Messages Area */}
