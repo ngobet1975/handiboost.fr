@@ -9,77 +9,71 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 py-12 lg:py-16 px-6 border-b-4 border-slate-200 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 py-16 lg:py-24 px-6 border-b-4 border-slate-200 overflow-hidden">
           {/* Decorative background elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
+          {/* Decorative illustration - top right */}
+          <div className="absolute top-6 right-6 lg:top-10 lg:right-16 w-32 h-32 lg:w-48 lg:h-48 opacity-[0.12] pointer-events-none">
+            <div className="w-full h-full bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center bg-no-repeat" />
+          </div>
           
-          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 relative z-10">
-            <div className="flex-1 space-y-6">
-              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-5 py-2 rounded-full font-bold text-lg mb-2">
+          <div className="max-w-5xl mx-auto relative z-10">
+            {/* Badge + Titre */}
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-5 py-2 rounded-full font-bold text-lg mb-6">
                 💙 Association loi 1901
               </div>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
-                L'Activité Physique Adaptée,<br />
+                L&apos;Activité Physique Adaptée,<br />
                 <span className="bg-gradient-to-r from-blue-700 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                   pour la santé de tous.
                 </span>
               </h1>
-              <p className="text-2xl lg:text-3xl text-slate-700 max-w-2xl leading-normal font-medium">
-                Que vous cherchiez une activité pour vous-même, pour un proche, ou des ressources professionnelles — choisissez votre profil :
+              <p className="text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium mt-6">
+                Trouvez une activité, un événement, une aide financière ou des ressources professionnelles — tout est ici.
               </p>
+            </div>
+
+            {/* Barre de recherche */}
+            <div className="w-full max-w-2xl mx-auto bg-white p-5 rounded-2xl shadow-lg border-2 border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-10">
+              <div className="relative flex-1">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-2xl">
+                  🔍
+                </div>
+                <input 
+                  type="text" 
+                  id="search"
+                  className="w-full bg-slate-50 border-2 border-slate-200 text-slate-900 rounded-xl py-4 pl-14 pr-6 text-lg font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400" 
+                  placeholder="Activité, aide, événement, ressource..." 
+                />
+              </div>
+              <Button className="bg-blue-800 hover:bg-blue-900 text-white text-lg font-bold rounded-xl px-8 h-14 sm:w-auto w-full transition-all shadow-md">
+                Chercher
+              </Button>
+            </div>
+
+            {/* CTA - Choix du profil */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
+              <Link href="/pratiquants" className="group bg-blue-800 hover:bg-blue-900 text-white py-7 px-8 flex items-center gap-5 rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all no-underline">
+                <span className="text-4xl flex-shrink-0">🙋‍♀️</span>
+                <div>
+                  <span className="block text-2xl font-bold">Je suis pratiquant</span>
+                  <span className="block text-base font-medium text-blue-200 mt-1">Activités, événements, aides financières</span>
+                </div>
+              </Link>
               
-              <div className="w-full max-w-2xl bg-white p-6 rounded-3xl shadow-xl border-4 border-slate-100 flex flex-col gap-4 relative z-10">
-                <label htmlFor="search" className="text-2xl font-bold text-slate-900 ml-2">Que souhaitez-vous faire ?</label>
-                <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                  <div className="relative flex-1">
-                    <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-3xl">
-                      🔍
-                    </div>
-                    <input 
-                      type="text" 
-                      id="search"
-                      className="w-full bg-slate-50 border-4 border-slate-200 text-slate-900 rounded-2xl py-5 pl-16 pr-6 text-xl font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-500" 
-                      placeholder="Activité, aide, événement, ressource..." 
-                    />
-                  </div>
-                  <Button className="bg-blue-800 hover:bg-blue-900 text-white text-xl font-bold rounded-2xl px-8 h-[72px] sm:w-auto w-full transition-all shadow-md">
-                    Chercher
-                  </Button>
+              <Link href="/professionnels" className="group bg-purple-700 hover:bg-purple-800 text-white py-7 px-8 flex items-center gap-5 rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all no-underline">
+                <span className="text-4xl flex-shrink-0">🩺</span>
+                <div>
+                  <span className="block text-2xl font-bold">Je suis professionnel</span>
+                  <span className="block text-base font-medium text-purple-200 mt-1">Ressources, outils, Guide Booster</span>
                 </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-stretch gap-6 pt-4">
-                <Link href="/pratiquants" className="flex-1 w-full bg-blue-800 hover:bg-blue-900 text-white text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-all border-4 border-transparent hover:border-blue-300 no-underline text-center">
-                  <span className="text-5xl">🙋‍♀️</span>
-                  <span className="text-3xl font-bold">Je suis pratiquant</span>
-                  <span className="text-xl font-medium text-blue-100 text-center leading-snug tracking-wide">Trouver une activité, un événement ou une aide financière.</span>
-                </Link>
-                
-                <Link href="/professionnels" className="flex-1 w-full bg-purple-700 hover:bg-purple-800 text-white text-2xl font-bold h-auto py-8 px-6 flex flex-col items-center gap-4 rounded-3xl shadow-2xl hover:-translate-y-2 transition-all border-4 border-transparent hover:border-purple-300 no-underline text-center">
-                  <span className="text-5xl">🩺</span>
-                  <span className="text-3xl font-bold">Je suis professionnel</span>
-                  <span className="text-xl font-medium text-purple-100 text-center leading-snug tracking-wide">Accéder aux ressources, outils et au Guide Booster.</span>
-                </Link>
-              </div>
+              </Link>
             </div>
-
-            <div className="hidden lg:flex flex-1 w-full justify-center relative">
-              <div className="w-72 xl:w-80 bg-white rounded-3xl overflow-hidden shadow-lg flex flex-col text-center transform rotate-2 hover:rotate-0 transition-transform duration-500 border-4 border-slate-100 relative group">
-                <div className="w-full h-48 bg-slate-50 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('/bonhommes-handiboost.png')] bg-[length:350%_auto] bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-700 opacity-90 mix-blend-multiply" />
-                </div>
-                <div className="p-5 w-full bg-gradient-to-br from-blue-50 to-pink-50 border-t-2 border-slate-100">
-                  <h3 className="text-xl font-extrabold text-slate-900 mb-1">Le sport pour tous</h3>
-                  <p className="text-sm text-slate-600 font-medium">
-                    Bouger, pratiquer, progresser ensemble.
-                  </p>
-                </div>
-              </div>
-            </div>
-
           </div>
         </section>
+
 
 
 
