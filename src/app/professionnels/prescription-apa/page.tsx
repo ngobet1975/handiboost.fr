@@ -176,10 +176,10 @@ export default async function PrescriptionApaPage() {
               </p>
               <Button 
                 nativeButton={false}
-                render={<a href="https://guidebooster.handiboost.fr" target="_blank" rel="noopener noreferrer" />}
+                render={<Link href="/guide-booster" />}
                 className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold h-12 rounded-xl"
               >
-                Accéder au Guide Booster <ExternalLink className="ml-2 w-4 h-4 shrink-0" />
+                Accéder au Guide Booster <ArrowRight className="ml-2 w-4 h-4 shrink-0" />
               </Button>
             </div>
 
