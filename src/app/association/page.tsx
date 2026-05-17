@@ -28,34 +28,48 @@ export default function AssociationPage() {
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
         
         {/* Mission Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {/* Mission */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '100ms' }}>
-            <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
-              <Target className="w-10 h-10" />
+            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-blue-50 border-4 border-blue-100 shadow-inner">
+              <img src="/bonhommes-handiboost.png" alt="Personnage Handiboost" className="w-full h-full object-cover object-[10%_50%]" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-blue-700 transition-colors">Notre Mission</h2>
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-blue-700 transition-colors">Notre mission</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
-              Faciliter l'accès au sport pour les personnes en situation de handicap ou atteintes de maladies chroniques.
+              HandiBoost est un guichet unique dédié à l’activité physique adaptée. Il centralise les informations, les contacts et les ressources pour aider les personnes et les professionnels à trouver facilement des solutions adaptées à leurs besoins, sans avoir à chercher sur plusieurs plateformes.
             </p>
           </div>
 
+          {/* Valeurs */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '300ms' }}>
-            <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-500">
-              <Heart className="w-10 h-10" />
+            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-emerald-50 border-4 border-emerald-100 shadow-inner">
+              <img src="/bonhommes-handiboost.png" alt="Personnage Handiboost" className="w-full h-full object-cover object-[40%_50%]" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-emerald-700 transition-colors">Nos Valeurs</h2>
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-emerald-700 transition-colors">Nos valeurs</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
-              Inclusion, bienveillance et rigueur médicale. L'Activité Physique Adaptée doit être accessible et sécurisée.
+              Accessibilité, inclusion, coopération. Nos valeurs reposent sur l’écoute, le partage et l’échange afin de développer les réseaux selon les spécialités et les retours d’expérience de chacun.
             </p>
           </div>
 
+          {/* Réseau */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '500ms' }}>
-            <div className="w-20 h-20 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
-              <Handshake className="w-10 h-10" />
+            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-amber-50 border-4 border-amber-100 shadow-inner">
+              <img src="/bonhommes-handiboost.png" alt="Personnage Handiboost" className="w-full h-full object-cover object-[70%_50%]" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-amber-700 transition-colors">Notre Réseau</h2>
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-amber-700 transition-colors">Notre réseau</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
-              Nous fédérons des professionnels de santé, des enseignants en APA et des clubs sportifs engagés.
+              HandiBoost s’appuie sur un réseau d’experts — professionnels de santé, paramédicaux, structures sportives et acteurs spécialisés.
+            </p>
+          </div>
+
+          {/* Objectif */}
+          <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '700ms' }}>
+            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-purple-50 border-4 border-purple-100 shadow-inner">
+              <img src="/bonhommes-handiboost.png" alt="Personnage Handiboost" className="w-full h-full object-cover object-[95%_50%]" />
+            </div>
+            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-purple-700 transition-colors">Notre objectif</h2>
+            <p className="text-lg text-slate-600 leading-relaxed font-medium">
+              Connecter les initiatives, éviter les doublons et proposer des solutions adaptées, accessibles partout sur le territoire, en faveur des bénéficiaires.
             </p>
           </div>
         </div>
@@ -65,14 +79,14 @@ export default function AssociationPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
-                Le sport santé, <span className="text-blue-700">notre priorité</span>
+                HandiBoost, le Guichet unique de l’activité physique <span className="text-blue-700">pour tous !</span>
               </h2>
               <div className="space-y-6">
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  L'Activité Physique Adaptée (APA) n'est pas qu'un simple loisir. C'est un véritable outil thérapeutique qui améliore la qualité de vie, réduit la fatigue et permet de mieux vivre avec sa pathologie.
+                  L’association HandiBoost crée un réseau complet et accessible, avec plusieurs canaux qui se complètent pour que chacun (bénéficiaires et professionnels) trouve ce dont il a besoin, en autonomie ou avec accompagnement.
                 </p>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  Notre équipe travaille chaque jour pour vous fournir des informations claires, validées par des professionnels, et pour vous aider à trouver la bonne structure près de chez vous.
+                  Aujourd’hui, accéder à une activité physique adaptée et durable peut vite devenir compliqué : les informations sont dispersées et difficiles à trouver. HandiBoost simplifie ce parcours en centralisant les ressources, en connectant les acteurs et en rendant visibles les créneaux et structures disponibles.
                 </p>
               </div>
             </div>

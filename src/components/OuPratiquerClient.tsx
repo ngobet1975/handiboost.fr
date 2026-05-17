@@ -11,7 +11,8 @@ const categoryLabels: Record<string, string> = {
   "all": "🏠 Tous les types",
   "club": "⚽ Un sport en club",
   "maison": "🏡 Pratique à la maison",
-  "enseignant-apa": "🎓 Un enseignant APA",
+  "enseignant-apa": "🎓 Un enseignant en APA",
+  "maison-sport-sante": "🏥 Une maison sport-santé",
   "kine": "🩺 Un kinésithérapeute"
 };
 
@@ -104,13 +105,14 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
                 <SelectItem value="all" className="text-lg py-3 font-medium">🏠 Tous les types</SelectItem>
                 <SelectItem value="club" className="text-lg py-3 font-medium">⚽ Un sport en club</SelectItem>
                 <SelectItem value="maison" className="text-lg py-3 font-medium">🏡 Pratique à la maison</SelectItem>
-                <SelectItem value="enseignant-apa" className="text-lg py-3 font-medium">🎓 Un enseignant APA</SelectItem>
+                <SelectItem value="enseignant-apa" className="text-lg py-3 font-medium">🎓 Un enseignant en APA</SelectItem>
+                <SelectItem value="maison-sport-sante" className="text-lg py-3 font-medium">🏥 Une maison sport-santé</SelectItem>
                 <SelectItem value="kine" className="text-lg py-3 font-medium">🩺 Un kinésithérapeute</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Filtre Région */}
+          {/* Filtre Région (Visual) */}
           <div>
             <label className="block text-xl font-bold text-slate-700 mb-3 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-slate-500" /> Région
@@ -151,6 +153,22 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
           </div>
         </div>
 
+        {/* Interactive Map Style Buttons */}
+        <div className="mt-8 pt-6 border-t border-slate-200">
+           <h3 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2"><MapPin className="w-5 h-5 text-blue-500" /> Cliquez sur une région sur la carte interactive</h3>
+           <div className="flex flex-wrap gap-3">
+              {Object.entries(regionLabels).map(([key, label]) => (
+                 <button
+                   key={key}
+                   onClick={() => setRegionFilter(key)}
+                   className={`px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${regionFilter === key ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-600 hover:border-slate-300'}`}
+                 >
+                   {label}
+                 </button>
+              ))}
+           </div>
+        </div>
+
         {/* Reset button */}
         {(searchTerm || categoryFilter !== "all" || regionFilter !== "all" || publicFilter !== "all") && (
           <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
@@ -171,6 +189,20 @@ export function OuPratiquerClient({ data }: { data: DirectoryData[] }) {
           </div>
         )}
       </section>
+
+      {/* Pratique à la maison Banner */}
+      {categoryFilter === "maison" && (
+        <section className="bg-gradient-to-r from-sky-100 to-indigo-100 rounded-[2rem] p-8 md:p-10 mb-12 shadow-sm border border-sky-200">
+           <h2 className="text-2xl font-black text-slate-800 mb-4 flex items-center gap-2"><Activity className="w-6 h-6 text-sky-600" /> Pratique à la maison</h2>
+           <p className="text-lg text-slate-700 font-medium leading-relaxed mb-6">
+             Retrouvez sur ces différentes chaînes des idées de séances adaptées à réaliser à la maison. L'essentiel est d'être régulier et d'avancer à votre rythme, en fonction de vos capacités. Pensez à faire des pauses si nécessaire, et à bien vous hydrater tout au long de la séance.
+           </p>
+           <div className="flex flex-wrap gap-4">
+              <a href="#" className="px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm">YouTube - La Team APA</a>
+              <a href="#" className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm">Site Web - Association MA Vie</a>
+           </div>
+        </section>
+      )}
 
       {/* Résultats de la recherche */}
       <section>

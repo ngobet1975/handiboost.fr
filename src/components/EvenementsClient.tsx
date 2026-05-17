@@ -8,11 +8,12 @@ import { Search, Calendar, MapPin, Users, Activity } from 'lucide-react';
 
 export function EvenementsClient({ data }: { data: EventData[] }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [periodFilter, setPeriodFilter] = useState('future');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [regionFilter, setRegionFilter] = useState('all');
-  const [publicFilter, setPublicFilter] = useState('all');
+  const [hospitalTab, setHospitalTab] = useState<'hors-hopital' | 'ghe'>('hors-hopital');
+  const [monthFilter, setMonthFilter] = useState('all');
+  const [selectedPublics, setSelectedPublics] = useState<string[]>([]);
   const [ageFilter, setAgeFilter] = useState('all');
+
+  const publicOptions = ["moteur", "sensoriel", "psychique", "cognitif", "mental", "maladies chroniques"];
 
   // Filtrage
   const filteredData = useMemo(() => {
@@ -26,35 +27,36 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
         if (!text.includes(query)) return false;
       }
 
-      // 2. Filtre de Période (Logique FALC)
+      // 2. Filtre Hopital (GHE vs Hors Hopital)
+      const isGHE = evt.title.toLowerCase().includes('ghe') || 
+                    (evt.locationName && evt.locationName.toLowerCase().includes('ghe')) ||
+                    evt.description.toLowerCase().includes('ghe');
+      if (hospitalTab === 'ghe' && !isGHE) return false;
+      if (hospitalTab === 'hors-hopital' && isGHE) return false;
+
+      // 3. Filtre de Mois
       const evtDate = new Date(evt.startDate);
-      const isPast = evtDate < now;
-      
-      if (periodFilter === 'future' && isPast) return false;
-      if (periodFilter === 'past' && !isPast) return false;
-      
-      if (periodFilter === 'this_month') {
-        if (isPast || evtDate.getMonth() !== now.getMonth() || evtDate.getFullYear() !== now.getFullYear()) return false;
-      }
-      
-      if (periodFilter === 'this_season' && evt.season) {
-        const diffTime = evtDate.getTime() - now.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (isPast || diffDays > 90) return false; // Approximatif : 3 mois max
+      if (monthFilter !== 'all') {
+        if (evtDate.getMonth().toString() !== monthFilter) return false;
       }
 
-      // 3. Filtre de Type
+      // 4. Filtre de Type
       if (typeFilter !== 'all' && evt.eventType !== typeFilter) return false;
 
-      // 4. Filtre de Région
+      // 5. Filtre de Région
       if (regionFilter !== 'all' && evt.region !== regionFilter && regionFilter !== 'Toutes les régions') return false;
 
-      // 5. Filtre Public
-      if (publicFilter !== 'all') {
-        if (!evt.publics || !evt.publics.includes(publicFilter)) return false;
+      // 6. Filtre Public (Multi-choix)
+      if (selectedPublics.length > 0) {
+        if (!evt.publics) return false;
+        // Si un des publics cochés est présent dans l'événement
+        const hasMatchingPublic = selectedPublics.some(p => evt.publics?.includes(p));
+        // On considère que "tous publics" matche tout
+        const isTousPublics = evt.publics.includes('tous publics');
+        if (!hasMatchingPublic && !isTousPublics) return false;
       }
 
-      // 6. Filtre Âge
+      // 7. Filtre Âge
       if (ageFilter !== 'all') {
         if (!evt.ageCategories || !evt.ageCategories.includes(ageFilter)) return false;
       }
@@ -66,19 +68,14 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
       const dateA = new Date(a.startDate).getTime();
       const dateB = new Date(b.startDate).getTime();
       
-      if (periodFilter === 'past') {
-        return dateB - dateA; // Décroissant pour les passés
+      if (monthFilter !== 'all') {
+        // If a specific month is selected, just sort naturally (already done below)
+      } else {
+        // Just sort nearest events first
       }
       return dateA - dateB; // Croissant pour les futurs
     });
-  }, [data, searchQuery, periodFilter, typeFilter, regionFilter]);
-
-  const periodLabels: Record<string, string> = {
-    future: "Événements à venir",
-    this_month: "Ce mois-ci",
-    this_season: "Cette saison",
-    past: "Événements passés"
-  };
+  }, [data, searchQuery, hospitalTab, monthFilter, typeFilter, regionFilter, selectedPublics, ageFilter]);
 
   const typeLabels: Record<string, string> = {
     all: "Tous les types",
@@ -111,20 +108,20 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
               />
             </div>
 
-            {/* Filtre Période */}
+            {/* Filtre Mois */}
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <Calendar className="w-4 h-4" /> Date / Période
+                <Calendar className="w-4 h-4" /> Mois de l'année
               </label>
-              <Select value={periodFilter} onValueChange={(v) => setPeriodFilter(v || "future")}>
+              <Select value={monthFilter} onValueChange={(v) => setMonthFilter(v || "all")}>
                 <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-800">
-                  <SelectValue>{periodLabels[periodFilter]}</SelectValue>
+                  <SelectValue>{monthFilter === 'all' ? 'Tous les mois' : new Date(2000, parseInt(monthFilter), 1).toLocaleString('fr-FR', { month: 'long' })}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="future">Événements à venir</SelectItem>
-                  <SelectItem value="this_month">Ce mois-ci</SelectItem>
-                  <SelectItem value="this_season">Cette saison</SelectItem>
-                  <SelectItem value="past" className="text-slate-500">Événements passés</SelectItem>
+                  <SelectItem value="all">Tous les mois</SelectItem>
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <SelectItem key={i} value={i.toString()}>{new Date(2000, i, 1).toLocaleString('fr-FR', { month: 'long', capitalize: true })}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -168,27 +165,30 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
               </Select>
             </div>
 
-            {/* Filtre Public Concerné */}
-            <div className="space-y-2">
+            {/* Filtre Public Concerné (Cases à cocher) */}
+            <div className="space-y-3">
               <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <Users className="w-4 h-4" /> Public concerné
+                <Users className="w-4 h-4" /> Public (handicaps)
               </label>
-              <Select value={publicFilter} onValueChange={(v) => setPublicFilter(v || "all")}>
-                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
-                  <SelectValue>
-                    {publicFilter === 'all' ? 'Tous les publics' : 
-                     publicFilter === 'personne en situation de handicap' ? 'En situation de handicap' : 
-                     publicFilter === 'maladie chronique / ALD' ? 'Maladie chronique / ALD' : 
-                     'Grand public'}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les publics</SelectItem>
-                  <SelectItem value="personne en situation de handicap">En situation de handicap</SelectItem>
-                  <SelectItem value="maladie chronique / ALD">Maladie chronique / ALD</SelectItem>
-                  <SelectItem value="tous publics">Grand public</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="grid grid-cols-1 gap-2">
+                {publicOptions.map(option => (
+                  <label key={option} className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border-2 border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
+                    <input 
+                      type="checkbox" 
+                      className="w-5 h-5 rounded text-blue-600 focus:ring-blue-500 border-gray-300"
+                      checked={selectedPublics.includes(option)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedPublics([...selectedPublics, option]);
+                        } else {
+                          setSelectedPublics(selectedPublics.filter(p => p !== option));
+                        }
+                      }}
+                    />
+                    <span className="text-slate-700 font-medium capitalize">{option}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Filtre Âge */}
@@ -217,10 +217,10 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
             <button 
               onClick={() => {
                 setSearchQuery('');
-                setPeriodFilter('future');
+                setMonthFilter('all');
                 setTypeFilter('all');
                 setRegionFilter('all');
-                setPublicFilter('all');
+                setSelectedPublics([]);
                 setAgeFilter('all');
               }}
               className="w-full text-slate-500 hover:text-slate-800 font-bold underline mt-4"
@@ -233,14 +233,27 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
 
       {/* Grille Résultats */}
       <main className="w-full lg:w-2/3 xl:w-3/4">
+        {/* Tabs Hôpital / Hors Hôpital */}
+        <div className="flex bg-slate-200/50 p-1.5 rounded-2xl mb-8">
+          <button
+            onClick={() => setHospitalTab('hors-hopital')}
+            className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all ${hospitalTab === 'hors-hopital' ? 'bg-white shadow-md text-blue-700' : 'text-slate-600 hover:text-slate-800'}`}
+          >
+            Événements hors hôpital
+          </button>
+          <button
+            onClick={() => setHospitalTab('ghe')}
+            className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all ${hospitalTab === 'ghe' ? 'bg-white shadow-md text-blue-700' : 'text-slate-600 hover:text-slate-800'}`}
+          >
+            Événements de l'hôpital GHE
+          </button>
+        </div>
+
         {/* Résumé des résultats */}
         <div className="mb-6 flex items-center justify-between">
           <p className="text-slate-600 font-bold text-lg">
             {filteredData.length} événement{filteredData.length > 1 ? 's' : ''} trouvé{filteredData.length > 1 ? 's' : ''}
           </p>
-          {periodFilter === 'past' && (
-            <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-sm font-bold">Archives</span>
-          )}
         </div>
 
         {filteredData.length > 0 ? (
@@ -258,11 +271,11 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
             </p>
             <button 
               onClick={() => { 
-                setPeriodFilter('future'); 
+                setMonthFilter('all'); 
                 setTypeFilter('all'); 
                 setRegionFilter('all'); 
                 setSearchQuery(''); 
-                setPublicFilter('all');
+                setSelectedPublics([]);
                 setAgeFilter('all');
               }}
               className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-6 rounded-xl transition-colors"

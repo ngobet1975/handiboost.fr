@@ -1,44 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import { ChevronLeft, Wrench, Settings } from "lucide-react";
+import { ChevronLeft, Wrench, ExternalLink, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ProResourceCard, ProResource } from "@/components/ProResourceCard";
-import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Outils d'Accompagnement APA | Espace Professionnels Handiboost",
   description: "Ressources, bilans, tests et supports pédagogiques pour les professionnels du sport adapté et de la santé.",
 };
 
-export default async function OutilsAccompagnementPage() {
-  const supabase = await createClient();
-  const { data: rawResources } = await supabase
-    .from("professional_resources")
-    .select("*")
-    .eq("status", "published")
-    .eq("validation_status", "validated")
-    .in("category", ["bilan", "pedagogie", "recommandation"]);
-
-  const resources: ProResource[] = (rawResources ?? []).map((r) => ({
-    id: r.id,
-    title: r.title,
-    description: r.description ?? "",
-    category: r.category ?? "bilan",
-    format: r.format ?? "pdf",
-    fileUrl: r.file_url ?? undefined,
-    externalUrl: r.url ?? undefined,
-    sourceName: r.source ?? "",
-    status: r.status ?? "published",
-  }));
-  
-  // Categorization
-  const bilans = resources.filter(r => r.category === "bilan");
-  const pedagogies = resources.filter(r => r.category === "pedagogie");
-  const recommandations = resources.filter(r => r.category === "recommandation");
-
+export default function OutilsAccompagnementPage() {
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
-      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         
         {/* Breadcrumb / Back */}
         <div className="mb-8">
@@ -53,69 +26,68 @@ export default async function OutilsAccompagnementPage() {
         </div>
 
         {/* Hero Section */}
-        <section className="mb-12 max-w-4xl">
+        <section className="mb-12">
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 leading-tight flex items-center gap-4">
-            <Wrench className="w-10 h-10 md:w-12 md:h-12 text-blue-700" />
-            Boîte à outils <span className="text-blue-700">d'accompagnement</span>
+            <Wrench className="w-10 h-10 md:w-12 md:h-12 text-blue-700 shrink-0" />
+            <span>Boîte à outils <span className="text-blue-700">d'accompagnement</span></span>
           </h1>
-          <p className="text-xl text-slate-600 font-medium leading-relaxed">
-            Évaluez vos patients, suivez leur progression et trouvez des ressources pédagogiques pour adapter vos séances d'Activité Physique.
+          <p className="text-xl text-slate-600 font-medium leading-relaxed max-w-3xl">
+            Retrouvez des ressources et outils pour accompagner vos bénéficiaires dans la pratique d’une activité physique adaptée et soutenir leur suivi au quotidien.
           </p>
         </section>
 
-        {/* Section Bilan et Évaluation */}
-        {bilans.length > 0 && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-3xl font-bold text-slate-800">Outils d'évaluation et bilans</h2>
-              <div className="h-px bg-slate-200 flex-grow ml-4 hidden sm:block"></div>
+        {/* Outils de l'enseignant en APA (ONAPS) */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-slate-800 mb-8 border-b-2 border-slate-200 pb-4">
+            Outils de l'enseignant en APA (ONAPS)
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Sensibiliser</h3>
+              <p className="text-slate-600 mb-6 flex-grow">Ressources, définitions et recommandations pour sensibiliser à l'APA.</p>
+              <a href="https://onaps.fr/sensibiliser/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-blue-700 font-bold hover:text-blue-900 group">
+                Portail Sensibiliser <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </div>
-            <p className="text-slate-600 mb-8 max-w-3xl">
-              Grilles de tests, évaluations de l'autonomie et questionnaires pour réaliser le bilan initial du patient (Aides au bilan APA).
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {bilans.map((resource) => (
-                <ProResourceCard key={resource.id} resource={resource} />
-              ))}
+            
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Évaluer</h3>
+              <p className="text-slate-600 mb-6 flex-grow">Tests de condition physique et questionnaires (GPAQ, IPAQ, etc.) pour vos bilans.</p>
+              <a href="https://onaps.fr/evaluer/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-blue-700 font-bold hover:text-blue-900 group">
+                Portail Évaluer <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
             </div>
-          </section>
-        )}
+            
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover:shadow-md transition-shadow">
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Mettre en place</h3>
+              <p className="text-slate-600 mb-6 flex-grow">Boîte à idées et ressources pour concevoir et structurer vos séances d'APA.</p>
+              <a href="https://onaps.fr/mettre-en-place/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-blue-700 font-bold hover:text-blue-900 group">
+                Portail Mettre en place <ExternalLink className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </div>
+          </div>
+        </section>
 
-        {/* Section Pédagogie */}
-        {pedagogies.length > 0 && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-3xl font-bold text-slate-800">Ressources Pédagogiques</h2>
-              <div className="h-px bg-slate-200 flex-grow ml-4 hidden sm:block"></div>
-            </div>
-            <p className="text-slate-600 mb-8 max-w-3xl">
-              Fiches d'exercices, carnets de suivi et livrets pratiques pour animer vos séances.
+        {/* Outils Pédagogiques */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-slate-800 mb-8 border-b-2 border-slate-200 pb-4">
+            Outils Pédagogiques
+          </h2>
+          <div className="bg-blue-50 border border-blue-100 p-8 rounded-3xl">
+            <h3 className="text-2xl font-bold text-blue-900 mb-4">Guide ALLIANCE (ONAPS)</h3>
+            <p className="text-blue-800 mb-8 max-w-2xl text-lg">
+              Téléchargez les livrets du programme ALLIANCE de l'ONAPS, conçus pour accompagner la pratique de l'Activité Physique Adaptée.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pedagogies.map((resource) => (
-                <ProResourceCard key={resource.id} resource={resource} />
-              ))}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button nativeButton={false} render={<a href="https://onaps.fr/wp-content/uploads/2021/04/Livret_Pratiquant_Alliance.pdf" target="_blank" rel="noopener noreferrer" />} className="bg-blue-700 hover:bg-blue-800 text-white font-bold h-14 rounded-xl px-8 shadow-sm">
+                <Download className="mr-2 w-5 h-5" /> Livret Pratiquant
+              </Button>
+              <Button nativeButton={false} render={<a href="https://onaps.fr/wp-content/uploads/2021/04/Livret_Pro_Alliance.pdf" target="_blank" rel="noopener noreferrer" />} className="bg-blue-700 hover:bg-blue-800 text-white font-bold h-14 rounded-xl px-8 shadow-sm">
+                <Download className="mr-2 w-5 h-5" /> Livret Professionnel
+              </Button>
             </div>
-          </section>
-        )}
-
-        {/* Section Recommandations Externes */}
-        {recommandations.length > 0 && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-3xl font-bold text-slate-800">Guides et Recommandations</h2>
-              <div className="h-px bg-slate-200 flex-grow ml-4 hidden sm:block"></div>
-            </div>
-            <p className="text-slate-600 mb-8 max-w-3xl">
-              Supports documentaires édités par les fédérations et ministères pour l'inclusion dans le sport.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommandations.map((resource) => (
-                <ProResourceCard key={resource.id} resource={resource} />
-              ))}
-            </div>
-          </section>
-        )}
+          </div>
+        </section>
 
       </div>
     </div>

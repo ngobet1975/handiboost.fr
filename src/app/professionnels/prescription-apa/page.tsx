@@ -34,7 +34,6 @@ export default async function PrescriptionApaPage() {
   // Grouper les ressources
   const downloads = resources.filter(r => r.category === "telechargement");
   const prescriptions = resources.filter(r => r.category === "prescription");
-  const recommandations = resources.filter(r => r.category === "recommandation");
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
@@ -74,16 +73,14 @@ export default async function PrescriptionApaPage() {
                 Le cadre de la prescription
               </h2>
               
-              <div className="prose prose-slate max-w-none mb-8">
+              <div className="prose prose-slate max-w-none mb-6">
                 <p>
-                  Depuis la loi de Modernisation de notre système de santé (2016) et la loi Sport (2022) <strong>(Sources et dates à valider par Handiboost)</strong>, 
-                  le médecin traitant ou spécialiste peut prescrire une Activité Physique Adaptée (APA) aux personnes atteintes 
-                  d'une Affection de Longue Durée (ALD), d'une maladie chronique, ou présentant des facteurs de risque.
+                  Depuis la loi de Modernisation de notre système de santé (2016) et la loi Sport (2022), le médecin peut prescrire une Activité Physique Adaptée (APA) aux personnes atteintes d'une Affection de Longue Durée (ALD), d'une maladie chronique, ou présentant des facteurs de risque.
                 </p>
-                <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg my-6">
+                <div className="bg-amber-50 border-l-4 border-amber-500 p-3 mt-4 text-sm rounded-r-lg">
                   <p className="text-amber-800 font-medium m-0 flex items-start gap-2">
-                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                    <span>Ces recommandations sont données à titre d'information et doivent toujours être adaptées à l'évaluation clinique personnalisée de votre patient.</span>
+                    <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    <span>Recommandations données à titre d'information, à adapter à l'évaluation clinique.</span>
                   </p>
                 </div>
               </div>
@@ -108,28 +105,59 @@ export default async function PrescriptionApaPage() {
                   <div className="bg-blue-100 text-blue-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">3</div>
                   <div>
                     <strong className="text-slate-800 block mb-1">L'orientation vers le bon professionnel</strong>
-                    <span className="text-slate-600">Selon la sévérité (Enseignant APA, Masseur-Kinésithérapeute, Éducateur sportif formé).</span>
+                    <span className="text-slate-600">Selon la sévérité (Enseignant en APA, Masseur-Kinésithérapeute, Éducateur sportif formé).</span>
                   </div>
                 </li>
               </ol>
             </section>
 
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Outil de prescription Vidal / HAS</h2>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-6 items-center">
+                 <div className="flex-1">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">Prescription de l'activité physique par le médecin traitant</h3>
+                    <p className="text-slate-600 mb-4">Accédez à l'outil en ligne recommandé par la Haute Autorité de Santé (HAS) et Vidal pour la prescription d'une activité physique en fonction des différentes pathologies.</p>
+                 </div>
+                 <Button nativeButton={false} render={<a href="https://www.has-sante.fr/jcms/p_3389811/fr/prescription-de-l-activite-physique-par-le-medecin-traitant" target="_blank" rel="noopener noreferrer" />} className="bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 rounded-xl px-6 w-full md:w-auto shrink-0">
+                    Accéder à l'outil HAS <ExternalLink className="ml-2 w-4 h-4" />
+                 </Button>
+              </div>
+            </section>
+
             {/* Accordéons Recommandations par pathologie */}
             <section>
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">Fiches par pathologie</h2>
+              <h2 className="text-2xl font-bold text-slate-800 mb-6">Guides & Fiches par pathologie (HAS / SFP-APA)</h2>
               <p className="text-slate-600 mb-6">
-                Fiches d'aide à la prescription détaillant les fréquences, intensités, types d'exercices et précautions.
+                Fiches d'aide à la prescription détaillant les fréquences, intensités, types d'exercices et précautions. Faites défiler horizontalement pour voir toutes les fiches.
               </p>
               
               {prescriptions.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory hide-scrollbar">
                   {prescriptions.map((resource) => (
-                    <ProResourceCard key={resource.id} resource={resource} />
+                    <div key={resource.id} className="snap-start shrink-0 w-[85%] sm:w-[320px]">
+                      <ProResourceCard resource={resource} />
+                    </div>
                   ))}
                 </div>
               ) : (
                 <p className="text-slate-500 italic">Aucune fiche disponible pour le moment.</p>
               )}
+            </section>
+            
+            <section>
+              <h2 className="text-2xl font-bold text-slate-800 mb-6 mt-8">Ressources Utiles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">Guide des consultations HAS</h3>
+                    <p className="text-slate-600 text-sm mb-4">Guide sur la consultation médicale de prescription d'Activité Physique Adaptée.</p>
+                    <a href="https://www.has-sante.fr/jcms/p_3389811/fr/prescription-de-l-activite-physique-par-le-medecin-traitant" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline flex items-center gap-1 text-sm"><ExternalLink className="w-4 h-4" /> Voir le guide HAS</a>
+                 </div>
+                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">Savoir prescrire - URPS AURA</h3>
+                    <p className="text-slate-600 text-sm mb-4">Le guide de l'URPS Médecins Libéraux Auvergne-Rhône-Alpes.</p>
+                    <a href="https://www.urps-med-aura.fr/savoir-prescrire" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline flex items-center gap-1 text-sm"><ExternalLink className="w-4 h-4" /> Voir le guide URPS</a>
+                 </div>
+              </div>
             </section>
           </div>
 
@@ -139,8 +167,8 @@ export default async function PrescriptionApaPage() {
             {/* Outils à télécharger */}
             <div className="bg-slate-800 text-white p-6 rounded-2xl shadow-md">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <DownloadIcon className="w-5 h-5" />
-                Modèles rapides
+                <DownloadIcon className="w-5 h-5 shrink-0" />
+                Modèles de prescription de l'APA
               </h3>
               <div className="space-y-4">
                 {downloads.map((resource) => (
@@ -154,16 +182,6 @@ export default async function PrescriptionApaPage() {
                     <span className="font-bold text-base">Télécharger {resource.title.toLowerCase()}</span>
                     <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">Format {resource.format || "PDF"}</span>
                   </Button>
-                ))}
-              </div>
-            </div>
-
-            {/* Guide HAS */}
-            <div>
-              <h3 className="text-lg font-bold text-slate-800 mb-4">Recommandations Officielles</h3>
-              <div className="space-y-4">
-                {recommandations.map((resource) => (
-                  <ProResourceCard key={resource.id} resource={resource} />
                 ))}
               </div>
             </div>

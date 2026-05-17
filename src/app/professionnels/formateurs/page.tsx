@@ -20,7 +20,7 @@ export default function FormateursPage() {
     },
     {
       name: "Thomas Dubois",
-      role: "Enseignant APA-S",
+      role: "Enseignant en APA-S",
       region: "Île-de-France",
       specialties: ["Handicap moteur", "Neurologie", "Inclusion en club"],
       imageUrl: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=300&h=300",

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
@@ -42,12 +44,19 @@ export function ArticleCard({ article }: { article: ArticleData }) {
       <Card className="h-full flex flex-col border border-slate-200 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 rounded-2xl overflow-hidden bg-white">
         
         {article.coverImage && (
-          <div className="w-full h-48 bg-slate-200 relative overflow-hidden">
+          <div className="w-full h-48 bg-slate-50 relative overflow-hidden flex items-center justify-center shrink-0 border-b border-slate-100">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src={article.coverImage} 
-              alt="" 
+              alt={article.title} 
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null; // prevent infinite loop
+                target.src = '/logo-handiboost.png';
+                target.className = 'w-1/2 h-1/2 object-contain opacity-40 mix-blend-multiply group-hover:scale-105 transition-transform duration-500';
+                target.parentElement!.className = "w-full h-48 bg-gradient-to-br from-blue-50 to-slate-100 relative overflow-hidden flex items-center justify-center shrink-0 border-b border-slate-200";
+              }}
             />
           </div>
         )}

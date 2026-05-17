@@ -1,4 +1,6 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Activity, AlertTriangle, Heart, Stethoscope, Link as LinkIcon, Info } from 'lucide-react';
@@ -28,6 +30,7 @@ export interface PathologyData {
 }
 
 export function PathologyCard({ data }: { data: PathologyData }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isPendingValidation = data.validationStatus !== "validated";
 
   return (
@@ -43,10 +46,28 @@ export function PathologyCard({ data }: { data: PathologyData }) {
       )}
 
       {/* Résumé */}
-      <section className="bg-primary/5 p-8 md:p-10 rounded-3xl border-l-8 border-primary shadow-sm">
+      <section className="bg-primary/5 p-8 md:p-10 rounded-3xl border-l-8 border-primary shadow-sm relative">
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">L'essentiel à retenir</h2>
-        <p className="text-2xl leading-relaxed text-gray-800 font-medium">{data.description}</p>
+        <p className="text-2xl leading-relaxed text-gray-800 font-medium mb-6">
+          {data.description.length > 150 ? data.description.substring(0, 150) + '...' : data.description}
+        </p>
+        {data.description.length > 150 && (
+          <Button onClick={() => setIsModalOpen(true)} className="text-lg font-bold">Lire l'article complet</Button>
+        )}
       </section>
+
+      {/* Modal for full article */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}>
+          <div className="bg-white rounded-3xl p-8 md:p-12 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 text-slate-400 hover:text-slate-800 text-2xl font-bold bg-slate-100 w-12 h-12 rounded-full flex items-center justify-center">✕</button>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8 pr-12">{data.title} - Article complet</h2>
+            <div className="text-xl text-gray-800 leading-relaxed font-medium whitespace-pre-wrap">
+              {data.description}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {/* Bénéfices */}
@@ -111,7 +132,7 @@ export function PathologyCard({ data }: { data: PathologyData }) {
           <CardHeader className="bg-blue-50 pb-5">
             <CardTitle className="flex items-center gap-4 text-3xl font-bold text-blue-900">
               <Activity className="h-10 w-10 text-blue-600" />
-              Activités possibles
+              Conseils sur les activités physiques
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-8 px-6 pb-8">

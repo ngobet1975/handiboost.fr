@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { AIChatbot } from "@/components/AIChatbot";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -27,9 +22,9 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth scroll-pt-28`}
+      className={`${inter.variable} font-sans h-full antialiased scroll-smooth scroll-pt-28`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col text-base leading-relaxed">
         <Header />
         {children}
         <AIChatbot />

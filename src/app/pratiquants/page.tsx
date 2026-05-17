@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight, Activity, Heart, Brain, Bone, Eye, Dumbbell, Smile, Ribbon } from 'lucide-react';
+import { MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight, Activity, Heart, Brain, Bone, Eye, Dumbbell, Smile, Ribbon, PersonStanding, Apple, Users, Flower, Sun, HeartPulse } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -20,16 +20,21 @@ const PATHO_COLORS = [
   { bg: 'bg-purple-500', hover: 'hover:bg-purple-600' },
 ];
 
-const PATHO_ICONS = [
-  <Activity className="w-12 h-12 text-white" key="1" />,
-  <Heart className="w-12 h-12 text-white" key="2" />,
-  <Dumbbell className="w-12 h-12 text-white" key="3" />,
-  <Brain className="w-12 h-12 text-white" key="4" />,
-  <Bone className="w-12 h-12 text-white" key="5" />,
-  <Smile className="w-12 h-12 text-white" key="6" />,
-  <Ribbon className="w-12 h-12 text-white" key="7" />,
-  <Eye className="w-12 h-12 text-white" key="8" />,
-];
+const getIconForPatho = (slug: string) => {
+  if (slug.includes('sclerose')) return <Activity className="w-12 h-12 text-white" />;
+  if (slug.includes('paralysie') || slug.includes('moteur')) return <PersonStanding className="w-12 h-12 text-white" />;
+  if (slug.includes('tca') || slug.includes('alimentaire')) return <Apple className="w-12 h-12 text-white" />;
+  if (slug.includes('neuromusculaire')) return <Dumbbell className="w-12 h-12 text-white" />;
+  if (slug.includes('age') || slug.includes('senior')) return <Users className="w-12 h-12 text-white" />;
+  if (slug.includes('endometriose')) return <Flower className="w-12 h-12 text-white" />;
+  if (slug.includes('mentale') || slug.includes('psy')) return <Sun className="w-12 h-12 text-white" />;
+  if (slug.includes('cancer')) return <Ribbon className="w-12 h-12 text-white" />;
+  if (slug.includes('cardio')) return <Heart className="w-12 h-12 text-white" />;
+  if (slug.includes('neuro')) return <Brain className="w-12 h-12 text-white" />;
+  if (slug.includes('articu') || slug.includes('os')) return <Bone className="w-12 h-12 text-white" />;
+  if (slug.includes('visu')) return <Eye className="w-12 h-12 text-white" />;
+  return <HeartPulse className="w-12 h-12 text-white" />;
+};
 
 export default async function PratiquantsHubPage() {
   const supabase = await createClient();
@@ -42,7 +47,7 @@ export default async function PratiquantsHubPage() {
   const cards = [
     {
       title: "Trouver une activité",
-      description: "Trouver une activité, un club ou un enseignant en APA près de chez vous.",
+      description: "Trouver une activité, un club, un enseignant en APA ou un kiné près de chez vous.",
       href: "/pratiquants/ou-pratiquer",
       icon: <MapPin className="h-8 w-8" />,
       theme: {
@@ -53,7 +58,7 @@ export default async function PratiquantsHubPage() {
     },
     {
       title: "Lire les conseils",
-      description: "Lire nos fiches santé pour pratiquer en toute sécurité.",
+      description: "Lire nos fiches conseils & activité physique pour pratiquer en toute sécurité.",
       href: "/pratiquants/conseils-par-pathologie",
       icon: <Stethoscope className="h-8 w-8" />,
       theme: {
@@ -116,7 +121,7 @@ export default async function PratiquantsHubPage() {
             Espace Pratiquants
           </h1>
           <p className="text-2xl text-slate-700 font-medium leading-relaxed">
-            Trouvez rapidement une activité sportive, un événement près de chez vous, ou des conseils santé pour bouger en toute sécurité.
+            Trouvez rapidement une activité sportive, un événement près de chez vous, ou des conseils pour bouger en toute sécurité.
           </p>
         </section>
 
@@ -129,13 +134,13 @@ export default async function PratiquantsHubPage() {
               Découvrez les activités physiques adaptées
             </h2>
             <p className="text-xl text-slate-600 font-medium text-center mb-10 max-w-3xl mx-auto">
-              Sélectionnez votre pathologie pour découvrir les activités recommandées, les précautions et les bénéfices du sport adapté.
+              Sélectionnez votre pathologie pour découvrir des recommandations, des bénéfices et des conseils pour votre pratique d'activité physique.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {pathologies.map((patho, idx) => {
                 const colorSet = PATHO_COLORS[idx % PATHO_COLORS.length];
-                const icon = PATHO_ICONS[idx % PATHO_ICONS.length];
+                const icon = getIconForPatho(patho.slug || '');
 
                 return (
                   <Link

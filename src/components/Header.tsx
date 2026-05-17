@@ -24,14 +24,14 @@ export function Header() {
           <img src="/logo-handiboost.png" alt="Handiboost" className="h-16 lg:h-24 w-auto object-contain" />
         </Link>
       </div>
-      <nav className="hidden xl:flex items-center gap-10">
+      <nav className="hidden xl:flex items-center gap-10 pr-10 border-r-4 border-slate-200">
         <Link href="/association" className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
         <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
         <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
         <Link href="/actualites" className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
         <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
       </nav>
-      <div className="flex items-center gap-6 hidden xl:flex">
+      <div className="flex items-center gap-6 hidden xl:flex pl-2">
         <Button nativeButton={false} render={<Link href="/dons" />} variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">
           ❤️ Faire un don
         </Button>

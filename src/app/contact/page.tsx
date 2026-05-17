@@ -47,41 +47,13 @@ export default function ContactPage() {
                     </a>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center shrink-0">
-                    <MapPin className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-800 text-lg">Siège social</h3>
-                    <p className="text-slate-600">
-                      Association Handiboost<br />
-                      Maison des Sports<br />
-                      69000 Lyon, France
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center shrink-0">
-                    <Phone className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-800 text-lg">Téléphone</h3>
-                    <p className="text-slate-600 mb-1">Du lundi au vendredi (9h-17h) :</p>
-                    <a href="tel:+33400000000" className="text-blue-700 font-bold hover:underline">
-                      04 00 00 00 00
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
 
-            {/* Info FALC */}
             <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
               <h3 className="font-bold text-blue-900 text-lg mb-2">Accessibilité</h3>
               <p className="text-blue-800">
-                Si vous avez des difficultés à utiliser ce formulaire, vous pouvez nous envoyer un email directement ou nous appeler. Nous vous aiderons avec plaisir.
+                Si vous avez des difficultés à utiliser ce formulaire, vous pouvez nous envoyer un email directement. Nous vous aiderons avec plaisir.
               </p>
             </div>
           </div>
@@ -144,6 +116,7 @@ export default function ContactPage() {
                     className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-lg bg-white"
                   >
                     <option value="">Choisissez une raison...</option>
+                    <option value="activity">Je souhaite trouver une activité physique</option>
                     <option value="info">Demande d'information générale</option>
                     <option value="pro">Je suis un professionnel de santé</option>
                     <option value="club">Je représente un club sportif</option>

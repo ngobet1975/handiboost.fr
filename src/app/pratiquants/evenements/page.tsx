@@ -15,10 +15,14 @@ export const metadata: Metadata = {
 
 export default async function EvenementsPage() {
   const supabase = await createClient();
+  const twoMonthsAgo = new Date();
+  twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+  
   const { data: rawEvents } = await supabase
     .from("events")
     .select("*")
     .eq("status", "published")
+    .gte("event_date", twoMonthsAgo.toISOString())
     .order("event_date", { ascending: true });
 
   // Map DB data to EventData interface expected by EventCard component
@@ -55,7 +59,7 @@ export default async function EvenementsPage() {
         {/* Hero Section */}
         <section className="mb-12 text-center max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-black text-slate-900 mb-6">
-            Trouver un événement sportif ou APA
+            Trouver un événement sportif adapté
           </h1>
           <p className="text-2xl text-slate-700 font-medium leading-relaxed">
             Parcourez notre agenda pour trouver une compétition, un atelier APA ou une rencontre près de chez vous.

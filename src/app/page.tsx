@@ -2,8 +2,15 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { HomeSearchBar } from '@/components/HomeSearchBar'
+import { NewsletterPopup } from '@/components/NewsletterPopup'
+import actualitesData from '@/data/actualites.json'
 
 export default function Home() {
+  const latestActus = actualitesData
+    .filter(actu => actu.status === 'published')
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, 3);
+
   return (
     <div className="flex flex-col min-h-screen text-slate-900">
 
@@ -28,7 +35,7 @@ export default function Home() {
                 </span>
               </h1>
               <p className="text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium mt-6">
-                Trouvez une activité, un événement, une aide financière ou des ressources professionnelles — tout est ici.
+                Un accès simple et clair à toutes les informations utiles pour pratiquer une activité physique adaptée et régulière.
               </p>
             </div>
 
@@ -72,15 +79,16 @@ export default function Home() {
                 <Card className="border-4 border-sky-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-sky-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-sky-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-sky-100">
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-sky-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-sky-100 flex items-center justify-center overflow-hidden">
+                      <img src="/bonhommes-handiboost.png" alt="Handiboost" className="w-full h-full object-cover" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Infos Pratiques</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
-                    Trouver une activité, une aide financière ou une ressource près de chez vous.
+                    Trouver une activité physique proche de chez vous, des informations et des ressources
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/pratiquants" className="block w-full text-center text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 py-4 rounded-2xl transition-all no-underline">Trouver une activité</Link>
+                     <Link href="/pratiquants/aides-financieres" className="block w-full text-center text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 py-4 rounded-2xl transition-all no-underline">Trouver une activité</Link>
                   </div>
                 </Card>
 
@@ -88,12 +96,13 @@ export default function Home() {
                 <Card className="border-4 border-orange-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-orange-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-orange-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-orange-100">
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-orange-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-orange-100 flex items-center justify-center overflow-hidden">
+                      <img src="/bonhommes-handiboost.png" alt="Handiboost" className="w-full h-full object-cover" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Événements</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
-                    Voir les ateliers, rencontres et événements sportifs adaptés.
+                    Trouver des événements sportifs adaptés proches de chez vous
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
                      <Link href="/pratiquants/evenements" className="block w-full text-center text-2xl font-extrabold border-4 border-orange-200 text-orange-700 hover:bg-orange-50 py-4 rounded-2xl transition-all no-underline">Voir l&apos;Agenda</Link>
@@ -104,12 +113,13 @@ export default function Home() {
                 <Card className="border-4 border-pink-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-pink-600 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-pink-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-pink-100">
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-pink-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-pink-100 flex items-center justify-center overflow-hidden">
+                      <img src="/bonhommes-handiboost.png" alt="Handiboost" className="w-full h-full object-cover" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Actualités</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
-                    Lire les nouvelles de l'association et de l'APA.
+                    Lire les nouvelles sur l'APA et l'association
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
                      <Link href="/actualites" className="block w-full text-center text-2xl font-extrabold border-4 border-pink-200 text-pink-700 hover:bg-pink-50 py-4 rounded-2xl transition-all no-underline">Lire les actualités</Link>
@@ -120,12 +130,13 @@ export default function Home() {
                 <Card className="border-4 border-purple-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-purple-700 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-purple-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-purple-100">
+                    <div className="w-16 h-16 xl:w-20 xl:h-20 bg-purple-50 rounded-2xl xl:rounded-3xl mb-6 xl:mb-8 shadow-sm border-2 border-purple-100 flex items-center justify-center overflow-hidden">
+                      <img src="/bonhommes-handiboost.png" alt="Handiboost" className="w-full h-full object-cover" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Professionnels</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
-                    Ressources et outils pour les professionnels du sport et de la santé.
+                    Ressources et outils pour les professionnels du sport et de la santé
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
                     <Link href="/professionnels" className="block w-full text-center text-xl xl:text-2xl font-bold bg-purple-700 hover:bg-purple-800 text-white rounded-2xl py-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 no-underline">
@@ -149,25 +160,29 @@ export default function Home() {
               </div>
               
               <div className="grid md:grid-cols-3 gap-10">
-                {[
-                  { title: "Lancement de la nouvelle saison APA", date: "12 Octobre 2026", color: "bg-orange-500", label: "Journée Handiboost", image: "18092019_ActiviteDanseDANSE-DNG0-01-205-1000x667.jpg"},
-                  { title: "Nouveaux financements pour l'équipement sportif", date: "05 Octobre 2026", color: "bg-sky-500", label: "Info Pratique", image: "24.05.2023_Foot-Americain.jpg"},
-                  { title: "Retour sur la course inclusive régionale", date: "28 Septembre 2026", color: "bg-pink-600", label: "Événement", image: "IMG-20240407-WA0016-1024x683.jpg"}
-                ].map((actu, i) => (
-                  <Link key={i} href="/actualites">
+                {latestActus.map((actu, i) => {
+                  const colors = ["bg-orange-500", "bg-sky-500", "bg-pink-600"];
+                  const color = colors[i % colors.length];
+                  const formattedDate = new Date(actu.publishedAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  });
+                  return (
+                  <Link key={actu.id} href={`/actualites#${actu.id}`}>
                     <div className="bg-white rounded-[2rem] border-4 border-slate-100 shadow-xl overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col h-full">
                       <div className="h-64 relative overflow-hidden bg-slate-100 border-b-4 border-slate-100">
-                         <img src={`/photos/${actu.image}`} alt={actu.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                         <img src={actu.coverImage.startsWith('http') ? actu.coverImage : `/photos/${actu.coverImage}`} alt={actu.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-80"></div>
-                         <div className={`absolute bottom-4 left-6 px-4 py-2 font-extrabold text-sm rounded-full ${actu.color} text-white shadow-lg`}>{actu.label}</div>
+                         <div className={`absolute bottom-4 left-6 px-4 py-2 font-extrabold text-sm rounded-full ${color} text-white shadow-lg`}>Actualité</div>
                       </div>
                       <div className="p-8 flex-1 flex flex-col">
                         <h3 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-4 group-hover:text-blue-800">{actu.title}</h3>
-                        <p className="text-xl font-medium text-slate-500 mt-auto">{actu.date}</p>
+                        <p className="text-xl font-medium text-slate-500 mt-auto">{formattedDate}</p>
                       </div>
                     </div>
                   </Link>
-                ))}
+                )})}
               </div>
             </div>
 
@@ -231,6 +246,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <NewsletterPopup />
     </div>
   )
 }

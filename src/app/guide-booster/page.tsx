@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Guide Booster — Annuaire APA & Parasport | Handiboost',
-  description: 'Trouvez rapidement un club, un enseignant APA ou une Maison Sport-Santé pour orienter vos patients vers une activité physique adaptée.',
+  description: 'Trouvez rapidement un club, un enseignant en APA ou une Maison Sport-Santé pour orienter vos patients vers une activité physique adaptée.',
   alternates: {
     canonical: '/guide-booster',
   }

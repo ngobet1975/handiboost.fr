@@ -170,6 +170,57 @@ export function AIChatbot() {
     }
   };
 
+  const handlePrePromptClick = (prompt: string) => {
+    setInput(prompt);
+    // Simulate form submission
+    const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+    // We set input then submit, but setInput is async. 
+    // It's better to pass the text directly.
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      role: 'user',
+      text: prompt,
+    };
+    
+    setMessages([...messages, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: prompt,
+        history: messages.map(m => ({ role: m.role, text: m.text }))
+      }),
+    })
+    .then(async (res) => {
+      if (!res.ok) throw new Error("API Error");
+      const data = await res.json();
+      const botMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'model',
+        text: data.text || "Désolé, je n'ai pas pu générer de réponse.",
+      };
+      setMessages(prev => [...prev, botMsg]);
+      if (window.speechSynthesis) {
+        const cleanText = botMsg.text.replace(/[*_#`\[\]]/g, '').replace(/\(http[^)]+\)/g, '');
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'fr-FR';
+        setTimeout(() => speakText(botMsg.text), 100);
+      }
+    })
+    .catch((err) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: 'model',
+        text: 'Oups, une erreur est survenue de mon côté. Veuillez réessayer plus tard.',
+      }]);
+    })
+    .finally(() => setIsLoading(false));
+  };
+
+
 
 
   return (
@@ -283,6 +334,29 @@ export function AIChatbot() {
                 </div>
               </div>
             ))}
+
+            {/* Pre-prompts */}
+            {messages.length === 1 && !isLoading && (
+              <div className="flex flex-col gap-2 mt-4 max-w-[90%] md:max-w-[85%] ml-auto">
+                <p className="text-xs font-bold text-slate-400 mb-1 ml-2">Exemples de questions :</p>
+                <div className="flex flex-wrap gap-2 justify-end">
+                  {[
+                    "Comment trouver un club de sport adapté ?",
+                    "Quelles sont les aides financières pour l'APA ?",
+                    "Je cherche un enseignant en APA",
+                    "Quels sports pratiquer avec ma pathologie ?"
+                  ].map((prompt, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handlePrePromptClick(prompt)}
+                      className="text-left text-[13px] bg-white border-2 border-blue-100 text-blue-700 hover:bg-blue-50 hover:border-blue-300 px-4 py-2.5 rounded-2xl transition-all shadow-sm font-bold active:scale-95"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {isLoading && (
               <div className="flex gap-3 max-w-[85%]">

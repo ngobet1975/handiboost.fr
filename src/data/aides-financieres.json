@@ -11,7 +11,7 @@
     ],
     "resources": [
       {
-        "label": "Consulter les démarches MDPH",
+        "label": "Consulter les démarches (Mon Parcours Handicap)",
         "url": "https://www.monparcourshandicap.gouv.fr/aides/la-prestation-de-compensation-du-handicap-pch",
         "type": "link"
       }
@@ -26,7 +26,7 @@
     "amount": "Selon votre contrat (ex: forfait annuel ou par séance)",
     "conditions": [
       "Avoir une prescription médicale d'APA",
-      "Séances dispensées par un professionnel qualifié (ex: Enseignant APA)"
+      "Séances dispensées par un professionnel qualifié (ex: Enseignant en APA)"
     ],
     "resources": [
       {
@@ -41,16 +41,16 @@
     "id": "aide-cancer-sein",
     "title": "Soutien financier pour les personnes ayant un cancer du sein",
     "slug": "soutien-financier-cancer-sein-apa",
-    "description": "Certaines associations et dispositifs spécifiques (ex: Ligue contre le Cancer) peuvent aider au financement de séances d'APA pour les personnes touchées par un cancer du sein.",
-    "amount": "Variable sur étude de dossier",
+    "description": "Certaines associations et dispositifs spécifiques peuvent aider au financement de séances d'APA pour les personnes touchées par un cancer du sein. La loi de Février 2025 permet également une meilleure prise en charge.",
+    "amount": "Variable sur étude de dossier ou selon la législation",
     "conditions": [
       "Être concerné(e) par un cancer du sein",
-      "Dossier à constituer auprès des comités départementaux"
+      "Prescription médicale nécessaire"
     ],
     "resources": [
       {
-        "label": "Plus d'informations sur la Ligue contre le Cancer",
-        "url": "https://www.ligue-cancer.net/",
+        "label": "Loi Février 2025 (Vie Publique)",
+        "url": "https://www.vie-publique.fr",
         "type": "link"
       }
     ],
@@ -60,7 +60,7 @@
     "id": "remboursement-fauteuils",
     "title": "Prise en charge intégrale des fauteuils roulants",
     "slug": "prise-en-charge-integrale-fauteuils-roulants",
-    "description": "Prise en charge à 100 % des fauteuils roulants par l'Assurance maladie et les mutuelles (entrée en vigueur prévue fin 2025). Cela inclut certains modèles adaptés à la mobilité et la vie quotidienne.",
+    "description": "Prise en charge à 100 % des fauteuils roulants par l'Assurance maladie et les mutuelles. Cela inclut certains modèles adaptés à la mobilité et la vie quotidienne.",
     "amount": "Prise en charge à 100% selon la nomenclature de la Sécurité Sociale",
     "conditions": [
       "Prescription médicale obligatoire",
@@ -68,7 +68,7 @@
     ],
     "resources": [
       {
-        "label": "Lire l'actualité gouvernementale",
+        "label": "Réforme (handicap.gouv.fr)",
         "url": "https://handicap.gouv.fr/remboursement-integral-des-fauteuils-roulants",
         "type": "link"
       }
@@ -76,22 +76,39 @@
     "oldUrls": ["/actu-fauteuils-roulants-rembourses-a-100-des-decembre-2025/"]
   },
   {
-    "id": "aides-bilan-apa",
-    "title": "Aides au bilan en Activité Physique Adaptée (APA)",
-    "slug": "aides-au-bilan-en-activite-physique-adaptee",
-    "description": "Certaines structures (Maisons Sport-Santé, Réseaux de soins) ou collectivités locales peuvent prendre en charge tout ou partie du coût du bilan initial en APA.",
-    "amount": "Bilan parfois gratuit ou partiellement pris en charge",
+    "id": "remboursement-apa-cardio",
+    "title": "Remboursement de l'APA pour les maladies cardiovasculaires",
+    "slug": "remboursement-apa-maladies-cardiovasculaires",
+    "description": "Les séances d'Activité Physique Adaptée prescrites pour les patients atteints de certaines maladies cardiovasculaires peuvent désormais bénéficier d'une prise en charge.",
+    "amount": "Selon le dispositif en vigueur",
     "conditions": [
-      "S'adresser à une structure labellisée (Maison Sport-Santé)",
-      "Variable selon votre département/région"
+      "Prescription médicale",
+      "Concerne les pathologies cardiovasculaires spécifiques"
     ],
     "resources": [
       {
-        "label": "Contacter une Maison Sport-Santé",
-        "url": "https://www.sports.gouv.fr/les-maisons-sport-sante-67",
+        "label": "Article France Bleu",
+        "url": "https://www.francebleu.fr",
         "type": "link"
       }
+    ]
+  },
+  {
+    "id": "pass-sport",
+    "title": "Pass'Sport",
+    "slug": "pass-sport",
+    "description": "Le Pass'Sport est une allocation de rentrée sportive pour financer tout ou partie de l'inscription dans une structure sportive.",
+    "amount": "50 € par bénéficiaire",
+    "conditions": [
+      "Être âgé de 6 à 30 ans et bénéficier de certaines allocations (AEEH, AAH, etc.)",
+      "S'inscrire dans une structure éligible (club affilié, etc.)"
     ],
-    "oldUrls": ["/aides-au-bilan-en-activite-physique-adaptee-apa/"]
+    "resources": [
+      {
+        "label": "Site officiel du Pass'Sport",
+        "url": "https://www.pass.sports.gouv.fr/",
+        "type": "link"
+      }
+    ]
   }
 ]
