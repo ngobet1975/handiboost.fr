@@ -79,8 +79,8 @@ export default function Home() {
                 <Card className="border-4 border-sky-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-sky-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
-                      <img src="/bonhommes-handiboost.png" alt="Infos Pratiques" className="w-full h-full object-contain drop-shadow-sm" />
+                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-sky-100 bg-sky-50/50">
+                      <img src="/bonhommes-handiboost.png" alt="Infos Pratiques" className="w-full h-full object-cover object-[10%_50%]" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Infos Pratiques</CardTitle>
                   </CardHeader>
@@ -96,8 +96,8 @@ export default function Home() {
                 <Card className="border-4 border-orange-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-orange-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
-                      <img src="/bonhommes-handiboost.png" alt="Événements" className="w-full h-full object-contain drop-shadow-sm" />
+                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-orange-100 bg-orange-50/50">
+                      <img src="/bonhommes-handiboost.png" alt="Événements" className="w-full h-full object-cover object-[40%_50%]" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Événements</CardTitle>
                   </CardHeader>
@@ -113,8 +113,8 @@ export default function Home() {
                 <Card className="border-4 border-pink-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-pink-600 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
-                      <img src="/bonhommes-handiboost.png" alt="Actualités" className="w-full h-full object-contain drop-shadow-sm" />
+                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-pink-100 bg-pink-50/50">
+                      <img src="/bonhommes-handiboost.png" alt="Actualités" className="w-full h-full object-cover object-[70%_50%]" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Actualités</CardTitle>
                   </CardHeader>
@@ -130,8 +130,8 @@ export default function Home() {
                 <Card className="border-4 border-purple-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-purple-700 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
-                      <img src="/bonhommes-handiboost.png" alt="Professionnels" className="w-full h-full object-contain drop-shadow-sm" />
+                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-purple-100 bg-purple-50/50">
+                      <img src="/bonhommes-handiboost.png" alt="Professionnels" className="w-full h-full object-cover object-[95%_50%]" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Professionnels</CardTitle>
                   </CardHeader>
@@ -139,9 +139,7 @@ export default function Home() {
                     Ressources et outils pour les professionnels du sport et de la santé
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                    <Link href="/professionnels" className="block w-full text-center text-xl xl:text-2xl font-bold bg-purple-700 hover:bg-purple-800 text-white rounded-2xl py-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 no-underline">
-                      Espace Professionnels
-                    </Link>
+                     <Link href="/professionnels" className="block w-full text-center text-2xl font-extrabold border-4 border-purple-200 text-purple-700 hover:bg-purple-50 py-4 rounded-2xl transition-all no-underline">Espace Professionnels</Link>
                   </div>
                 </Card>
              </div>
