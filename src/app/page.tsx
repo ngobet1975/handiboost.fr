@@ -79,8 +79,8 @@ export default function Home() {
                 <Card className="border-4 border-sky-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-sky-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-20 h-20 xl:w-24 xl:h-24 bg-sky-50 rounded-full mb-6 xl:mb-8 shadow-inner border-4 border-sky-100 flex items-center justify-center overflow-hidden">
-                      <img src="/bonhommes-handiboost.png" alt="Infos Pratiques" className="w-full h-full object-cover object-[10%_50%]" />
+                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
+                      <img src="/bonhommes-handiboost.png" alt="Infos Pratiques" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Infos Pratiques</CardTitle>
                   </CardHeader>
@@ -96,8 +96,8 @@ export default function Home() {
                 <Card className="border-4 border-orange-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-orange-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-20 h-20 xl:w-24 xl:h-24 bg-orange-50 rounded-full mb-6 xl:mb-8 shadow-inner border-4 border-orange-100 flex items-center justify-center overflow-hidden">
-                      <img src="/bonhommes-handiboost.png" alt="Événements" className="w-full h-full object-cover object-[40%_50%]" />
+                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
+                      <img src="/bonhommes-handiboost.png" alt="Événements" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Événements</CardTitle>
                   </CardHeader>
@@ -113,8 +113,8 @@ export default function Home() {
                 <Card className="border-4 border-pink-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-pink-600 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-20 h-20 xl:w-24 xl:h-24 bg-pink-50 rounded-full mb-6 xl:mb-8 shadow-inner border-4 border-pink-100 flex items-center justify-center overflow-hidden">
-                      <img src="/bonhommes-handiboost.png" alt="Actualités" className="w-full h-full object-cover object-[70%_50%]" />
+                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
+                      <img src="/bonhommes-handiboost.png" alt="Actualités" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Actualités</CardTitle>
                   </CardHeader>
@@ -130,8 +130,8 @@ export default function Home() {
                 <Card className="border-4 border-purple-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-purple-700 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-20 h-20 xl:w-24 xl:h-24 bg-purple-50 rounded-full mb-6 xl:mb-8 shadow-inner border-4 border-purple-100 flex items-center justify-center overflow-hidden">
-                      <img src="/bonhommes-handiboost.png" alt="Professionnels" className="w-full h-full object-cover object-[95%_50%]" />
+                    <div className="w-full h-24 xl:h-28 mb-4 xl:mb-6 flex items-center justify-center">
+                      <img src="/bonhommes-handiboost.png" alt="Professionnels" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Professionnels</CardTitle>
                   </CardHeader>
