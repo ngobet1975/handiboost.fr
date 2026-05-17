@@ -10,6 +10,8 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [hospitalTab, setHospitalTab] = useState<'hors-hopital' | 'ghe'>('hors-hopital');
   const [monthFilter, setMonthFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [regionFilter, setRegionFilter] = useState('all');
   const [selectedPublics, setSelectedPublics] = useState<string[]>([]);
   const [ageFilter, setAgeFilter] = useState('all');
 
@@ -114,13 +116,13 @@ export function EvenementsClient({ data }: { data: EventData[] }) {
                 <Calendar className="w-4 h-4" /> Mois de l'année
               </label>
               <Select value={monthFilter} onValueChange={(v) => setMonthFilter(v || "all")}>
-                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-800">
+                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-800 capitalize">
                   <SelectValue>{monthFilter === 'all' ? 'Tous les mois' : new Date(2000, parseInt(monthFilter), 1).toLocaleString('fr-FR', { month: 'long' })}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tous les mois</SelectItem>
                   {Array.from({ length: 12 }, (_, i) => (
-                    <SelectItem key={i} value={i.toString()}>{new Date(2000, i, 1).toLocaleString('fr-FR', { month: 'long', capitalize: true })}</SelectItem>
+                    <SelectItem key={i} value={i.toString()} className="capitalize">{new Date(2000, i, 1).toLocaleString('fr-FR', { month: 'long' })}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
