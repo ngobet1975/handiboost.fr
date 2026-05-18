@@ -5,6 +5,28 @@ import { HomeSearchBar } from '@/components/HomeSearchBar'
 import { NewsletterPopup } from '@/components/NewsletterPopup'
 import actualitesData from '@/data/actualites.json'
 
+const defilementImages = [
+  "Capture d’écran 2026-05-18 225414.png",
+  "Capture d’écran 2026-05-18 225450.png",
+  "Capture d’écran 2026-05-18 225501.png",
+  "Capture d’écran 2026-05-18 225512.png",
+  "Capture d’écran 2026-05-18 225523.png",
+  "Capture d’écran 2026-05-18 225534.png",
+  "Capture d’écran 2026-05-18 225545.png",
+  "Capture d’écran 2026-05-18 225556.png",
+  "Capture d’écran 2026-05-18 225607.png",
+  "Capture d’écran 2026-05-18 225617.png",
+  "Capture d’écran 2026-05-18 225628.png",
+  "Capture d’écran 2026-05-18 225638.png",
+  "Capture d’écran 2026-05-18 225649.png",
+  "Capture d’écran 2026-05-18 225700.png"
+];
+
+const images1 = defilementImages;
+const images2 = [...defilementImages.slice(5), ...defilementImages.slice(0, 5)];
+const images3 = [...defilementImages.slice(10), ...defilementImages.slice(0, 10)];
+const images4 = [...defilementImages.slice(3), ...defilementImages.slice(0, 3)];
+
 export default function Home() {
   const latestActus = actualitesData
     .filter(actu => actu.status === 'published')
@@ -23,20 +45,25 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-100/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
 
           <div className="max-w-5xl mx-auto relative z-10">
-            {/* Badge + Titre */}
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-5 py-2 rounded-full font-bold text-lg mb-6">
-                💙 Association loi 1901
+            {/* Badge + Titre + Mascotte */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10 mb-10 text-center md:text-left">
+              <div className="flex-1">
+                <div className="inline-flex items-center justify-center md:justify-start gap-2 bg-blue-100 text-blue-800 px-5 py-2 rounded-full font-bold text-lg mb-6">
+                  💙 Association loi 1901
+                </div>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
+                  L&apos;Activité Physique Adaptée,<br />
+                  <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                    pour la santé de tous.
+                  </span>
+                </h1>
+                <p className="text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto md:mx-0 leading-relaxed font-medium mt-6">
+                  Un accès simple et clair à toutes les informations utiles pour pratiquer une activité physique adaptée et régulière.
+                </p>
               </div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
-                L&apos;Activité Physique Adaptée,<br />
-                <span className="bg-gradient-to-r from-blue-700 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  pour la santé de tous.
-                </span>
-              </h1>
-              <p className="text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium mt-6">
-                Un accès simple et clair à toutes les informations utiles pour pratiquer une activité physique adaptée et régulière.
-              </p>
+              <div className="w-48 md:w-1/3 max-w-[250px] mx-auto md:mx-0">
+                 <img src="/mascotte-ia.png" alt="Mascotte Handiboost" className="w-full h-auto object-contain drop-shadow-2xl animate-bounce-slow" />
+              </div>
             </div>
 
             {/* Barre de recherche */}
@@ -79,8 +106,12 @@ export default function Home() {
                 <Card className="border-4 border-sky-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-sky-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-sky-100 bg-sky-50/50">
-                      <img src="/bonhommes-handiboost.png" alt="Infos Pratiques" className="w-full h-full object-cover object-[10%_50%]" />
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-sky-100 bg-white">
+                      <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '45s' }}>
+                        {[...images1, ...images1].map((img, idx) => (
+                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3}s` }} />
+                        ))}
+                      </div>
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Infos Pratiques</CardTitle>
                   </CardHeader>
@@ -96,8 +127,12 @@ export default function Home() {
                 <Card className="border-4 border-orange-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-orange-500 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-orange-100 bg-orange-50/50">
-                      <img src="/bonhommes-handiboost.png" alt="Événements" className="w-full h-full object-cover object-[40%_50%]" />
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-orange-100 bg-white">
+                      <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '38s', animationDelay: '-15s' }}>
+                        {[...images2, ...images2].map((img, idx) => (
+                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3 + 0.4}s` }} />
+                        ))}
+                      </div>
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Événements</CardTitle>
                   </CardHeader>
@@ -113,8 +148,12 @@ export default function Home() {
                 <Card className="border-4 border-pink-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-pink-600 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-pink-100 bg-pink-50/50">
-                      <img src="/bonhommes-handiboost.png" alt="Actualités" className="w-full h-full object-cover object-[70%_50%]" />
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-pink-100 bg-white">
+                      <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '50s', animationDelay: '-5s' }}>
+                        {[...images3, ...images3].map((img, idx) => (
+                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3 + 0.8}s` }} />
+                        ))}
+                      </div>
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Actualités</CardTitle>
                   </CardHeader>
@@ -130,8 +169,12 @@ export default function Home() {
                 <Card className="border-4 border-purple-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-purple-700 w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-20 xl:h-24 mb-6 xl:mb-8 flex items-center justify-center overflow-hidden rounded-xl border border-purple-100 bg-purple-50/50">
-                      <img src="/bonhommes-handiboost.png" alt="Professionnels" className="w-full h-full object-cover object-[95%_50%]" />
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-purple-100 bg-white">
+                      <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '42s', animationDelay: '-25s' }}>
+                        {[...images4, ...images4].map((img, idx) => (
+                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3 + 1.2}s` }} />
+                        ))}
+                      </div>
                     </div>
                     <CardTitle className="text-3xl font-black text-slate-900">Professionnels</CardTitle>
                   </CardHeader>
