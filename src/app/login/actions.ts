@@ -6,13 +6,29 @@ import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
 import { authenticator } from 'otplib'
 
+import fs from 'fs'
+import path from 'path'
+
 export async function sendOtp(email: string) {
+  // Check whitelist in adherents.json
+  const filePath = path.join(process.cwd(), 'src/data/adherents.json')
+  let adherents = []
+  try {
+    adherents = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+  } catch (e) {}
+
+  const isAdherent = adherents.some((a: any) => a.email?.toLowerCase() === email.toLowerCase())
+
+  if (!isAdherent) {
+    return { error: "Votre email n'est pas autorisé. Veuillez contacter l'administrateur." }
+  }
+
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      shouldCreateUser: false, // Prevent public signups if that's the policy
+      shouldCreateUser: true, // Create the user in Supabase Auth if they are in our JSON whitelist
     }
   })
 

@@ -4,6 +4,9 @@ import React, { useState, useMemo } from 'react'
 import { Search, ExternalLink, MapPin, Building2, Users, Landmark, AlertTriangle, CheckCircle2, Filter } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const Map = dynamic(() => import('@/components/Map'), { ssr: false, loading: () => <div className="h-[500px] bg-slate-100 flex items-center justify-center rounded-xl border border-slate-200">Chargement de la carte...</div> })
 
 export interface GuideEntry {
   id: string
@@ -27,7 +30,7 @@ const SCOPE_CONFIG: Record<string, { label: string; emoji: string }> = {
   regional: { label: 'Régional', emoji: '📍' },
 }
 
-export function GuideBoosterClient({ entries }: { entries: GuideEntry[] }) {
+export function GuideBoosterClient({ entries, structures = [] }: { entries: GuideEntry[], structures?: any[] }) {
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState<string | null>(null)
   const [scopeFilter, setScopeFilter] = useState<string | null>(null)
@@ -134,9 +137,23 @@ export function GuideBoosterClient({ entries }: { entries: GuideEntry[] }) {
       </div>
 
       {/* Results count */}
-      <p className="text-center text-lg font-medium text-slate-500 mb-8">
-        {filtered.length} résultat{filtered.length > 1 ? 's' : ''}{search && ` pour "${search}"`}
-      </p>
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-slate-800">La Carte des Structures Locales</h2>
+        <p className="text-lg font-medium text-slate-500">
+          {structures.length} structure{structures.length > 1 ? 's' : ''} référencée{structures.length > 1 ? 's' : ''}
+        </p>
+      </div>
+
+      <div className="mb-16">
+        <Map structures={structures} />
+      </div>
+
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-slate-800">Annuaires Partenaires</h2>
+        <p className="text-lg font-medium text-slate-500">
+          {filtered.length} résultat{filtered.length > 1 ? 's' : ''}{search && ` pour "${search}"`}
+        </p>
+      </div>
 
       {/* Results Grid */}
       {filtered.length === 0 ? (

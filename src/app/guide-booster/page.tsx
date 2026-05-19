@@ -4,6 +4,8 @@ import { Metadata } from 'next';
 import { Compass } from 'lucide-react';
 import { GuideBoosterClient, GuideEntry } from '@/components/GuideBoosterClient';
 import { createClient } from '@/lib/supabase/server';
+import fs from 'fs';
+import path from 'path';
 
 export const metadata: Metadata = {
   title: 'Guide Booster — Annuaire APA & Parasport | Handiboost',
@@ -20,6 +22,12 @@ export default async function GuideBoosterPage() {
     .select('*')
     .eq('status', 'published')
     .order('name');
+
+  const filePath = path.join(process.cwd(), 'src/data/structures.json');
+  let structures = [];
+  if (fs.existsSync(filePath)) {
+    structures = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  }
 
   const entries: GuideEntry[] = (rawEntries ?? []).map((e) => ({
     id: e.id,
@@ -78,7 +86,7 @@ export default async function GuideBoosterPage() {
         </section>
 
         {/* Search + Results */}
-        <GuideBoosterClient entries={entries} />
+        <GuideBoosterClient entries={entries} structures={structures} />
       </div>
     </div>
   );

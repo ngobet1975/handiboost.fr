@@ -4,12 +4,8 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 export default async function AdminPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
+  // Auth is handled by middleware
+  // No need to check Supabase user here since we use admin_session cookie
 
   return (
     <div className="min-h-screen bg-slate-50 p-8">
