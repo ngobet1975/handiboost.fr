@@ -92,7 +92,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <div className="w-full aspect-video bg-slate-200 rounded-3xl overflow-hidden shadow-lg mb-10 relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
-                src={article.cover_image} 
+                src={article.cover_image.startsWith('http') || article.cover_image.startsWith('/') ? article.cover_image : `/photos/${article.cover_image}`} 
                 alt={article.title} 
                 className="w-full h-full object-cover"
               />

@@ -47,7 +47,7 @@ export function ArticleCard({ article }: { article: ArticleData }) {
           <div className="w-full h-48 bg-slate-50 relative overflow-hidden flex items-center justify-center shrink-0 border-b border-slate-100">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
-              src={article.coverImage} 
+              src={article.coverImage.startsWith('http') || article.coverImage.startsWith('/') ? article.coverImage : `/photos/${article.coverImage}`} 
               alt={article.title} 
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               onError={(e) => {
