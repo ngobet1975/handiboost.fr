@@ -113,7 +113,7 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
-                    <CardTitle className="text-3xl font-black text-slate-900">Infos Pratiques</CardTitle>
+                    <CardTitle className="text-3xl font-black text-slate-900 text-center">Infos Pratiques</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
                     Trouver une activité physique proche de chez vous, des informations et des ressources
@@ -134,7 +134,7 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
-                    <CardTitle className="text-3xl font-black text-slate-900">Événements</CardTitle>
+                    <CardTitle className="text-3xl font-black text-slate-900 text-center">Événements</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
                     Trouver des événements sportifs adaptés proches de chez vous
@@ -155,7 +155,7 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
-                    <CardTitle className="text-3xl font-black text-slate-900">Actualités</CardTitle>
+                    <CardTitle className="text-3xl font-black text-slate-900 text-center">Actualités</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
                     Lire les nouvelles sur l'APA et l'association
@@ -176,7 +176,7 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
-                    <CardTitle className="text-3xl font-black text-slate-900">Professionnels</CardTitle>
+                    <CardTitle className="text-3xl font-black text-slate-900 text-center">Professionnels</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
                     Ressources et outils pour les professionnels du sport et de la santé
