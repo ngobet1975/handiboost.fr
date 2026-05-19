@@ -9,9 +9,15 @@ import { Mail, KeyRound, ArrowRight, Loader2 } from 'lucide-react'
 
 export function LoginForm({ initialMessage }: { initialMessage: string | null }) {
   const [tab, setTab] = useState<'pro' | 'admin'>('pro')
+  const [proMode, setProMode] = useState<'login' | 'register'>('login')
   const [step, setStep] = useState<'email' | 'otp'>('email')
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
+  
+  // Register fields
+  const [regNom, setRegNom] = useState('')
+  const [regPrenom, setRegPrenom] = useState('')
+  const [regProfession, setRegProfession] = useState('')
   
   // Admin fields
   const [adminCode, setAdminCode] = useState('')
@@ -33,6 +39,30 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
       setLoading(false)
     } else {
       setSuccessMsg(`Un code de sécurité a été envoyé à ${email}`)
+      setStep('otp')
+      setLoading(false)
+    }
+  }
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    setSuccessMsg(null)
+
+    const { registerPro } = await import('./actions')
+    const res = await registerPro({
+      nom: regNom,
+      prenom: regPrenom,
+      profession: regProfession,
+      email: email
+    })
+    
+    if (res.error) {
+      setError(res.error)
+      setLoading(false)
+    } else {
+      setSuccessMsg(`Inscription réussie ! Un code de sécurité a été envoyé à ${email}`)
       setStep('otp')
       setLoading(false)
     }
@@ -103,7 +133,7 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
         {/* PRO TAB */}
         {tab === 'pro' && (
           <>
-            {step === 'email' && (
+            {step === 'email' && proMode === 'login' && (
               <form onSubmit={handleSendOtp} className="space-y-6">
                 <div>
                   <Label htmlFor="email" className="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
@@ -128,6 +158,59 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
                   {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Recevoir mon code'}
                   {!loading && <ArrowRight className="w-6 h-6 ml-2" />}
                 </Button>
+                
+                <div className="text-center mt-4">
+                  <button 
+                    type="button" 
+                    onClick={() => { setProMode('register'); setError(null) }}
+                    className="text-slate-500 font-medium hover:text-blue-600 transition-colors"
+                  >
+                    Pas encore de compte ? <span className="underline">S'inscrire</span>
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {step === 'email' && proMode === 'register' && (
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="regNom" className="text-sm font-bold text-slate-700 mb-1 block">Nom</Label>
+                    <Input id="regNom" required value={regNom} onChange={e => setRegNom(e.target.value)} placeholder="Dupont" className="h-12 bg-slate-50" />
+                  </div>
+                  <div>
+                    <Label htmlFor="regPrenom" className="text-sm font-bold text-slate-700 mb-1 block">Prénom</Label>
+                    <Input id="regPrenom" required value={regPrenom} onChange={e => setRegPrenom(e.target.value)} placeholder="Jean" className="h-12 bg-slate-50" />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="regProfession" className="text-sm font-bold text-slate-700 mb-1 block">Profession</Label>
+                  <Input id="regProfession" required value={regProfession} onChange={e => setRegProfession(e.target.value)} placeholder="Kinésithérapeute" className="h-12 bg-slate-50" />
+                </div>
+
+                <div>
+                  <Label htmlFor="regEmail" className="text-sm font-bold text-slate-700 mb-1 block">Email professionnel</Label>
+                  <Input id="regEmail" type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="jean@exemple.com" className="h-12 bg-slate-50" />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-14 mt-2 text-lg rounded-xl font-bold bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all"
+                  disabled={loading}
+                >
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Créer mon compte'}
+                </Button>
+                
+                <div className="text-center mt-3">
+                  <button 
+                    type="button" 
+                    onClick={() => { setProMode('login'); setError(null) }}
+                    className="text-slate-500 font-medium hover:text-blue-600 transition-colors"
+                  >
+                    Déjà inscrit ? <span className="underline">Se connecter</span>
+                  </button>
+                </div>
               </form>
             )}
 

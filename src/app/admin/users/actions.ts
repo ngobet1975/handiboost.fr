@@ -18,8 +18,7 @@ export async function addAdherent(formData: FormData) {
   const typeAdhesion = formData.get('typeAdhesion') as string
   const telephone = formData.get('telephone') as string || ''
   const dateAdhesion = formData.get('dateAdhesion') as string || ''
-  const dateAttribution = formData.get('dateAttribution') as string || ''
-  const dateFinAdhesion = formData.get('dateFinAdhesion') as string || ''
+  const profession = formData.get('profession') as string || ''
 
   const capitalize = (str: string) => {
     if (!str) return ''
@@ -44,8 +43,7 @@ export async function addAdherent(formData: FormData) {
     email: email.trim().toLowerCase(),
     telephone: formatE164(telephone),
     dateAdhesion,
-    dateAttribution,
-    dateFinAdhesion,
+    profession: capitalize(profession),
     typeAdhesion
   })
 
@@ -68,8 +66,7 @@ export async function updateAdherent(id: string, formData: FormData) {
   const typeAdhesion = formData.get('typeAdhesion') as string
   const telephone = formData.get('telephone') as string || ''
   const dateAdhesion = formData.get('dateAdhesion') as string || ''
-  const dateAttribution = formData.get('dateAttribution') as string || ''
-  const dateFinAdhesion = formData.get('dateFinAdhesion') as string || ''
+  const profession = formData.get('profession') as string || ''
 
   const capitalize = (str: string) => {
     if (!str) return ''
@@ -96,8 +93,7 @@ export async function updateAdherent(id: string, formData: FormData) {
       email: email.trim().toLowerCase(),
       telephone: formatE164(telephone),
       dateAdhesion,
-      dateAttribution,
-      dateFinAdhesion,
+      profession: capitalize(profession),
       typeAdhesion
     }
     fs.writeFileSync(filePath, JSON.stringify(adherents, null, 2))

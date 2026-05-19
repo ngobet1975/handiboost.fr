@@ -88,10 +88,24 @@ export async function updateStructure(id: string, data: any) {
       informations: data.informations?.trim() || '',
       appele: data.appele?.trim() || 'non',
       latitude: data.latitude !== undefined ? data.latitude : structures[index].latitude,
-      longitude: data.longitude !== undefined ? data.longitude : structures[index].longitude
+      longitude: data.longitude !== undefined ? data.longitude : structures[index].longitude,
+      enAttenteMaj: false
     }
     fs.writeFileSync(filePath, JSON.stringify(structures, null, 2))
     revalidatePath('/admin/annuaire')
   }
 }
 
+
+export async function reportStructureError(id: string) {
+  const structures = await getStructures()
+  const index = structures.findIndex((s: any) => s.id === id)
+  
+  if (index !== -1) {
+    structures[index].enAttenteMaj = true
+    const filePath = require('path').join(process.cwd(), 'src/data/structures.json')
+    require('fs').writeFileSync(filePath, JSON.stringify(structures, null, 2))
+    revalidatePath('/admin/annuaire')
+    revalidatePath('/guide-booster')
+  }
+}

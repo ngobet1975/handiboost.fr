@@ -6,6 +6,7 @@ import { GuideBoosterClient, GuideEntry } from '@/components/GuideBoosterClient'
 import { createClient } from '@/lib/supabase/server';
 import fs from 'fs';
 import path from 'path';
+import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'Guide Booster — Annuaire APA & Parasport | Handiboost',
@@ -29,6 +30,12 @@ export default async function GuideBoosterPage() {
     structures = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   }
 
+  const activitesPath = path.join(process.cwd(), 'src/data/activites.json');
+  let activites: string[] = [];
+  if (fs.existsSync(activitesPath)) {
+    activites = JSON.parse(fs.readFileSync(activitesPath, 'utf8'));
+  }
+
   const entries: GuideEntry[] = (rawEntries ?? []).map((e) => ({
     id: e.id,
     name: e.name,
@@ -40,14 +47,31 @@ export default async function GuideBoosterPage() {
     verified_at: e.verified_at ?? null,
   }));
 
+  const cookieStore = await cookies();
+  const isLogged = cookieStore.has('pro_session') || cookieStore.has('admin_session');
+
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
-      {/* Breadcrumb */}
+      {/* Breadcrumb & Logout */}
       <div className="bg-white border-b border-slate-200 py-4 px-6">
-        <div className="max-w-7xl mx-auto flex items-center gap-2 text-lg font-bold text-slate-500">
-          <Link href="/" className="hover:text-blue-800 hover:underline transition-all">Accueil</Link>
-          <span>&gt;</span>
-          <span className="text-slate-800">Guide Booster</span>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-lg font-bold text-slate-500">
+            <Link href="/" className="hover:text-blue-800 hover:underline transition-all">Accueil</Link>
+            <span>&gt;</span>
+            <span className="text-slate-800">Guide Booster</span>
+          </div>
+          {isLogged && (
+            <div className="flex items-center gap-3">
+              <Link href="/profil" className="inline-flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm border border-blue-200">
+                👤 Mon Profil
+              </Link>
+              <form action="/auth/signout" method="post">
+                <button type="submit" className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                  Se déconnecter
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
 
@@ -86,7 +110,7 @@ export default async function GuideBoosterPage() {
         </section>
 
         {/* Search + Results */}
-        <GuideBoosterClient entries={entries} structures={structures} />
+        <GuideBoosterClient entries={entries} structures={structures} activites={activites} />
       </div>
     </div>
   );

@@ -64,18 +64,14 @@ export default function UsersManager({ initialAdherents }: { initialAdherents: a
               <input type="tel" name="telephone" defaultValue={adherentToEdit?.telephone || ''} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500" placeholder="Ex: 0612345678" />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Date d'adhésion</label>
               <input type="date" name="dateAdhesion" defaultValue={adherentToEdit?.dateAdhesion || ''} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Date d'attribution</label>
-              <input type="date" name="dateAttribution" defaultValue={adherentToEdit?.dateAttribution || ''} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Fin d'adhésion</label>
-              <input type="date" name="dateFinAdhesion" defaultValue={adherentToEdit?.dateFinAdhesion || ''} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500" />
+              <label className="block text-sm font-medium text-slate-700 mb-1">Profession</label>
+              <input type="text" name="profession" defaultValue={adherentToEdit?.profession || ''} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500" placeholder="Ex: Kinésithérapeute" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Statut</label>
@@ -132,9 +128,8 @@ export default function UsersManager({ initialAdherents }: { initialAdherents: a
                         📞 <a href={`tel:${adherent.telephone}`} className="text-blue-600 hover:underline font-medium">{adherent.telephone}</a>
                       </div>
                     )}
+                    {adherent.profession && <div className="text-sm font-medium text-slate-700 mb-1">{adherent.profession}</div>}
                     {adherent.dateAdhesion && <div className="text-xs">Adh. : {new Date(adherent.dateAdhesion).toLocaleDateString('fr-FR')}</div>}
-                    {adherent.dateAttribution && <div className="text-xs">Attr. : {new Date(adherent.dateAttribution).toLocaleDateString('fr-FR')}</div>}
-                    {adherent.dateFinAdhesion && <div className="text-xs">Fin : {new Date(adherent.dateFinAdhesion).toLocaleDateString('fr-FR')}</div>}
                   </td>
                   <td className="px-4 py-4">
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${

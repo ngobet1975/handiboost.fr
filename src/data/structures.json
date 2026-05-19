@@ -3174,15 +3174,16 @@
   {
     "id": "558cc9a7-722b-474d-9ec2-a9e846eb7304",
     "nom": "gobet",
-    "activite": "Sports de balle, Natation / Nautisme, Équitation",
-    "public": "olsdpqsdhgvbpsd",
+    "activite": "Massage",
+    "public": "test\neooz",
     "adresse": "146 Avenue des Hélvètes 01600 Saint-Bernard",
-    "site": "",
+    "site": "https://www.itsynchronic.com",
     "telephone": "",
     "mail": "",
     "informations": "",
     "appele": "non",
     "latitude": 45.945745,
-    "longitude": 4.738695
+    "longitude": 4.738695,
+    "enAttenteMaj": false
   }
 ]
