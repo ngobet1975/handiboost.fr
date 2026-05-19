@@ -3170,5 +3170,19 @@
     "informations": "Mardi de 14h à 15h / Mardi de 10h à 11h",
     "latitude": 45.775533,
     "longitude": 4.824953
+  },
+  {
+    "id": "558cc9a7-722b-474d-9ec2-a9e846eb7304",
+    "nom": "gobet",
+    "activite": "Sports de balle, Natation / Nautisme, Équitation",
+    "public": "olsdpqsdhgvbpsd",
+    "adresse": "146 Avenue des Hélvètes 01600 Saint-Bernard",
+    "site": "",
+    "telephone": "",
+    "mail": "",
+    "informations": "",
+    "appele": "non",
+    "latitude": 45.945745,
+    "longitude": 4.738695
   }
 ]
