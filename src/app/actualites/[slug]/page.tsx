@@ -3,16 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Calendar, Tag, Info, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/server";
+import actualitesData from "@/data/actualites.json";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const supabase = await createClient();
-  const { data: article } = await supabase
-    .from("articles")
-    .select("title, excerpt")
-    .eq("slug", resolvedParams.slug)
-    .single();
+  const article = (actualitesData as any[]).find(a => a.slug === resolvedParams.slug);
   
   if (!article) return { title: "Article introuvable | Handiboost" };
 
@@ -24,19 +19,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const supabase = await createClient();
-  const { data: article } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("slug", resolvedParams.slug)
-    .eq("status", "published")
-    .single();
+  const article = (actualitesData as any[]).find(a => a.slug === resolvedParams.slug && a.status === "published");
 
   if (!article) {
     notFound();
   }
 
-  const formattedDate = new Date(article.published_at).toLocaleDateString('fr-FR', {
+  const formattedDate = new Date(article.publishedAt).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -80,7 +69,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </span>
             <span className="text-slate-500 text-sm font-medium flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
-              Publié le <time dateTime={article.published_at}>{formattedDate}</time>
+              Publié le <time dateTime={article.publishedAt}>{formattedDate}</time>
             </span>
           </div>
 
@@ -88,11 +77,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             {article.title}
           </h1>
 
-          {article.cover_image && (
+          {article.coverImage && (
             <div className="w-full aspect-video bg-slate-200 rounded-3xl overflow-hidden shadow-lg mb-10 relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img 
-                src={article.cover_image.startsWith('http') || article.cover_image.startsWith('/') ? article.cover_image : `/photos/${article.cover_image}`} 
+                src={article.coverImage.startsWith('http') || article.coverImage.startsWith('/') ? article.coverImage : `/photos/${article.coverImage}`} 
                 alt={article.title} 
                 className="w-full h-full object-cover"
               />

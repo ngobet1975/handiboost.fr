@@ -37,8 +37,12 @@ export async function updateSession(request: NextRequest) {
       console.error('Supabase middleware error:', error)
     }
 
+    // Check for custom admin cookie
+    const hasAdminCookie = request.cookies.has('admin_session')
+    const isAdmin = hasAdminCookie || !!user
+
     // Protect /admin routes
-    if (request.nextUrl.pathname.startsWith('/admin') && !user) {
+    if (request.nextUrl.pathname.startsWith('/admin') && !isAdmin) {
       const url = request.nextUrl.clone()
       url.pathname = '/login'
       return NextResponse.redirect(url)
@@ -51,8 +55,8 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    // Redirect to admin if already logged in
-    if (request.nextUrl.pathname === '/login' && user) {
+    // Redirect to admin if already logged in as admin
+    if (request.nextUrl.pathname === '/login' && isAdmin) {
        const url = request.nextUrl.clone()
        url.pathname = '/admin'
        return NextResponse.redirect(url)

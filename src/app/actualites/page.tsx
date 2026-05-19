@@ -2,35 +2,31 @@ import React from "react";
 import Link from "next/link";
 import { ChevronRight, Newspaper } from "lucide-react";
 import { ArticleCard, ArticleData } from "@/components/ArticleCard";
-import { createClient } from "@/lib/supabase/server";
+import actualitesData from "@/data/actualites.json";
 
 export const metadata = {
   title: "Actualités | Handiboost",
   description: "Retrouvez toutes les actualités, rapports et événements autour du sport adapté et du parasport.",
 };
 
-export default async function ActualitesPage() {
-  const supabase = await createClient();
-  const { data: rawArticles } = await supabase
-    .from("articles")
-    .select("*")
-    .eq("status", "published")
-    .order("published_at", { ascending: false });
-
-  // Map DB snake_case to component camelCase
-  const articles: ArticleData[] = (rawArticles ?? []).map((a) => ({
-    id: a.id,
-    title: a.title,
-    slug: a.slug,
-    excerpt: a.excerpt ?? "",
-    content: a.content ?? "",
-    category: a.category ?? "info-apa",
-    coverImage: a.cover_image ?? "",
-    publishedAt: a.published_at ?? "",
-    featured: a.featured ?? false,
-    showOnHomepage: a.show_on_homepage ?? false,
-    status: a.status,
-  }));
+export default function ActualitesPage() {
+  // Read directly from JSON file instead of Supabase
+  const articles: ArticleData[] = (actualitesData as any[])
+    .filter(a => a.status === "published")
+    .map((a) => ({
+      id: a.id,
+      title: a.title,
+      slug: a.slug,
+      excerpt: a.excerpt ?? "",
+      content: a.content ?? "",
+      category: a.category ?? "info-apa",
+      coverImage: a.coverImage ?? "",
+      publishedAt: a.publishedAt ?? "",
+      featured: a.featured ?? false,
+      showOnHomepage: a.showOnHomepage ?? false,
+      status: a.status as any,
+    }))
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
   const featuredArticles = articles.filter(a => a.featured);
   const regularArticles = articles.filter(a => !a.featured);
