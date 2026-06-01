@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { AIChatbot } from "@/components/AIChatbot";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col text-base leading-relaxed">
         <Header />
         {children}
+        <Footer />
         <AIChatbot />
       </body>
     </html>

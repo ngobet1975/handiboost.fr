@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight, Activity, Heart, Brain, Bone, Eye, Dumbbell, Smile, Ribbon, PersonStanding, Apple, Users, Flower, Sun, HeartPulse } from 'lucide-react';
-import { createClient } from '@/lib/supabase/server';
+import fs from 'fs';
+import path from 'path';
 
 export const metadata: Metadata = {
   title: 'Espace Pratiquants | Handiboost',
@@ -37,12 +38,13 @@ const getIconForPatho = (slug: string) => {
 };
 
 export default async function PratiquantsHubPage() {
-  const supabase = await createClient();
-  const { data: pathologies } = await supabase
-    .from('pathologies')
-    .select('id, title, slug')
-    .eq('status', 'published')
-    .eq('validation_status', 'validated');
+  let rawPathologies: any[] = [];
+  try {
+    rawPathologies = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/pathologies.json'), 'utf8'));
+  } catch {
+    rawPathologies = [];
+  }
+  const pathologies = rawPathologies.filter((p: any) => p.validationStatus !== 'rejected');
 
   const cards = [
     {

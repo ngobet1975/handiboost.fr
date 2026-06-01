@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { Compass } from 'lucide-react';
 import { GuideBoosterClient, GuideEntry } from '@/components/GuideBoosterClient';
-import { createClient } from '@/lib/supabase/server';
+
 import fs from 'fs';
 import path from 'path';
 import { cookies } from 'next/headers';
@@ -17,12 +17,13 @@ export const metadata: Metadata = {
 };
 
 export default async function GuideBoosterPage() {
-  const supabase = await createClient();
-  const { data: rawEntries } = await supabase
-    .from('directories')
-    .select('*')
-    .eq('status', 'published')
-    .order('name');
+  const annuairePath = path.join(process.cwd(), 'src/data/annuaire.json');
+  let rawEntries: any[] = [];
+  try {
+    rawEntries = JSON.parse(fs.readFileSync(annuairePath, 'utf8'));
+  } catch {
+    rawEntries = [];
+  }
 
   const filePath = path.join(process.cwd(), 'src/data/structures.json');
   let structures = [];
@@ -36,16 +37,19 @@ export default async function GuideBoosterPage() {
     activites = JSON.parse(fs.readFileSync(activitesPath, 'utf8'));
   }
 
-  const entries: GuideEntry[] = (rawEntries ?? []).map((e) => ({
-    id: e.id,
-    name: e.name,
-    provider: e.provider,
-    description: e.description,
-    url: e.url,
-    scope: e.scope,
-    type: e.type,
-    verified_at: e.verified_at ?? null,
-  }));
+  const entries: GuideEntry[] = rawEntries
+    .filter((e: any) => e.status === 'published')
+    .sort((a: any, b: any) => (a.name || '').localeCompare(b.name || ''))
+    .map((e: any) => ({
+      id: e.id,
+      name: e.name,
+      provider: e.provider,
+      description: e.description,
+      url: e.url,
+      scope: e.scope,
+      type: e.type,
+      verified_at: null,
+    }));
 
   const cookieStore = await cookies();
   const isLogged = cookieStore.has('pro_session') || cookieStore.has('admin_session');

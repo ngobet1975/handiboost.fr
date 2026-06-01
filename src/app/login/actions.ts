@@ -2,7 +2,6 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
 import { authenticator } from 'otplib'
 
@@ -10,6 +9,8 @@ import fs from 'fs'
 import path from 'path'
 
 import nodemailer from 'nodemailer'
+
+const otpStore = new Map<string, { code: string; expiresAt: number }>();
 
 export async function sendOtp(email: string) {
   const emailLower = email.toLowerCase().trim();
@@ -30,21 +31,8 @@ export async function sendOtp(email: string) {
   // Generate a 6-digit code
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
   
-  // Save OTP in otps.json
-  const otpsPath = path.join(process.cwd(), 'src/data/otps.json');
-  let otps: any[] = [];
-  try {
-    otps = JSON.parse(fs.readFileSync(otpsPath, 'utf8'));
-  } catch (e) {}
-
-  // Remove old otps for this email
-  otps = otps.filter(o => o.email !== emailLower);
-  otps.push({
-    email: emailLower,
-    code: otpCode,
-    expiresAt: Date.now() + 15 * 60 * 1000 // 15 mins
-  });
-  fs.writeFileSync(otpsPath, JSON.stringify(otps, null, 2));
+  // Store OTP in memory
+  otpStore.set(emailLower, { code: otpCode, expiresAt: Date.now() + 15 * 60 * 1000 });
 
   // Send Email with Nodemailer
   const transporter = nodemailer.createTransport({
@@ -106,25 +94,19 @@ export async function verifyOtp(email: string, token: string) {
   }
 
   const emailLower = email.toLowerCase().trim();
-  const otpsPath = path.join(process.cwd(), 'src/data/otps.json');
-  let otps: any[] = [];
-  try {
-    otps = JSON.parse(fs.readFileSync(otpsPath, 'utf8'));
-  } catch (e) {}
+  const record = otpStore.get(emailLower);
 
-  const record = otps.find(o => o.email === emailLower && o.code === token);
-
-  if (!record) {
+  if (!record || record.code !== token) {
     return { error: 'Code incorrect.' }
   }
 
   if (Date.now() > record.expiresAt) {
+    otpStore.delete(emailLower);
     return { error: 'Code expiré. Veuillez recommencer.' }
   }
 
   // Remove the used OTP
-  otps = otps.filter(o => o.email !== emailLower);
-  fs.writeFileSync(otpsPath, JSON.stringify(otps, null, 2));
+  otpStore.delete(emailLower);
 
   // Create session cookie (bypassing Supabase Auth)
   const { cookies } = await import('next/headers');

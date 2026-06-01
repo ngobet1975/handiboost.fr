@@ -25,10 +25,10 @@ export default function MentionsLegalesPage() {
           <h2>Éditeur du site</h2>
           <p>
             Le site <strong>handiboost.fr</strong> est édité par l'association <strong>Handiboost</strong>, association loi 1901.<br />
-            Siège social : <em>À compléter</em><br />
-            N° RNA / SIRET : <em>À compléter</em><br />
-            Directeur de la publication : <em>À compléter</em><br />
-            E-mail : <a href="mailto:contact@handiboost.fr">contact@handiboost.fr</a>
+            Siège social : <strong className="text-blue-700">À renseigner par l&apos;association</strong><br />
+            N° RNA / SIRET : <strong className="text-blue-700">À renseigner par l&apos;association</strong><br />
+            Directeur de la publication : <strong className="text-blue-700">À renseigner par l&apos;association</strong><br />
+            E-mail : <a href="mailto:handiboost.contact@gmail.com">handiboost.contact@gmail.com</a>
           </p>
 
           <h2>Hébergement</h2>
@@ -49,7 +49,7 @@ export default function MentionsLegalesPage() {
           <p>
             Les informations collectées via le formulaire de contact sont destinées exclusivement à l'association Handiboost
             et ne sont ni vendues ni transmises à des tiers. Conformément au RGPD, vous disposez d'un droit d'accès,
-            de rectification et de suppression de vos données en écrivant à <a href="mailto:contact@handiboost.fr">contact@handiboost.fr</a>.
+            de rectification et de suppression de vos données en écrivant à <a href="mailto:handiboost.contact@gmail.com">handiboost.contact@gmail.com</a>.
           </p>
           <p>
             Pour plus d'informations, consultez notre <Link href="/politique-de-confidentialite" className="text-blue-700 font-bold hover:underline">politique de confidentialité</Link>.

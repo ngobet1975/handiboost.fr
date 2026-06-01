@@ -1,33 +1,19 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, Plus, Pencil, Trash2, Eye, EyeOff, Save, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase/client'
-
-interface Article {
-  id: string
-  title: string
-  slug: string
-  excerpt: string | null
-  content: string | null
-  category: string | null
-  cover_image: string | null
-  published_at: string | null
-  featured: boolean
-  show_on_homepage: boolean
-  status: string
-}
+import { getArticles, saveArticle, deleteArticle as deleteArticleAction, toggleArticleStatus, Article } from './actions'
 
 export default function AdminArticlesPage() {
-  const supabase = createClient()
   const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Article | null>(null)
   const [isNew, setIsNew] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
     loadArticles()
@@ -35,11 +21,8 @@ export default function AdminArticlesPage() {
 
   async function loadArticles() {
     setLoading(true)
-    const { data } = await supabase
-      .from('articles')
-      .select('*')
-      .order('published_at', { ascending: false })
-    setArticles(data ?? [])
+    const data = await getArticles()
+    setArticles(data)
     setLoading(false)
   }
 
@@ -60,41 +43,29 @@ export default function AdminArticlesPage() {
     })
   }
 
-  async function saveArticle() {
+  async function handleSave() {
     if (!editing) return
-    const payload = {
-      title: editing.title,
-      slug: editing.slug || editing.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-      excerpt: editing.excerpt,
-      content: editing.content,
-      category: editing.category,
-      cover_image: editing.cover_image,
-      published_at: editing.published_at,
-      featured: editing.featured,
-      show_on_homepage: editing.show_on_homepage,
-      status: editing.status,
-    }
-
-    if (isNew) {
-      await supabase.from('articles').insert(payload)
-    } else {
-      await supabase.from('articles').update(payload).eq('id', editing.id)
-    }
-    setEditing(null)
-    setIsNew(false)
-    loadArticles()
+    startTransition(async () => {
+      await saveArticle(editing, isNew)
+      setEditing(null)
+      setIsNew(false)
+      await loadArticles()
+    })
   }
 
-  async function deleteArticle(id: string) {
+  async function handleDelete(id: string) {
     if (!confirm('Supprimer cet article ?')) return
-    await supabase.from('articles').delete().eq('id', id)
-    loadArticles()
+    startTransition(async () => {
+      await deleteArticleAction(id)
+      await loadArticles()
+    })
   }
 
-  async function toggleStatus(article: Article) {
-    const newStatus = article.status === 'published' ? 'draft' : 'published'
-    await supabase.from('articles').update({ status: newStatus }).eq('id', article.id)
-    loadArticles()
+  async function handleToggleStatus(article: Article) {
+    startTransition(async () => {
+      await toggleArticleStatus(article.id)
+      await loadArticles()
+    })
   }
 
   if (editing) {
@@ -207,7 +178,7 @@ export default function AdminArticlesPage() {
             </div>
 
             <div className="pt-4 border-t">
-              <Button onClick={saveArticle} className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 h-12">
+              <Button onClick={handleSave} disabled={isPending} className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 h-12">
                 <Save className="w-4 h-4 mr-2" /> {isNew ? 'Créer l\'article' : 'Enregistrer'}
               </Button>
             </div>
@@ -271,13 +242,13 @@ export default function AdminArticlesPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => toggleStatus(article)} className="p-2 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-blue-50" title={article.status === 'published' ? 'Dépublier' : 'Publier'}>
+                        <button onClick={() => handleToggleStatus(article)} disabled={isPending} className="p-2 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-blue-50" title={article.status === 'published' ? 'Dépublier' : 'Publier'}>
                           {article.status === 'published' ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                         <button onClick={() => { setEditing(article); setIsNew(false); }} className="p-2 text-slate-400 hover:text-emerald-600 rounded-lg hover:bg-emerald-50" title="Modifier">
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button onClick={() => deleteArticle(article.id)} className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50" title="Supprimer">
+                        <button onClick={() => handleDelete(article.id)} disabled={isPending} className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50" title="Supprimer">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

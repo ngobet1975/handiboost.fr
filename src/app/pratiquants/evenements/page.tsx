@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { EvenementsClient } from '@/components/EvenementsClient';
 import { EventData } from '@/components/EventCard';
-import { createClient } from '@/lib/supabase/server';
+import fs from 'fs';
+import path from 'path';
 
 export const metadata: Metadata = {
   title: 'Agenda & Événements Sportifs | Handiboost',
@@ -14,33 +15,34 @@ export const metadata: Metadata = {
 };
 
 export default async function EvenementsPage() {
-  const supabase = await createClient();
+  let rawEvents: any[] = [];
+  try {
+    rawEvents = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/evenements.json'), 'utf8'));
+  } catch {
+    rawEvents = [];
+  }
+
   const twoMonthsAgo = new Date();
   twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-  
-  const { data: rawEvents } = await supabase
-    .from("events")
-    .select("*")
-    .eq("status", "published")
-    .gte("event_date", twoMonthsAgo.toISOString())
-    .order("event_date", { ascending: true });
 
-  // Map DB data to EventData interface expected by EventCard component
-  const data: EventData[] = (rawEvents ?? []).map((evt) => ({
-    id: evt.id,
-    title: evt.title,
-    slug: evt.slug,
-    description: evt.excerpt ?? evt.content ?? "",
-    startDate: evt.event_date ?? "",
-    endDate: evt.event_date ?? "",
-    eventType: "sport" as const,
-    practiceTypes: [],
-    publics: ["tous publics"],
-    locationName: evt.location?.split(",")[0] ?? "",
-    city: evt.location?.split(",")[1]?.trim() ?? "",
-    status: evt.status as "published",
-    featured: false,
-  }));
+  const data: EventData[] = rawEvents
+    .filter((evt: any) => evt.status === 'published' && new Date(evt.startDate) >= twoMonthsAgo)
+    .sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+    .map((evt: any) => ({
+      id: evt.id,
+      title: evt.title,
+      slug: evt.slug,
+      description: evt.description ?? "",
+      startDate: evt.startDate ?? "",
+      endDate: evt.endDate ?? "",
+      eventType: (evt.eventType ?? "sport") as "sport",
+      practiceTypes: evt.practiceTypes ?? [],
+      publics: evt.publics ?? ["tous publics"],
+      locationName: evt.locationName ?? "",
+      city: evt.city ?? "",
+      status: evt.status as "published",
+      featured: evt.featured ?? false,
+    }));
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">

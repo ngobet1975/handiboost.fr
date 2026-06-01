@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Stethoscope, HeartPulse, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase/server";
+import fs from "fs";
+import path from "path";
 
 export const metadata = {
   title: "Conseils santé et Activité Physique Adaptée par pathologie | Handiboost",
@@ -11,24 +12,24 @@ export const metadata = {
 };
 
 export default async function PathologiesPage() {
-  const supabase = await createClient();
-  const { data: rawPathologies } = await supabase
-    .from("pathologies")
-    .select("*")
-    .eq("status", "published")
-    .eq("validation_status", "validated");
+  let rawPathologies: any[] = [];
+  try {
+    rawPathologies = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/pathologies.json'), 'utf8'));
+  } catch {
+    rawPathologies = [];
+  }
 
-  const pathologies = (rawPathologies ?? []).map((item) => ({
+  const pathologies = rawPathologies.map((item: any) => ({
     id: item.id,
     slug: item.slug,
     title: item.title,
     description: item.description ?? "",
     benefits: item.benefits ?? [],
     precautions: item.precautions ?? [],
-    recommendedActivities: item.recommended_activities ?? [],
+    recommendedActivities: item.recommendedActivities ?? [],
     resources: item.resources ?? [],
-    validationStatus: item.validation_status,
-    status: item.status,
+    validationStatus: item.validationStatus,
+    status: "published",
   }));
 
   return (

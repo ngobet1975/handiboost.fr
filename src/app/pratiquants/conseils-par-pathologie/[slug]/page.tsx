@@ -4,16 +4,21 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PathologyCard } from "@/components/PathologyCard";
-import { createClient } from "@/lib/supabase/server";
+import fs from "fs";
+import path from "path";
+
+function loadPathologies(): any[] {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/pathologies.json'), 'utf8'));
+  } catch {
+    return [];
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const supabase = await createClient();
-  const { data: patho } = await supabase
-    .from("pathologies")
-    .select("title, description")
-    .eq("slug", resolvedParams.slug)
-    .single();
+  const allPathos = loadPathologies();
+  const patho = allPathos.find((p: any) => p.slug === resolvedParams.slug);
   
   if (!patho) return { title: "Fiche introuvable | Handiboost" };
 
@@ -25,14 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function PathologiePage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const supabase = await createClient();
-  const { data: raw } = await supabase
-    .from("pathologies")
-    .select("*")
-    .eq("slug", resolvedParams.slug)
-    .eq("status", "published")
-    .eq("validation_status", "validated")
-    .single();
+  const allPathos = loadPathologies();
+  const raw = allPathos.find((p: any) => p.slug === resolvedParams.slug);
 
   if (!raw) {
     notFound();
@@ -45,11 +44,11 @@ export default async function PathologiePage({ params }: { params: Promise<{ slu
     description: raw.description ?? "",
     benefits: raw.benefits ?? [],
     precautions: raw.precautions ?? [],
-    recommendedActivities: raw.recommended_activities ?? [],
+    recommendedActivities: raw.recommendedActivities ?? [],
     resources: raw.resources ?? [],
-    validationStatus: raw.validation_status,
+    validationStatus: raw.validationStatus,
     whenToAskDoctor: "En cas de douleur inhabituelle ou de doute, consultez votre médecin traitant.",
-    status: raw.status,
+    status: "published" as const,
   };
 
   return (

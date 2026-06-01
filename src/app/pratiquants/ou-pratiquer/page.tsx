@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { OuPratiquerClient } from '@/components/OuPratiquerClient';
 import { DirectoryData } from '@/components/DirectoryCard';
-import { createClient } from '@/lib/supabase/server';
+import fs from 'fs';
+import path from 'path';
 
 export const metadata: Metadata = {
   title: 'Où pratiquer ? Annuaire Handiboost',
@@ -14,22 +15,25 @@ export const metadata: Metadata = {
 };
 
 export default async function OuPratiquerPage() {
-  const supabase = await createClient();
-  const { data: rawDirectories } = await supabase
-    .from("directories")
-    .select("*")
-    .eq("status", "published");
+  let rawDirectories: any[] = [];
+  try {
+    rawDirectories = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/annuaire.json'), 'utf8'));
+  } catch {
+    rawDirectories = [];
+  }
 
-  const data: DirectoryData[] = (rawDirectories ?? []).map((item) => ({
-    id: item.id,
-    title: item.name,
-    description: item.description || '',
-    category: "club",
-    resourceType: item.scope === "national" ? "annuaire-national" : "ressource-locale",
-    regions: item.scope === "national" ? ["Toutes les régions"] : [item.scope || "Auvergne-Rhône-Alpes"],
-    publics: ["tous publics"],
-    externalUrl: item.url,
-  }));
+  const data: DirectoryData[] = rawDirectories
+    .filter((item: any) => item.status === 'published')
+    .map((item: any) => ({
+      id: item.id,
+      title: item.name,
+      description: item.description || '',
+      category: "club",
+      resourceType: item.scope === "national" ? "annuaire-national" : "ressource-locale",
+      regions: item.scope === "national" ? ["Toutes les régions"] : [item.scope || "Auvergne-Rhône-Alpes"],
+      publics: ["tous publics"],
+      externalUrl: item.url,
+    }));
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">

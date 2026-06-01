@@ -4,7 +4,8 @@ import { Metadata } from 'next';
 import { AideCard, AideData } from '@/components/AideCard';
 import { Button } from '@/components/ui/button';
 import { Landmark, ShieldPlus, Heart, Building, Users } from 'lucide-react';
-import { createClient } from '@/lib/supabase/server';
+import fs from 'fs';
+import path from 'path';
 
 export const metadata: Metadata = {
   title: 'Aides Financières pour le Sport Adapté | Handiboost',
@@ -23,13 +24,14 @@ const CATEGORIES = [
 ];
 
 export default async function AidesFinancieresPage() {
-  const supabase = await createClient();
-  const { data: rawAides } = await supabase
-    .from("financial_aids")
-    .select("*")
-    .eq("status", "published");
+  let rawAides: any[] = [];
+  try {
+    rawAides = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/aides-financieres.json'), 'utf8'));
+  } catch {
+    rawAides = [];
+  }
 
-  const allAides: AideData[] = (rawAides ?? []).map((item) => ({
+  const allAides: AideData[] = rawAides.map((item: any) => ({
     id: item.id,
     title: item.title,
     slug: item.slug,
@@ -37,9 +39,9 @@ export default async function AidesFinancieresPage() {
     category: "etat",
     eligibility: item.conditions ?? [],
     amountLabel: item.amount,
-    externalUrl: (item.resources as any)?.[0]?.url,
-    officialSourceName: (item.resources as any)?.[0]?.label,
-    status: item.status ?? "published"
+    externalUrl: item.resources?.[0]?.url,
+    officialSourceName: item.resources?.[0]?.label,
+    status: "published"
   }));
 
   // Regroupement des aides par catégorie

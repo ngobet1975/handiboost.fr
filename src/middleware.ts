@@ -1,8 +1,48 @@
-import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { NextResponse, type NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+export function middleware(request: NextRequest) {
+  const hasAdminCookie = request.cookies.has('admin_session')
+  const hasProCookie = request.cookies.has('pro_session')
+  const isAdmin = hasAdminCookie
+  const isPro = hasProCookie
+
+  // Protect /admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!isAdmin && !isPro) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+    if (isPro && !isAdmin) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/guide-booster'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // Protect /profil route
+  if (request.nextUrl.pathname.startsWith('/profil')) {
+    if (!isAdmin && !isPro) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // Redirect if already logged in
+  if (request.nextUrl.pathname === '/login') {
+    if (isAdmin) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin'
+      return NextResponse.redirect(url)
+    } else if (isPro) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/guide-booster'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {

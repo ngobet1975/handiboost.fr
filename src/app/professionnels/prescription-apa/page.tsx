@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ChevronLeft, FileText, CheckCircle2, AlertCircle, ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProResourceCard, ProResource } from "@/components/ProResourceCard";
-import { createClient } from "@/lib/supabase/server";
+import fs from "fs";
+import path from "path";
 
 export const metadata = {
   title: "Aide à la Prescription APA | Espace Professionnels Handiboost",
@@ -11,21 +12,20 @@ export const metadata = {
 };
 
 export default async function PrescriptionApaPage() {
-  const supabase = await createClient();
-  const { data: rawResources } = await supabase
-    .from("professional_resources")
-    .select("*")
-    .eq("status", "published")
-    .eq("validation_status", "validated")
-    .in("category", ["telechargement", "prescription", "recommandation"]);
+  let rawResources: any[] = [];
+  try {
+    rawResources = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/prescription-apa.json'), 'utf8'));
+  } catch {
+    rawResources = [];
+  }
 
-  const resources: ProResource[] = (rawResources ?? []).map((r) => ({
+  const resources: ProResource[] = rawResources.map((r: any) => ({
     id: r.id,
     title: r.title,
     description: r.description ?? "",
     category: r.category ?? "prescription",
     format: r.format ?? "pdf",
-    fileUrl: r.file_url ?? undefined,
+    fileUrl: r.fileUrl ?? undefined,
     externalUrl: r.url ?? undefined,
     sourceName: r.source ?? "",
     status: r.status ?? "published",
