@@ -2,11 +2,22 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { jwtVerify } from 'jose'
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // ── Déconnexion partenaire ────────────────────────────────────────────────
+  if (pathname === '/auth/partner-signout') {
+    const response = NextResponse.redirect(new URL('/partenaires', request.url))
+    response.cookies.delete('partner_session')
+    return response
+  }
+
   const adminCookie = request.cookies.get('admin_session')?.value
   const proCookie = request.cookies.get('pro_session')?.value
-  
+  const partnerCookie = request.cookies.get('partner_session')?.value
+
   let isAdmin = false
   let isPro = false
+  let isPartner = false
 
   const secret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
 
@@ -28,6 +39,15 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (partnerCookie) {
+    try {
+      await jwtVerify(partnerCookie, secret)
+      isPartner = true
+    } catch (e) {
+      // Invalid JWT
+    }
+  }
+
   // Protect /admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!isAdmin && !isPro) {
@@ -43,7 +63,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protect /profil and /guide-booster routes
-  if (request.nextUrl.pathname.startsWith('/profil') || request.nextUrl.pathname.startsWith('/guide-booster')) {
+  if (pathname.startsWith('/profil') || pathname.startsWith('/guide-booster')) {
     if (!isAdmin && !isPro) {
       const url = request.nextUrl.clone()
       url.pathname = '/login'
@@ -51,8 +71,17 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Protect /partenaires/dashboard
+  if (pathname.startsWith('/partenaires/dashboard')) {
+    if (!isPartner && !isAdmin) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/partenaires/connexion'
+      return NextResponse.redirect(url)
+    }
+  }
+
   // Redirect if already logged in
-  if (request.nextUrl.pathname === '/login') {
+  if (pathname === '/login') {
     if (isAdmin) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin'
@@ -62,6 +91,13 @@ export async function middleware(request: NextRequest) {
       url.pathname = '/guide-booster'
       return NextResponse.redirect(url)
     }
+  }
+
+  // Redirect partenaire déjà connecté
+  if (pathname === '/partenaires/connexion' && (isPartner || isAdmin)) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/partenaires/dashboard'
+    return NextResponse.redirect(url)
   }
 
   return NextResponse.next()
