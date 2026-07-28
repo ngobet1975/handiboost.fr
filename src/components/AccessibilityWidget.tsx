@@ -230,10 +230,10 @@ export function AccessibilityWidget() {
       onClick={() => setIsOpen(true)}
       style={{
         position: 'fixed',
-        bottom: '20px',
-        left: '20px',
-        width: '56px',
-        height: '56px',
+        bottom: '24px',
+        left: '24px',
+        width: '72px',
+        height: '72px',
         borderRadius: '50%',
         background: '#0062B0',
         color: 'white',
@@ -251,7 +251,7 @@ export function AccessibilityWidget() {
       onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
       onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
     >
-      <Accessibility size={28} />
+      <Accessibility size={40} />
     </button>
   )
 }
