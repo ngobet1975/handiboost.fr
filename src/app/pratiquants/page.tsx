@@ -128,6 +128,39 @@ export default async function PratiquantsHubPage() {
         </section>
 
         {/* ═══════════════════════════════════════════════ */}
+        {/* Grille de Cartes Navigation — Accès rapide EN PREMIER */}
+        {/* ═══════════════════════════════════════════════ */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Accès rapide</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+            {cards.map((card, idx) => (
+              <Link 
+                key={idx} 
+                href={card.href}
+                className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] bg-white border-2 border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${card.theme.hoverBorder}`}
+              >
+                <div>
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${card.theme.iconBg}`}>
+                    {card.icon}
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-extrabold mb-4 text-slate-900 group-hover:text-slate-950 transition-colors">
+                    {card.title}
+                  </h2>
+                  <p className="text-lg md:text-xl font-medium text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
+                    {card.description}
+                  </p>
+                </div>
+                <div className="mt-10 flex justify-end">
+                  <div className={`p-4 rounded-full bg-slate-50 text-slate-400 transition-all duration-300 shadow-sm ${card.theme.hoverArrow}`}>
+                    <ArrowRight className="h-8 w-8" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════ */}
         {/* Section Pathologies — Grille colorée à la WordPress */}
         {/* ═══════════════════════════════════════════════ */}
         {pathologies && pathologies.length > 0 && (
@@ -169,39 +202,6 @@ export default async function PratiquantsHubPage() {
             </div>
           </section>
         )}
-
-        {/* ═══════════════════════════════════════════════ */}
-        {/* Grille de Cartes Navigation */}
-        {/* ═══════════════════════════════════════════════ */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Accès rapide</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
-            {cards.map((card, idx) => (
-              <Link 
-                key={idx} 
-                href={card.href}
-                className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] bg-white border-2 border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${card.theme.hoverBorder}`}
-              >
-                <div>
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${card.theme.iconBg}`}>
-                    {card.icon}
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-extrabold mb-4 text-slate-900 group-hover:text-slate-950 transition-colors">
-                    {card.title}
-                  </h2>
-                  <p className="text-lg md:text-xl font-medium text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
-                    {card.description}
-                  </p>
-                </div>
-                <div className="mt-10 flex justify-end">
-                  <div className={`p-4 rounded-full bg-slate-50 text-slate-400 transition-all duration-300 shadow-sm ${card.theme.hoverArrow}`}>
-                    <ArrowRight className="h-8 w-8" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
 
       </div>
     </div>
