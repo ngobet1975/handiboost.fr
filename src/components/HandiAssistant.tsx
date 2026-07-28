@@ -194,7 +194,7 @@ export default function HandiAssistant() {
         body: JSON.stringify({ message: t, history: hist }),
       })
       const data = await res.json()
-      const reply = data.text || 'Je n\'ai pas pu générer une réponse. Veuillez réessayer.'
+      const reply = data.text || data.error || 'Je n\'ai pas pu générer une réponse. Veuillez réessayer.'
 
       const aid = crypto.randomUUID()
       const aMsg: Message = { id: aid, role: 'assistant', text: reply }
