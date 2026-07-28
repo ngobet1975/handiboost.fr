@@ -1,66 +1,77 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { OuPratiquerClient } from '@/components/OuPratiquerClient';
-import { DirectoryData } from '@/components/DirectoryCard';
-import fs from 'fs';
-import path from 'path';
+import dynamic from 'next/dynamic';
+import { ArrowRight } from 'lucide-react';
+
+const HandiAssistant = dynamic(() => import('@/components/HandiAssistant'), {
+  ssr: false,
+  loading: () => (
+    <div className="min-h-[88vh] rounded-[28px] bg-[#0c0c1d] flex items-center justify-center border border-slate-800">
+      <div className="text-center">
+        <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center animate-pulse">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
+        </div>
+        <p className="text-white/70 font-bold text-lg">Chargement de HandiAssistant…</p>
+      </div>
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
-  title: 'Où pratiquer ? Annuaire Handiboost',
-  description: 'Trouvez un club sportif, un enseignant en Activité Physique Adaptée (APA) ou une ressource pour pratiquer près de chez vous.',
-  alternates: {
-    canonical: '/pratiquants/ou-pratiquer',
-  }
+  title: 'Trouver une activité — HandiAssistant · Handiboost',
+  description: 'HandiAssistant vous guide par la conversation pour trouver l\'activité sportive adaptée à votre handicap. Interface accessible : voix, grand texte, contraste élevé.',
+  alternates: { canonical: '/pratiquants/ou-pratiquer' },
 };
 
-export default async function OuPratiquerPage() {
-  let rawDirectories: any[] = [];
-  try {
-    rawDirectories = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/data/annuaire.json'), 'utf8'));
-  } catch {
-    rawDirectories = [];
-  }
-
-  const data: DirectoryData[] = rawDirectories
-    .filter((item: any) => item.status === 'published')
-    .map((item: any) => ({
-      id: item.id,
-      title: item.name,
-      description: item.description || '',
-      category: "club",
-      resourceType: item.scope === "national" ? "annuaire-national" : "ressource-locale",
-      regions: item.scope === "national" ? ["Toutes les régions"] : [item.scope || "Auvergne-Rhône-Alpes"],
-      publics: ["tous publics"],
-      externalUrl: item.url,
-    }));
-
+export default function OuPratiquerPage() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#0c0c1d] via-[#0f0e2a] to-slate-950 pb-20">
       {/* Fil d'Ariane */}
-      <div className="bg-white border-b border-slate-200 py-4 px-6">
-        <div className="max-w-7xl mx-auto flex items-center gap-2 text-lg font-bold text-slate-500">
-          <Link href="/" className="hover:text-blue-800 hover:underline transition-all">Accueil</Link>
-          <span>&gt;</span>
-          <Link href="/pratiquants" className="hover:text-blue-800 hover:underline transition-all">Pratiquants</Link>
-          <span>&gt;</span>
-          <span className="text-slate-800">Où pratiquer</span>
+      <div className="bg-white/5 border-b border-white/10 py-4 px-6 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto flex items-center gap-2 text-sm font-bold text-white/50">
+          <Link href="/" className="hover:text-white/80 transition-colors">Accueil</Link>
+          <span>›</span>
+          <Link href="/pratiquants" className="hover:text-white/80 transition-colors">Pratiquants</Link>
+          <span>›</span>
+          <span className="text-white/80">Trouver une activité</span>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16">
-        {/* Hero Section */}
-        <section className="mb-12 text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-black text-slate-900 mb-6">
-            Où pratiquer ?
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-10 md:mt-14">
+
+        {/* Hero */}
+        <section className="mb-10 text-center">
+          <div className="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 font-bold text-sm px-5 py-2 rounded-full mb-6">
+            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+            Assistant IA · Inclusif · Accessible
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black text-white mb-5 leading-tight tracking-tight">
+            Trouvez<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-teal-400">
+              votre activité
+            </span>
           </h1>
-          <p className="text-2xl text-slate-700 font-medium leading-relaxed">
-            Recherchez une activité sportive en club, une pratique à la maison ou un professionnel de l'Activité Physique Adaptée.
+          <p className="text-white/60 text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+            HandiAssistant vous guide par la conversation.
+            <br />
+            <span className="text-white/40 text-base">Voix, grand texte, contraste élevé — pour tout le monde.</span>
           </p>
         </section>
 
-        {/* Composant Client (Moteur de recherche + Grille) */}
-        <OuPratiquerClient data={data} />
+        {/* HandiAssistant — composant principal */}
+        <HandiAssistant />
+
+        {/* Lien vers l'annuaire classique */}
+        <div className="mt-12 text-center">
+          <p className="text-white/30 text-sm font-medium mb-3">Préférez-vous consulter les annuaires directement ?</p>
+          <Link
+            href="/pratiquants/ou-pratiquer/annuaires"
+            className="inline-flex items-center gap-2 text-white/50 hover:text-white/80 font-bold text-sm border border-white/10 hover:border-white/30 px-6 py-3 rounded-xl transition-all hover:bg-white/5"
+          >
+            Voir tous les annuaires partenaires <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
     </div>
   );
