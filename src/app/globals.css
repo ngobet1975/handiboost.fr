@@ -147,3 +147,39 @@
 .animate-bob {
   animation: bob 1.5s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   GLOBAL ACCESSIBILITY STYLES (Injected by AccessibilityProvider)
+   ========================================================================== */
+
+/* 1. Dyslexia Mode */
+.access-dyslexia * {
+  font-family: "Comic Sans MS", "OpenDyslexic", "Lexend", sans-serif !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.6 !important;
+}
+
+/* 2. Epilepsy Mode */
+.access-epilepsy * {
+  /* Disable all animations and smooth transitions */
+  animation: none !important;
+  transition: none !important;
+  /* Slightly reduce contrast on pure white/black to avoid harsh flashes if any */
+}
+.access-epilepsy body {
+  background-color: #f0f0f0 !important;
+}
+
+/* 3. Motor Difficulties Mode */
+.access-motor a,
+.access-motor button,
+.access-motor [role="button"] {
+  /* Increase padding to enlarge click target */
+  padding: 0.75rem 1rem !important;
+  margin: 0.25rem !important;
+}
+.access-motor *:focus {
+  /* Ultra-visible focus ring */
+  outline: 4px solid #F7941D !important;
+  outline-offset: 2px !important;
+}
