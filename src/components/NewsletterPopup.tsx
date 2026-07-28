@@ -39,12 +39,13 @@ export function NewsletterPopup() {
       onClick={handleClose}
     >
       <div 
-        className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative"
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button 
           onClick={handleClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors"
+          aria-label="Fermer"
+          className="absolute top-4 right-4 p-3 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center z-10"
         >
           <X className="w-5 h-5" />
         </button>

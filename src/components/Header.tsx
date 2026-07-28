@@ -63,23 +63,32 @@ export function Header() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-b-4 border-slate-200 shadow-xl p-6 flex flex-col gap-6 xl:hidden animate-in slide-in-from-top-4">
-          <nav className="flex flex-col gap-6">
-            <Link href="/association" onClick={closeMenu} className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
-            <Link href="/pratiquants" onClick={closeMenu} className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
-            <Link href="/professionnels" onClick={closeMenu} className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
-            <Link href="/actualites" onClick={closeMenu} className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
-            <Link href="/contact" onClick={closeMenu} className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
-          </nav>
-          <div className="flex flex-col gap-4 mt-4 pt-6 border-t-2 border-slate-100">
-            <Button nativeButton={false} render={<Link href="/dons" onClick={closeMenu} />} variant="outline" className="w-full text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 rounded-2xl transition-all">
-              ❤️ Faire un don
-            </Button>
-            <Button nativeButton={false} render={<Link href="/login" onClick={closeMenu} />} className="w-full bg-purple-700 hover:bg-purple-800 text-xl font-extrabold h-16 shadow-xl rounded-2xl transition-all text-white">
-              Accès Guide Booster
-            </Button>
+        <>
+          {/* Backdrop sombre — clic ferme le menu */}
+          <div
+            className="fixed inset-0 bg-slate-900/50 z-40 xl:hidden animate-in fade-in duration-200"
+            onClick={closeMenu}
+            aria-hidden="true"
+          />
+          {/* Menu déroulant scrollable */}
+          <div className="absolute top-full left-0 right-0 bg-white border-b-4 border-slate-200 shadow-xl p-6 flex flex-col gap-6 xl:hidden z-50 max-h-[calc(100vh-100px)] overflow-y-auto animate-in slide-in-from-top-4">
+            <nav className="flex flex-col gap-6">
+              <Link href="/association" onClick={closeMenu} className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
+              <Link href="/pratiquants" onClick={closeMenu} className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
+              <Link href="/professionnels" onClick={closeMenu} className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
+              <Link href="/actualites" onClick={closeMenu} className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
+              <Link href="/contact" onClick={closeMenu} className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
+            </nav>
+            <div className="flex flex-col gap-4 mt-4 pt-6 border-t-2 border-slate-100">
+              <Button nativeButton={false} render={<Link href="/dons" onClick={closeMenu} />} variant="outline" className="w-full text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 rounded-2xl transition-all">
+                ❤️ Faire un don
+              </Button>
+              <Button nativeButton={false} render={<Link href="/login" onClick={closeMenu} />} className="w-full bg-purple-700 hover:bg-purple-800 text-xl font-extrabold h-16 shadow-xl rounded-2xl transition-all text-white">
+                Accès Guide Booster
+              </Button>
+            </div>
           </div>
-        </div>
+        </>
       )}
       </header>
     </div>

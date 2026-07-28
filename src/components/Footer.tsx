@@ -9,14 +9,14 @@ export function Footer() {
             <img src="/logo-handiboost.png" alt="Handiboost" className="w-full h-auto object-contain" />
           </div>
         </div>
-        <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-center">
-          <Link href="/association" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">À propos</Link>
-          <Link href="/mentions-legales" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Mentions légales</Link>
-          <Link href="/politique-de-confidentialite" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Confidentialité</Link>
-          <Link href="/contact" className="text-2xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Nous contacter</Link>
+        <div className="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 gap-y-4 text-center">
+          <Link href="/association" className="text-base sm:text-xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">À propos</Link>
+          <Link href="/mentions-legales" className="text-base sm:text-xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Mentions légales</Link>
+          <Link href="/politique-de-confidentialite" className="text-base sm:text-xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Confidentialité</Link>
+          <Link href="/contact" className="text-base sm:text-xl font-bold text-slate-300 hover:text-white transition-colors underline-offset-8 hover:underline">Nous contacter</Link>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-800 flex items-center justify-center gap-3 text-slate-500 text-sm">
+      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-center gap-3 text-slate-500 text-sm text-center">
         <p>
           Site web développé gracieusement par{' '}
           <a href="https://www.itsynchronic.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-300 transition-colors underline underline-offset-4">
