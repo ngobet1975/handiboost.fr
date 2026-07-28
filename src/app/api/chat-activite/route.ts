@@ -29,9 +29,12 @@ Tu aides les personnes en situation de handicap (et leurs proches, aidants) à t
 - Pour toute question médicale → toujours conseiller de consulter un médecin ou enseignant APA agréé.
 
 ━━ SUGGESTIONS DE RÉPONSES (PROMPTS) ━━
-À la TOUTE FIN de chacune de tes réponses, tu DOIS proposer 2 à 3 suggestions courtes que l'utilisateur pourrait te répondre, pour lui faciliter la vie (il n'aura qu'à cliquer dessus).
-Format obligatoire strict : [SUGGESTION: Texte de la suggestion]
-Exemple : [SUGGESTION: Handicap moteur] [SUGGESTION: Handicap visuel] [SUGGESTION: Je cherche à Paris]
+À la TOUTE FIN de chacune de tes réponses, tu as l'OBLIGATION ABSOLUE d'ajouter 2 à 3 suggestions courtes que l'utilisateur pourrait te répondre.
+Tu dois utiliser EXACTEMENT le format "[SUGGESTION: Texte de la suggestion]".
+Exemple de fin de message :
+...votre texte...
+[SUGGESTION: Handicap moteur]
+[SUGGESTION: Handicap visuel]
 
 ━━ BASE DE DONNÉES HANDIBOOST ━━
 Voici les données internes du site Handiboost (format JSON). Sers-t'en pour apporter des réponses ultra-précises et personnalisées :
@@ -73,37 +76,10 @@ export async function POST(req: Request) {
         systemInstruction: SYSTEM_INSTRUCTION,
         maxOutputTokens: 600,
         tools: [{ googleSearch: {} }],
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: 'OBJECT',
-          properties: {
-            text: { type: 'STRING', description: 'La réponse principale de l\'assistant, au format Markdown.' },
-            suggestions: {
-              type: 'ARRAY',
-              items: { type: 'STRING' },
-              description: '2 ou 3 suggestions courtes (prompts) que l\'utilisateur peut cliquer pour répondre. Exemple: ["Handicap moteur", "Handicap visuel", "Je cherche à Paris"]'
-            }
-          },
-          required: ['text', 'suggestions']
-        }
       },
     })
 
-    let parsedResponse = { text: '', suggestions: [] as string[] }
-    try {
-      parsedResponse = JSON.parse(response.text || '{}')
-    } catch(e) {
-      parsedResponse.text = response.text || ''
-    }
-
-    let text = parsedResponse.text || ''
-    
-    // Injecter les suggestions formatées à la fin du texte pour la compatibilité avec le frontend
-    if (parsedResponse.suggestions && Array.isArray(parsedResponse.suggestions)) {
-      parsedResponse.suggestions.forEach(sug => {
-        text += ` [SUGGESTION: ${sug}]`
-      })
-    }
+    const text = response.text || ''
     let audio = null
 
     if (tts) {
