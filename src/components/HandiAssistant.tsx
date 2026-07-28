@@ -449,7 +449,20 @@ export default function HandiAssistant() {
           aria-relevant="additions"
           style={{ position: 'relative', zIndex: 5, flex: 1, overflowY: 'auto', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 24 }}
         >
-          {messages.map((msg) => (
+          {messages.map((msg) => {
+            let cleanText = msg.text
+            const suggestions: string[] = []
+            
+            if (msg.role === 'assistant') {
+              const regex = /\[SUGGESTION:\s*(.+?)\]/g
+              let match
+              while ((match = regex.exec(cleanText)) !== null) {
+                suggestions.push(match[1])
+              }
+              cleanText = cleanText.replace(/\[SUGGESTION:\s*.+?\]/g, '').trim()
+            }
+
+            return (
             <div key={msg.id} className="h-slide">
               {msg.role === 'assistant' ? (
                 <div style={{ display: 'flex', gap: 14, maxWidth: '78%' }}>
@@ -462,16 +475,31 @@ export default function HandiAssistant() {
                       role="article"
                       aria-label="Réponse de HandiAssistant"
                       style={{ background: C.aBubble, border: `1px solid ${C.aBorder}`, borderRadius: '6px 20px 20px 20px', padding: '16px 20px', backdropFilter: contrast ? 'none' : 'blur(12px)', color: C.text, lineHeight: 1.65 }}>
-                      {renderMarkdown(msg.text, C.text)}
+                      {renderMarkdown(cleanText, C.text)}
                     </div>
 
                     <button
-                      onClick={() => speakId === msg.id ? stopSpeak() : speak(msg.text, msg.id)}
+                      onClick={() => speakId === msg.id ? stopSpeak() : speak(cleanText, msg.id)}
                       aria-label={speakId === msg.id ? 'Arrêter la lecture' : 'Lire ce message à voix haute'}
                       style={{ marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 12px', borderRadius: 20, fontSize: '0.72em', fontWeight: 700, background: speakId === msg.id ? 'rgba(99,102,241,0.3)' : 'rgba(255,255,255,0.07)', border: `1px solid ${speakId === msg.id ? '#6366f1' : C.aBorder}`, color: speakId === msg.id ? '#a5b4fc' : C.sub, cursor: 'pointer', transition: 'all 0.18s' }}>
                       <Volume2 size={12} />
                       {speakId === msg.id ? <><span className="h-pulse">●</span> Lecture…</> : 'Écouter'}
                     </button>
+                    
+                    {suggestions.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
+                        {suggestions.map((sug, i) => (
+                          <button
+                            key={i}
+                            onClick={() => sendMsg(sug)}
+                            className="h-quick"
+                            style={{ background: 'rgba(99,102,241,0.1)', border: `1px solid rgba(99,102,241,0.3)`, color: '#6366f1', padding: '6px 14px', borderRadius: 20, fontSize: '0.78em', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s', textAlign: 'left', lineHeight: 1.3 }}
+                          >
+                            {sug}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -485,7 +513,7 @@ export default function HandiAssistant() {
                 </div>
               )}
             </div>
-          ))}
+          )})}
 
           {showQuick && (
             <div className="h-slide" style={{ animationDelay: '0.25s' }}>
