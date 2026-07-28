@@ -323,10 +323,10 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
       <MapContainer
         center={[46.603354, 1.888334]}
         zoom={6}
-        minZoom={5}
+        minZoom={6}
         maxZoom={18}
         maxBounds={[[41.0, -5.5], [51.5, 10.0]]}
-        maxBoundsViscosity={0.85}
+        maxBoundsViscosity={1.0}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%', zIndex: 0 }}
       >
