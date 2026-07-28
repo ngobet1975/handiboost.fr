@@ -305,7 +305,7 @@ export default function HandiAssistant() {
       handsFree.current = false
     } finally {
       setLoading(false)
-      inputRef.current?.focus()
+      inputRef.current?.focus({ preventScroll: true })
     }
   }, [messages, loading, tts, speak, checkHandsFreeRestart])
 
