@@ -124,11 +124,11 @@ export default function HandiAssistant() {
       setTimeout(() => {
         const lastMsg = messages[messages.length - 1]
         const el = document.getElementById(`msg-${lastMsg.id}`)
-        if (el) {
+        if (el && chatRef.current) {
           if (lastMsg.role === 'assistant') {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            chatRef.current.scrollTo({ top: el.offsetTop - 24, behavior: 'smooth' })
           } else {
-            chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
+            chatRef.current.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
           }
         }
       }, 50)
