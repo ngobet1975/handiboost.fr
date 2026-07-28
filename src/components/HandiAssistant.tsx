@@ -106,6 +106,7 @@ export default function HandiAssistant() {
   const [speakId, setSpeakId]       = useState<string | null>(null)
   const [fontSize, setFontSize]     = useState<0 | 1 | 2>(0) // 0=normal 1=large 2=huge
   const [contrast, setContrast]     = useState(false)
+  const [lightMode, setLightMode]   = useState(false)
   const [showQuick, setShowQuick]   = useState(true)
 
   const chatRef   = useRef<HTMLDivElement>(null)
@@ -262,7 +263,8 @@ export default function HandiAssistant() {
     setShowQuick(true)
   }
 
-  // ── Theme ──────────────────────────────────────────────────────────────────
+  // ── Theme ────────────────────────────────────────────────────────────────────────
+  // Contraste élevé prime sur tout
   const C = contrast ? {
     bg:       '#000000',
     chat:     '#050505',
@@ -277,7 +279,23 @@ export default function HandiAssistant() {
     inpBord:  '#ffffff',
     btnBg:    '#222222',
     btnBord:  '#ffffff',
+  } : lightMode ? {
+    // ☀️ Mode clair
+    bg:       '#f4f6fb',
+    chat:     'transparent',
+    aBar:     'rgba(255,255,255,0.85)',
+    aBubble:  '#ffffff',
+    aBorder:  'rgba(99,102,241,0.18)',
+    uBubble:  'rgba(99,102,241,0.88)',
+    text:     '#1e1e3a',
+    sub:      '#64748b',
+    accent:   '#6366f1',
+    inp:      '#ffffff',
+    inpBord:  'rgba(99,102,241,0.28)',
+    btnBg:    'rgba(99,102,241,0.08)',
+    btnBord:  'rgba(99,102,241,0.22)',
   } : {
+    // 🌙 Mode sombre (défaut)
     bg:       '#0c0c1d',
     chat:     'transparent',
     aBar:     'rgba(255,255,255,0.04)',
@@ -335,9 +353,9 @@ export default function HandiAssistant() {
         {/* ── Animated orbs background ───────────────────────────────────── */}
         {!contrast && (
           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
-            <div className="h-orb1" style={{ position: 'absolute', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%)', top: -150, left: -100 }} />
-            <div className="h-orb2" style={{ position: 'absolute', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 65%)', bottom: 80, right: -80 }} />
-            <div className="h-orb3" style={{ position: 'absolute', width: 280, height: 280, borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.09) 0%, transparent 65%)', bottom: -60, left: '35%' }} />
+            <div className="h-orb1" style={{ position: 'absolute', width: 500, height: 500, borderRadius: '50%', background: lightMode ? 'radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)' : 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%)', top: -150, left: -100 }} />
+            <div className="h-orb2" style={{ position: 'absolute', width: 380, height: 380, borderRadius: '50%', background: lightMode ? 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 65%)' : 'radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 65%)', bottom: 80, right: -80 }} />
+            <div className="h-orb3" style={{ position: 'absolute', width: 280, height: 280, borderRadius: '50%', background: lightMode ? 'radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 65%)' : 'radial-gradient(circle, rgba(16,185,129,0.09) 0%, transparent 65%)', bottom: -60, left: '35%' }} />
           </div>
         )}
 
@@ -387,8 +405,22 @@ export default function HandiAssistant() {
               title="Contraste élevé"
               className="h-btn"
               style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 12, background: contrast ? '#ffffff' : C.btnBg, border: `1.5px solid ${contrast ? '#ffffff' : C.btnBord}`, color: contrast ? '#000000' : C.sub, fontWeight: 700, fontSize: '0.78em', cursor: 'pointer', transition: 'all 0.18s' }}>
-              <span style={{ fontSize: '1.1em' }}>◑</span> Contraste
+              <span style={{ fontSize: '1.1em' }}>&#9680;</span> Contraste
             </button>
+
+            {/* Light / Dark toggle */}
+            {!contrast && (
+              <button
+                onClick={() => setLightMode(p => !p)}
+                aria-label={lightMode ? 'Passer en mode sombre' : 'Passer en mode clair'}
+                aria-pressed={lightMode}
+                title={lightMode ? 'Mode sombre' : 'Mode clair'}
+                className="h-btn"
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 12, background: lightMode ? 'rgba(251,191,36,0.18)' : C.btnBg, border: `1.5px solid ${lightMode ? '#fbbf24' : C.btnBord}`, color: lightMode ? '#f59e0b' : C.sub, fontWeight: 700, fontSize: '0.82em', cursor: 'pointer', transition: 'all 0.18s' }}>
+                <span style={{ fontSize: '1.15em' }}>{lightMode ? '🌙' : '☀️'}</span>
+                {lightMode ? 'Sombre' : 'Clair'}
+              </button>
+            )}
 
             {/* Reset */}
             <button
