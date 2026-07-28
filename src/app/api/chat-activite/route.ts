@@ -69,7 +69,7 @@ ${structuresContext}`
       : []
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents: [
         ...formattedHistory,
         { role: 'user', parts: [{ text: message }] },
@@ -81,10 +81,11 @@ ${structuresContext}`
     })
 
     return NextResponse.json({ text: response.text })
-  } catch (error) {
-    console.error('[chat-activite] Error:', error)
+  } catch (error: any) {
+    console.error('[chat-activite] Error:', error?.message || error)
+    console.error('[chat-activite] API Key set:', !!process.env.GEMINI_API_KEY)
     return NextResponse.json(
-      { error: "Une erreur est survenue. Veuillez réessayer." },
+      { error: `Erreur: ${error?.message || 'Inconnue'}` },
       { status: 500 }
     )
   }
