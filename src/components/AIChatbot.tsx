@@ -418,9 +418,6 @@ export function AIChatbot() {
                 <Send className="w-5 h-5" />
               </button>
             </form>
-            <p className="text-center text-[11px] font-medium text-slate-400 mt-3">
-              L'IA peut faire des erreurs. Vérifiez toujours les informations importantes.
-            </p>
           </div>
         </div>
       )}

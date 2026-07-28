@@ -28,10 +28,6 @@ export default function OuPratiquerPage() {
 
         {/* Hero */}
         <section className="mb-10 text-center">
-          <div className="inline-flex items-center gap-2 bg-indigo-100 border border-indigo-200 text-indigo-700 font-bold text-sm px-5 py-2 rounded-full mb-6">
-            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-            Assistant IA · Inclusif · Accessible
-          </div>
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-5 leading-tight tracking-tight">
             Trouvez<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-teal-500">
