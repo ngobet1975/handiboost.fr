@@ -10,6 +10,12 @@ export interface AccessSettings {
   tts: boolean
   ttsSpeed: number
   ttsPitch: number
+  highContrast: boolean
+  largeCursor: boolean
+  highlightLinks: boolean
+  leftAlign: boolean
+  textSize: number
+  letterSpacing: number
 }
 
 const defaultSettings: AccessSettings = {
@@ -20,6 +26,12 @@ const defaultSettings: AccessSettings = {
   tts: false,
   ttsSpeed: 1.0,
   ttsPitch: 1.0,
+  highContrast: false,
+  largeCursor: false,
+  highlightLinks: false,
+  leftAlign: false,
+  textSize: 100,
+  letterSpacing: 0,
 }
 
 interface AccessContextType {
@@ -61,6 +73,14 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
     root.classList.toggle('access-dyslexia', settings.dyslexia)
     root.classList.toggle('access-epilepsy', settings.epilepsy)
     root.classList.toggle('access-motor', settings.motor)
+    root.classList.toggle('access-high-contrast', settings.highContrast)
+    root.classList.toggle('access-large-cursor', settings.largeCursor)
+    root.classList.toggle('access-highlight-links', settings.highlightLinks)
+    root.classList.toggle('access-left-align', settings.leftAlign)
+    
+    // Variables CSS dynamiques
+    root.style.setProperty('--access-text-size', `${settings.textSize}%`)
+    root.style.setProperty('--access-letter-spacing', `${settings.letterSpacing}px`)
   }, [settings, isMounted])
 
   const updateSetting = useCallback(<K extends keyof AccessSettings>(key: K, value: AccessSettings[K]) => {

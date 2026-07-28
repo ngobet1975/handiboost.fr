@@ -183,3 +183,52 @@
   outline: 4px solid #F7941D !important;
   outline-offset: 2px !important;
 }
+
+/* 4. High Contrast Mode */
+.access-high-contrast {
+  /* Invert colors or use a high contrast dark theme */
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #111111;
+  --card-foreground: #ffffff;
+  --primary: #ffff00;
+  --primary-foreground: #000000;
+  --border: #444444;
+  --muted: #222222;
+  --muted-foreground: #dddddd;
+}
+.access-high-contrast * {
+  border-color: var(--border) !important;
+}
+
+/* 5. Large Cursor */
+.access-large-cursor, .access-large-cursor * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 24 32"><path d="M2,2 L18,18 L11,18 L15,26 L12,28 L8,20 L2,26 Z" fill="%23ffff00" stroke="%23000000" stroke-width="2" /></svg>') 2 2, auto !important;
+}
+
+/* 6. Highlight Links */
+.access-highlight-links a,
+.access-highlight-links button {
+  text-decoration: underline !important;
+  text-decoration-thickness: 3px !important;
+  text-decoration-color: #F7941D !important;
+  text-underline-offset: 4px !important;
+  font-weight: 800 !important;
+}
+
+/* 7. Left Align Text */
+.access-left-align * {
+  text-align: left !important;
+}
+
+/* 8. Global Dynamic Text Size and Letter Spacing */
+:root {
+  --access-text-size: 100%;
+  --access-letter-spacing: 0px;
+}
+html {
+  font-size: var(--access-text-size) !important;
+}
+body {
+  letter-spacing: var(--access-letter-spacing) !important;
+}

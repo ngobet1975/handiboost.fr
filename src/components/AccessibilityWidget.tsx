@@ -6,13 +6,17 @@ import {
   Accessibility, 
   X, 
   Type, 
-  Eye, 
   Activity, 
   MousePointer2, 
   Focus,
   Volume2,
   Minus,
-  Plus
+  Plus,
+  Moon,
+  Link,
+  AlignLeft,
+  ZoomIn,
+  Space
 } from 'lucide-react'
 
 export function AccessibilityWidget() {
@@ -25,8 +29,8 @@ export function AccessibilityWidget() {
         position: 'fixed',
         bottom: '20px',
         left: '20px',
-        width: '320px',
-        maxHeight: '80vh',
+        width: '340px',
+        maxHeight: '85vh',
         overflowY: 'auto',
         background: '#ffffff',
         borderRadius: '16px',
@@ -46,7 +50,10 @@ export function AccessibilityWidget() {
           borderBottom: '1px solid #e2e8f0',
           background: '#f8fafc',
           borderTopLeftRadius: '16px',
-          borderTopRightRadius: '16px'
+          borderTopRightRadius: '16px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', color: '#0062B0' }}>
             <Accessibility size={20} />
@@ -62,73 +69,156 @@ export function AccessibilityWidget() {
         </div>
 
         {/* Content */}
-        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
-          <h3 style={{ fontSize: '0.85em', textTransform: 'uppercase', color: '#64748b', fontWeight: 800, letterSpacing: '0.05em' }}>
-            Affichage sur-mesure
-          </h3>
+          {/* Section: VISION */}
+          <div>
+            <h3 style={sectionTitleStyle}>Vision & Contraste</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <ToggleRow 
+                icon={<Moon size={20} />} 
+                label="Contraste élevé" 
+                checked={settings.highContrast} 
+                onChange={(v) => updateSetting('highContrast', v)} 
+                desc="Mode sombre à fort contraste"
+              />
+              <ToggleRow 
+                icon={<ZoomIn size={20} />} 
+                label="Grand curseur" 
+                checked={settings.largeCursor} 
+                onChange={(v) => updateSetting('largeCursor', v)} 
+              />
+              <ToggleRow 
+                icon={<Activity size={20} />} 
+                label="Épilepsie photosensible" 
+                checked={settings.epilepsy} 
+                onChange={(v) => updateSetting('epilepsy', v)} 
+                desc="Désactive les animations"
+              />
+            </div>
+          </div>
 
-          <ToggleRow 
-            icon={<Type size={20} />} 
-            label="Dyslexie" 
-            checked={settings.dyslexia} 
-            onChange={(v: boolean) => updateSetting('dyslexia', v)} 
-          />
-          <ToggleRow 
-            icon={<Activity size={20} />} 
-            label="Épilepsie photosensible" 
-            checked={settings.epilepsy} 
-            onChange={(v: boolean) => updateSetting('epilepsy', v)} 
-            desc="Désactive les animations et flashs"
-          />
-          <ToggleRow 
-            icon={<MousePointer2 size={20} />} 
-            label="Mouvements difficiles" 
-            checked={settings.motor} 
-            onChange={(v: boolean) => updateSetting('motor', v)} 
-            desc="Agrandit les boutons et zones cliquables"
-          />
-          <ToggleRow 
-            icon={<Focus size={20} />} 
-            label="Difficultés de concentration" 
-            checked={settings.concentration} 
-            onChange={(v: boolean) => updateSetting('concentration', v)} 
-            desc="Bande de lecture qui suit la souris"
-          />
+          <hr style={{ borderColor: '#e2e8f0', margin: '0' }} />
 
-          <hr style={{ borderColor: '#e2e8f0', margin: '4px 0' }} />
-
-          <h3 style={{ fontSize: '0.85em', textTransform: 'uppercase', color: '#64748b', fontWeight: 800, letterSpacing: '0.05em' }}>
-            Synthèse vocale globale
-          </h3>
-
-          <ToggleRow 
-            icon={<Volume2 size={20} />} 
-            label="Lecture vocale" 
-            checked={settings.tts} 
-            onChange={(v: boolean) => updateSetting('tts', v)} 
-            desc="Clic Droit sur un texte pour le lire. Clic Gauche pour arrêter."
-          />
-
-          {settings.tts && (
-            <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9em', fontWeight: 600 }}>
-                <span>Vitesse de lecture</span>
-                <span>{settings.ttsSpeed}x</span>
+          {/* Section: LECTURE */}
+          <div>
+            <h3 style={sectionTitleStyle}>Lecture & Typographie</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <ToggleRow 
+                icon={<Type size={20} />} 
+                label="Police Dyslexie" 
+                checked={settings.dyslexia} 
+                onChange={(v) => updateSetting('dyslexia', v)} 
+              />
+              
+              {/* Taille du texte */}
+              <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9em', fontWeight: 600 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Type size={16} /> Taille du texte</span>
+                  <span>{settings.textSize}%</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button onClick={() => updateSetting('textSize', Math.max(80, settings.textSize - 10))} style={btnStyle}><Minus size={16} /></button>
+                  <input 
+                    type="range" min="80" max="150" step="10" 
+                    value={settings.textSize} 
+                    onChange={(e) => updateSetting('textSize', parseInt(e.target.value))}
+                    style={{ flex: 1 }}
+                  />
+                  <button onClick={() => updateSetting('textSize', Math.min(150, settings.textSize + 10))} style={btnStyle}><Plus size={16} /></button>
+                </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <button onClick={() => updateSetting('ttsSpeed', Math.max(0.5, settings.ttsSpeed - 0.25))} style={btnStyle}><Minus size={16} /></button>
-                <input 
-                  type="range" 
-                  min="0.5" max="2" step="0.25" 
-                  value={settings.ttsSpeed} 
-                  onChange={(e) => updateSetting('ttsSpeed', parseFloat(e.target.value))}
-                  style={{ flex: 1 }}
-                />
-                <button onClick={() => updateSetting('ttsSpeed', Math.min(2, settings.ttsSpeed + 0.25))} style={btnStyle}><Plus size={16} /></button>
+
+              {/* Espacement */}
+              <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9em', fontWeight: 600 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Space size={16} /> Espacement</span>
+                  <span>{settings.letterSpacing}px</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button onClick={() => updateSetting('letterSpacing', Math.max(0, settings.letterSpacing - 1))} style={btnStyle}><Minus size={16} /></button>
+                  <input 
+                    type="range" min="0" max="5" step="1" 
+                    value={settings.letterSpacing} 
+                    onChange={(e) => updateSetting('letterSpacing', parseInt(e.target.value))}
+                    style={{ flex: 1 }}
+                  />
+                  <button onClick={() => updateSetting('letterSpacing', Math.min(5, settings.letterSpacing + 1))} style={btnStyle}><Plus size={16} /></button>
+                </div>
               </div>
             </div>
-          )}
+          </div>
+
+          <hr style={{ borderColor: '#e2e8f0', margin: '0' }} />
+
+          {/* Section: NAVIGATION */}
+          <div>
+            <h3 style={sectionTitleStyle}>Navigation & Concentration</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <ToggleRow 
+                icon={<Link size={20} />} 
+                label="Souligner les liens" 
+                checked={settings.highlightLinks} 
+                onChange={(v) => updateSetting('highlightLinks', v)} 
+              />
+              <ToggleRow 
+                icon={<AlignLeft size={20} />} 
+                label="Aligner à gauche" 
+                checked={settings.leftAlign} 
+                onChange={(v) => updateSetting('leftAlign', v)} 
+                desc="Supprime la justification du texte"
+              />
+              <ToggleRow 
+                icon={<MousePointer2 size={20} />} 
+                label="Mouvements difficiles" 
+                checked={settings.motor} 
+                onChange={(v) => updateSetting('motor', v)} 
+                desc="Agrandit les zones cliquables"
+              />
+              <ToggleRow 
+                icon={<Focus size={20} />} 
+                label="Masque de concentration" 
+                checked={settings.concentration} 
+                onChange={(v) => updateSetting('concentration', v)} 
+                desc="Bande de lecture qui suit la souris"
+              />
+            </div>
+          </div>
+
+          <hr style={{ borderColor: '#e2e8f0', margin: '0' }} />
+
+          {/* Section: VOCAL */}
+          <div>
+            <h3 style={sectionTitleStyle}>Synthèse Vocale</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <ToggleRow 
+                icon={<Volume2 size={20} />} 
+                label="Lecture vocale" 
+                checked={settings.tts} 
+                onChange={(v) => updateSetting('tts', v)} 
+                desc="Clic Droit pour lire. Clic Gauche pour arrêter."
+              />
+
+              {settings.tts && (
+                <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9em', fontWeight: 600 }}>
+                    <span>Vitesse de lecture</span>
+                    <span>{settings.ttsSpeed}x</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <button onClick={() => updateSetting('ttsSpeed', Math.max(0.5, settings.ttsSpeed - 0.25))} style={btnStyle}><Minus size={16} /></button>
+                    <input 
+                      type="range" min="0.5" max="2" step="0.25" 
+                      value={settings.ttsSpeed} 
+                      onChange={(e) => updateSetting('ttsSpeed', parseFloat(e.target.value))}
+                      style={{ flex: 1 }}
+                    />
+                    <button onClick={() => updateSetting('ttsSpeed', Math.min(2, settings.ttsSpeed + 0.25))} style={btnStyle}><Plus size={16} /></button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
 
         </div>
       </div>
@@ -166,6 +256,15 @@ export function AccessibilityWidget() {
   )
 }
 
+const sectionTitleStyle = {
+  fontSize: '0.85em', 
+  textTransform: 'uppercase' as const, 
+  color: '#64748b', 
+  fontWeight: 800, 
+  letterSpacing: '0.05em',
+  marginBottom: '14px'
+}
+
 interface ToggleRowProps {
   icon: React.ReactNode
   label: string
@@ -176,20 +275,20 @@ interface ToggleRowProps {
 
 function ToggleRow({ icon, label, checked, onChange, desc }: ToggleRowProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', fontWeight: 600 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ color: '#0062B0' }}>{icon}</div>
-          {label}
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      <label style={{ display: 'flex', alignItems: 'center', justifyItems: 'flex-start', cursor: 'pointer', fontWeight: 600 }}>
         <input 
           type="checkbox" 
           checked={checked} 
           onChange={(e) => onChange(e.target.checked)} 
-          style={{ width: '20px', height: '20px', accentColor: '#0062B0', cursor: 'pointer' }}
+          style={{ width: '20px', height: '20px', accentColor: '#0062B0', cursor: 'pointer', flexShrink: 0 }}
         />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '12px' }}>
+          <div style={{ color: '#0062B0' }}>{icon}</div>
+          {label}
+        </div>
       </label>
-      {desc && <div style={{ fontSize: '0.8em', color: '#64748b', marginLeft: '30px', lineHeight: 1.4 }}>{desc}</div>}
+      {desc && <div style={{ fontSize: '0.8em', color: '#64748b', marginLeft: '32px', lineHeight: 1.4 }}>{desc}</div>}
     </div>
   )
 }
@@ -203,5 +302,6 @@ const btnStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  flexShrink: 0
 }
