@@ -378,7 +378,7 @@ export default function HandiAssistant() {
         ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:8px}
       `}</style>
 
-      <div style={{ background: C.bg, borderRadius: 28, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '88vh', position: 'relative', fontSize: FS }}>
+      <div style={{ background: C.bg, borderRadius: 28, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 120px)', minHeight: 500, position: 'relative', fontSize: FS }}>
 
         {!contrast && (
           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>

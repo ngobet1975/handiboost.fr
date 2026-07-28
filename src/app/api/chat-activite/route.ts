@@ -73,10 +73,37 @@ export async function POST(req: Request) {
         systemInstruction: SYSTEM_INSTRUCTION,
         maxOutputTokens: 600,
         tools: [{ googleSearch: {} }],
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'OBJECT',
+          properties: {
+            text: { type: 'STRING', description: 'La réponse principale de l\'assistant, au format Markdown.' },
+            suggestions: {
+              type: 'ARRAY',
+              items: { type: 'STRING' },
+              description: '2 ou 3 suggestions courtes (prompts) que l\'utilisateur peut cliquer pour répondre. Exemple: ["Handicap moteur", "Handicap visuel", "Je cherche à Paris"]'
+            }
+          },
+          required: ['text', 'suggestions']
+        }
       },
     })
 
-    const text = response.text || ''
+    let parsedResponse = { text: '', suggestions: [] as string[] }
+    try {
+      parsedResponse = JSON.parse(response.text || '{}')
+    } catch(e) {
+      parsedResponse.text = response.text || ''
+    }
+
+    let text = parsedResponse.text || ''
+    
+    // Injecter les suggestions formatées à la fin du texte pour la compatibilité avec le frontend
+    if (parsedResponse.suggestions && Array.isArray(parsedResponse.suggestions)) {
+      parsedResponse.suggestions.forEach(sug => {
+        text += ` [SUGGESTION: ${sug}]`
+      })
+    }
     let audio = null
 
     if (tts) {
