@@ -119,29 +119,73 @@ export default function HandiAssistant() {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, loading])
 
-  // ── TTS ────────────────────────────────────────────────────────────────────
-  const speak = useCallback((text: string, id: string) => {
-    if (!('speechSynthesis' in window)) return
-    window.speechSynthesis.cancel()
+  // ── TTS via Gemini ──────────────────────────────────────────────────────────
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  const speak = useCallback(async (text: string, id: string) => {
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+    window.speechSynthesis?.cancel()
+    setSpeakId(id)
+
     const clean = text
       .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/\[(.+?)\]\(.+?\)/g, '$1')
       .replace(/[▸•]/g, '')
+      .trim()
+
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: clean }),
+      })
+      const data = await res.json()
+
+      if (data.audio) {
+        // Décoder base64 PCM 24kHz 16-bit mono → WAV jouable
+        const binary = atob(data.audio)
+        const bytes = new Uint8Array(binary.length)
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+        const sampleRate = 24000
+        const wav = new ArrayBuffer(44 + bytes.length)
+        const v = new DataView(wav)
+        const s = (o: number, str: string) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)) }
+        s(0, 'RIFF'); v.setUint32(4, 36 + bytes.length, true); s(8, 'WAVE')
+        s(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true)
+        v.setUint16(22, 1, true); v.setUint32(24, sampleRate, true)
+        v.setUint32(28, sampleRate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true)
+        s(36, 'data'); v.setUint32(40, bytes.length, true)
+        new Uint8Array(wav).set(bytes, 44)
+        const url = URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }))
+        const audio = new Audio(url)
+        audioRef.current = audio
+        audio.onended = () => { setSpeakId(null); URL.revokeObjectURL(url) }
+        audio.onerror = () => { setSpeakId(null); URL.revokeObjectURL(url) }
+        await audio.play()
+        return
+      }
+    } catch (e) {
+      console.warn('[TTS] Gemini TTS échoué, fallback navigateur', e)
+    }
+
+    // Fallback SpeechSynthesis
+    if (!('speechSynthesis' in window)) { setSpeakId(null); return }
     const u = new SpeechSynthesisUtterance(clean)
-    u.lang = 'fr-FR'
-    u.rate = 0.88
-    u.pitch = 1.05
+    u.lang = 'fr-FR'; u.rate = 0.88; u.pitch = 1.05
     u.onstart = () => setSpeakId(id)
-    u.onend   = () => setSpeakId(null)
+    u.onend = () => setSpeakId(null)
     u.onerror = () => setSpeakId(null)
-    // Prefer French voice
     const voices = window.speechSynthesis.getVoices()
     const fr = voices.find(v => v.lang.startsWith('fr'))
     if (fr) u.voice = fr
     window.speechSynthesis.speak(u)
   }, [])
 
-  const stopSpeak = () => { window.speechSynthesis?.cancel(); setSpeakId(null) }
+  const stopSpeak = () => {
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+    window.speechSynthesis?.cancel()
+    setSpeakId(null)
+  }
 
   // ── STT ────────────────────────────────────────────────────────────────────
   const toggleMic = useCallback(() => {
