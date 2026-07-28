@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     let audio = null
     const parts = response.candidates?.[0]?.content?.parts || []
     const audioPart = parts.find((p: any) => p.inlineData?.mimeType?.startsWith('audio'))
-    if (audioPart) {
+    if (audioPart && audioPart.inlineData) {
       audio = audioPart.inlineData.data // base64
     }
 
