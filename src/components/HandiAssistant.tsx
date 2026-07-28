@@ -113,12 +113,32 @@ export default function HandiAssistant() {
   const inputRef  = useRef<HTMLTextAreaElement>(null)
   const recogRef  = useRef<any>(null)
   const inputSnap = useRef('')
+  const handsFree = useRef(false)
+  const prevSpeakId = useRef<string | null>(null)
 
   useEffect(() => { inputSnap.current = input }, [input])
 
   useEffect(() => {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, loading])
+
+  const checkHandsFreeRestart = useCallback(() => {
+    if (handsFree.current) {
+      setTimeout(() => {
+        const btn = document.getElementById('handi-mic-btn')
+        if (btn && btn.dataset.listening === 'false') {
+          btn.click()
+        }
+      }, 500)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (prevSpeakId.current && !speakId) {
+      checkHandsFreeRestart()
+    }
+    prevSpeakId.current = speakId
+  }, [speakId, checkHandsFreeRestart])
 
   // ── TTS via Gemini ──────────────────────────────────────────────────────────
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -193,7 +213,11 @@ export default function HandiAssistant() {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     if (!SR) { alert('La dictée vocale n\'est disponible que sur Chrome et Safari.'); return }
 
-    if (listening) { recogRef.current?.stop(); return }
+    if (listening) { 
+      handsFree.current = false
+      recogRef.current?.stop()
+      return 
+    }
 
     const r = new SR()
     r.lang = 'fr-FR'
@@ -207,13 +231,21 @@ export default function HandiAssistant() {
     r.onend = () => {
       setListening(false)
       const val = inputSnap.current.trim()
-      if (val) setTimeout(() => sendMsg(val), 100)
+      if (val) {
+        handsFree.current = true
+        setTimeout(() => sendMsg(val), 100)
+      } else {
+        handsFree.current = false
+      }
     }
-    r.onerror = () => setListening(false)
+    r.onerror = () => {
+      setListening(false)
+      handsFree.current = false
+    }
     recogRef.current = r
     r.start()
     setListening(true)
-  }, [listening]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [listening])
 
   // ── Send ───────────────────────────────────────────────────────────────────
   const sendMsg = useCallback(async (text: string) => {
@@ -244,17 +276,22 @@ export default function HandiAssistant() {
       const aid = crypto.randomUUID()
       const aMsg: Message = { id: aid, role: 'assistant', text: reply }
       setMessages(prev => [...prev, aMsg])
-      if (tts) speak(reply, aid)
+      if (tts) {
+        speak(reply, aid)
+      } else {
+        checkHandsFreeRestart()
+      }
     } catch {
       setMessages(prev => [...prev, {
         id: crypto.randomUUID(), role: 'assistant',
         text: '😕 Désolé, une erreur est survenue. Pouvez-vous réessayer ?',
       }])
+      handsFree.current = false
     } finally {
       setLoading(false)
       inputRef.current?.focus()
     }
-  }, [messages, loading, tts, speak])
+  }, [messages, loading, tts, speak, checkHandsFreeRestart])
 
   const reset = () => {
     stopSpeak()
@@ -264,7 +301,6 @@ export default function HandiAssistant() {
   }
 
   // ── Theme ────────────────────────────────────────────────────────────────────────
-  // Contraste élevé prime sur tout
   const C = contrast ? {
     bg:       '#000000',
     chat:     '#050505',
@@ -280,7 +316,6 @@ export default function HandiAssistant() {
     btnBg:    '#222222',
     btnBord:  '#ffffff',
   } : lightMode ? {
-    // ☀️ Mode clair
     bg:       '#f4f6fb',
     chat:     'transparent',
     aBar:     'rgba(255,255,255,0.85)',
@@ -295,7 +330,6 @@ export default function HandiAssistant() {
     btnBg:    'rgba(99,102,241,0.08)',
     btnBord:  'rgba(99,102,241,0.22)',
   } : {
-    // 🌙 Mode sombre (défaut)
     bg:       '#0c0c1d',
     chat:     'transparent',
     aBar:     'rgba(255,255,255,0.04)',
@@ -318,7 +352,6 @@ export default function HandiAssistant() {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <>
-      {/* ── Keyframes ──────────────────────────────────────────────────────── */}
       <style>{`
         @keyframes hOrb1  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-40px) scale(1.1)} }
         @keyframes hOrb2  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-25px,30px) scale(0.95)} }
@@ -350,7 +383,6 @@ export default function HandiAssistant() {
 
       <div style={{ background: C.bg, borderRadius: 28, overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: '88vh', position: 'relative', fontSize: FS }}>
 
-        {/* ── Animated orbs background ───────────────────────────────────── */}
         {!contrast && (
           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
             <div className="h-orb1" style={{ position: 'absolute', width: 500, height: 500, borderRadius: '50%', background: lightMode ? 'radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%)' : 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%)', top: -150, left: -100 }} />
@@ -359,9 +391,7 @@ export default function HandiAssistant() {
           </div>
         )}
 
-        {/* ── Accessibility / Header bar ─────────────────────────────────── */}
         <div role="banner" style={{ position: 'relative', zIndex: 10, background: C.aBar, borderBottom: `1px solid ${C.inpBord}`, backdropFilter: 'blur(16px)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          {/* Brand */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}>
               <Bot size={20} color="white" />
@@ -372,10 +402,7 @@ export default function HandiAssistant() {
             </div>
           </div>
 
-          {/* Controls */}
           <div role="toolbar" aria-label="Options d'accessibilité" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-
-            {/* TTS */}
             <button
               onClick={() => { if (tts) stopSpeak(); setTts(p => !p) }}
               aria-label={tts ? 'Désactiver la lecture vocale automatique' : 'Activer la lecture vocale automatique'}
@@ -387,7 +414,6 @@ export default function HandiAssistant() {
               {tts ? '🔊 Voix ON' : '🔇 Voix'}
             </button>
 
-            {/* Font size */}
             <button
               onClick={() => setFontSize(p => ((p + 1) % 3) as 0 | 1 | 2)}
               aria-label={`Taille du texte : ${fontTitle}. Cliquez pour changer`}
@@ -397,7 +423,6 @@ export default function HandiAssistant() {
               {fontLabel}
             </button>
 
-            {/* High contrast */}
             <button
               onClick={() => setContrast(p => !p)}
               aria-label={contrast ? 'Désactiver le contraste élevé' : 'Activer le contraste élevé (fond noir, texte blanc)'}
@@ -408,7 +433,6 @@ export default function HandiAssistant() {
               <span style={{ fontSize: '1.1em' }}>&#9680;</span> Contraste
             </button>
 
-            {/* Light / Dark toggle */}
             {!contrast && (
               <button
                 onClick={() => setLightMode(p => !p)}
@@ -422,7 +446,6 @@ export default function HandiAssistant() {
               </button>
             )}
 
-            {/* Reset */}
             <button
               onClick={reset}
               aria-label="Recommencer une nouvelle conversation"
@@ -434,7 +457,6 @@ export default function HandiAssistant() {
           </div>
         </div>
 
-        {/* ── Chat area ─────────────────────────────────────────────────────── */}
         <div
           ref={chatRef}
           role="log"
@@ -446,9 +468,7 @@ export default function HandiAssistant() {
           {messages.map((msg) => (
             <div key={msg.id} className="h-slide">
               {msg.role === 'assistant' ? (
-                // ── Assistant bubble ─────────────────────────────────────────
                 <div style={{ display: 'flex', gap: 14, maxWidth: '78%' }}>
-                  {/* Avatar */}
                   <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 4, boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
                     <Bot size={18} color="white" />
                   </div>
@@ -461,7 +481,6 @@ export default function HandiAssistant() {
                       {renderMarkdown(msg.text, C.text)}
                     </div>
 
-                    {/* Read button */}
                     <button
                       onClick={() => speakId === msg.id ? stopSpeak() : speak(msg.text, msg.id)}
                       aria-label={speakId === msg.id ? 'Arrêter la lecture' : 'Lire ce message à voix haute'}
@@ -472,7 +491,6 @@ export default function HandiAssistant() {
                   </div>
                 </div>
               ) : (
-                // ── User bubble ───────────────────────────────────────────────
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <div
                     role="article"
@@ -485,7 +503,6 @@ export default function HandiAssistant() {
             </div>
           ))}
 
-          {/* ── Quick suggestions ─────────────────────────────────────────── */}
           {showQuick && (
             <div className="h-slide" style={{ animationDelay: '0.25s' }}>
               <p style={{ color: C.sub, fontSize: '0.82em', fontWeight: 700, marginBottom: 14, letterSpacing: '0.02em' }}>
@@ -507,7 +524,6 @@ export default function HandiAssistant() {
             </div>
           )}
 
-          {/* ── Typing indicator ─────────────────────────────────────────── */}
           {loading && (
             <div className="h-slide" style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
               <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
@@ -522,10 +538,8 @@ export default function HandiAssistant() {
           <div aria-hidden="true" />
         </div>
 
-        {/* ── Input bar ──────────────────────────────────────────────────────── */}
         <div style={{ position: 'relative', zIndex: 10, borderTop: `1px solid ${C.inpBord}`, padding: '16px 20px 20px', background: C.aBar, backdropFilter: contrast ? 'none' : 'blur(16px)' }}>
 
-          {/* Listening indicator */}
           {listening && (
             <div role="status" aria-live="assertive" style={{ textAlign: 'center', marginBottom: 10, fontSize: '0.8em', fontWeight: 700, color: '#f87171' }} className="h-pulse">
               🎤 Dictée en cours — Parlez clairement maintenant
@@ -534,7 +548,6 @@ export default function HandiAssistant() {
 
           <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
 
-            {/* ── Microphone ──────────────────────────────────────────────── */}
             <div style={{ position: 'relative', flexShrink: 0 }}>
               {listening && (
                 <>
@@ -543,6 +556,8 @@ export default function HandiAssistant() {
                 </>
               )}
               <button
+                id="handi-mic-btn"
+                data-listening={String(listening)}
                 onClick={toggleMic}
                 aria-label={listening ? 'Arrêter la dictée vocale. Votre texte sera envoyé automatiquement.' : 'Démarrer la dictée vocale. Pratique si vous ne pouvez pas taper au clavier.'}
                 aria-pressed={listening}
