@@ -50,10 +50,24 @@ export async function POST(req: Request) {
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         maxOutputTokens: 600,
+        responseModalities: ['TEXT', 'AUDIO'],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: { voiceName: 'Aoede' }
+          }
+        }
       },
     })
 
-    return NextResponse.json({ text: response.text })
+    const text = response.text
+    let audio = null
+    const parts = response.candidates?.[0]?.content?.parts || []
+    const audioPart = parts.find((p: any) => p.inlineData?.mimeType?.startsWith('audio'))
+    if (audioPart) {
+      audio = audioPart.inlineData.data // base64
+    }
+
+    return NextResponse.json({ text, audio })
   } catch (error: any) {
     console.error('[chat-activite] Error:', error?.message || error)
     console.error('[chat-activite] API Key set:', !!process.env.GEMINI_API_KEY)
