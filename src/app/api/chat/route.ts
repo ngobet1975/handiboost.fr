@@ -37,15 +37,16 @@ export async function POST(req: Request) {
       ],
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
-        tools: [{ googleSearch: {} }],
+        maxOutputTokens: 800,
       }
     });
 
     return NextResponse.json({ text: response.text });
-  } catch (error) {
-    console.error('Error in chat API route:', error);
+  } catch (error: any) {
+    console.error('Error in chat API route:', error?.message || error);
+    console.error('API Key set:', !!process.env.GEMINI_API_KEY);
     return NextResponse.json(
-      { error: "Une erreur est survenue lors de la communication avec l'assistant." },
+      { error: `Erreur: ${error?.message || 'Inconnue'}` },
       { status: 500 }
     );
   }
