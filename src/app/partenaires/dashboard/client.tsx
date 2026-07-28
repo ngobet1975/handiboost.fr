@@ -43,6 +43,8 @@ interface PartnerData {
   charte_signee?: boolean
   charte_signee_le?: string
   charte_signee_par?: string
+  est_itinerant?: boolean
+  rayon_intervention?: number | string | null
 }
 
 export default function PartnerDashboardClient({
@@ -87,19 +89,24 @@ export default function PartnerDashboardClient({
     setFicheMsg('')
     setFicheError('')
 
+    const normalizedForm = {
+      ...form,
+      rayon_intervention: form.rayon_intervention ? Number(form.rayon_intervention) : null,
+    }
+
     // Créer la fiche en base si elle n'existe pas encore
     if (!partner) {
-      const result = await savePartnerProfile(email, form)
+      const result = await savePartnerProfile(email, normalizedForm)
       setSavingFiche(false)
-      if (result.error) { setFicheError(result.error); return }
+      if (!result.success) { setFicheError('Erreur lors de la sauvegarde.'); return }
       setFicheMsg('Fiche enregistrée avec succès !')
-      setPartner({ email, ...form })
+      setPartner({ email, ...normalizedForm })
     } else {
-      const result = await savePartnerProfile(email, form)
+      const result = await savePartnerProfile(email, normalizedForm)
       setSavingFiche(false)
-      if (result.error) { setFicheError(result.error); return }
+      if (!result.success) { setFicheError('Erreur lors de la sauvegarde.'); return }
       setFicheMsg('Fiche mise à jour avec succès !')
-      setPartner(prev => ({ ...prev, ...form }))
+      setPartner(prev => ({ ...prev, ...normalizedForm }))
     }
   }
 
@@ -111,15 +118,16 @@ export default function PartnerDashboardClient({
       const result = await savePartnerProfile(email, {
         ...form,
         nom_contact: signataireName,
+        rayon_intervention: form.rayon_intervention ? Number(form.rayon_intervention) : null,
       })
-      if (result.error) { setCharteError(result.error); return }
+      if (!result.success) { setCharteError('Erreur lors de la sauvegarde.'); return }
     }
 
     setSigningCharte(true)
     setCharteError('')
     const result = await signCharter(email, signataireName.trim())
     setSigningCharte(false)
-    if (result.error) { setCharteError(result.error); return }
+    if (!result.success) { setCharteError('Erreur lors de la signature.'); return }
     setPartner(prev => ({
       ...prev,
       charte_signee: true,

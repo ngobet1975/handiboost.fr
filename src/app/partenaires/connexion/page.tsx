@@ -37,9 +37,9 @@ export default function PartenaireConnexionPage() {
     setError('')
     const result = await verifyPartnerOtp(email.trim(), otp.trim())
     setLoading(false)
-    if (result?.error) {
+    if ('error' in result && result.error) {
       setError(result.error)
-    } else if (result?.redirect) {
+    } else if ('redirect' in result && result.redirect) {
       router.push(result.redirect)
     }
   }

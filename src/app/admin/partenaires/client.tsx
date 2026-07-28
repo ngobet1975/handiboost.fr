@@ -58,7 +58,7 @@ export default function AdminPartenairesClient({ partners: initialPartners }: { 
     setDeleting(true)
     const result = await adminDeletePartner(id)
     setDeleting(false)
-    if (!result.error) {
+    if (result.success) {
       setPartners(prev => prev.filter(p => p.id !== id))
       setDeleteConfirm(null)
     }

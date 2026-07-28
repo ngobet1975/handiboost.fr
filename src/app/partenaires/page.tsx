@@ -19,7 +19,7 @@ const AVANTAGES = [
   {
     icon: <ShieldCheck className="w-8 h-8 text-white" />,
     title: 'Label Réseau Handiboost',
-    desc: 'Attestez votre engagement en faveur de l'activité physique adaptée pour les personnes en situation de handicap.',
+    desc: "Attestez votre engagement en faveur de l'activité physique adaptée pour les personnes en situation de handicap.",
     color: 'bg-purple-600',
   },
   {
