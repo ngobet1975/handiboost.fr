@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
 import { GoogleGenAI } from '@google/genai'
+import structuresData from '@/data/structures.json'
+import annuaireData from '@/data/annuaire.json'
+import actualitesData from '@/data/actualites.json'
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
 
@@ -19,10 +22,23 @@ Tu aides les personnes en situation de handicap (et leurs proches, aidants) à t
 3. Avec ces infos → propose des pistes concrètes
 4. Si rien ne correspond → propose le Guide Booster ou un contact Handiboost
 
-━━ RESSOURCES CLÉS ━━
-- Carte des structures : [Guide Booster](/professionnels/guide-booster)
-- Contact humain : [handiboost.contact@gmail.com](mailto:handiboost.contact@gmail.com)
-- Pour toute question médicale → toujours conseiller de consulter un médecin ou enseignant APA agréé`
+━━ RESSOURCES CLÉS (DISPONIBLES CI-DESSOUS) ━━
+- Tu as accès ci-dessous à la BASE DE DONNÉES HANDIBOOST contenant tous nos partenaires (structures), annuaires nationaux, et articles d'actualité.
+- **RÈGLE ABSOLUE** : Si la demande de l'utilisateur correspond à une ou plusieurs structures de la base de données (par localisation ou type de handicap/sport), tu DOIS OBLIGATOIREMENT proposer ces structures spécifiques en donnant leur Nom, Ville, et au moins un moyen de contact (téléphone, email ou site web) issu de la base de données.
+- Pour toute question médicale → toujours conseiller de consulter un médecin ou enseignant APA agréé.
+
+━━ BASE DE DONNÉES HANDIBOOST ━━
+Voici les données internes du site Handiboost (format JSON). Sers-t'en pour apporter des réponses ultra-précises et personnalisées :
+
+[STRUCTURES ET PARTENAIRES LOCAUX]
+${JSON.stringify(structuresData)}
+
+[ANNUAIRES NATIONAUX]
+${JSON.stringify(annuaireData)}
+
+[ARTICLES ET ACTUALITÉS DU SITE]
+${JSON.stringify(actualitesData)}
+`
 
 export async function POST(req: Request) {
   try {
