@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       : []
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-preview-tts',
+      model: 'gemini-2.5-flash',
       contents: [
         ...formattedHistory,
         { role: 'user', parts: [{ text: message }] },
@@ -50,24 +50,10 @@ export async function POST(req: Request) {
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         maxOutputTokens: 600,
-        responseModalities: ['TEXT', 'AUDIO'],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Aoede' }
-          }
-        }
       },
     })
 
-    const text = response.text
-    let audio = null
-    const parts = response.candidates?.[0]?.content?.parts || []
-    const audioPart = parts.find((p: any) => p.inlineData?.mimeType?.startsWith('audio'))
-    if (audioPart && audioPart.inlineData) {
-      audio = audioPart.inlineData.data // base64
-    }
-
-    return NextResponse.json({ text, audio })
+    return NextResponse.json({ text: response.text })
   } catch (error: any) {
     console.error('[chat-activite] Error:', error?.message || error)
     console.error('[chat-activite] API Key set:', !!process.env.GEMINI_API_KEY)
