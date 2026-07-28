@@ -404,7 +404,7 @@ export default function HandiAssistant() {
           </div>
         )}
 
-        <div role="banner" style={{ position: 'relative', zIndex: 10, background: C.aBar, borderBottom: `1px solid ${C.inpBord}`, backdropFilter: 'blur(16px)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <div role="banner" style={{ position: 'relative', zIndex: 10, background: C.aBar, borderBottom: `1px solid ${C.inpBord}`, backdropFilter: 'blur(16px)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}>
               <Bot size={20} color="white" />
@@ -551,7 +551,7 @@ export default function HandiAssistant() {
           <div aria-hidden="true" />
         </div>
 
-        <div style={{ position: 'relative', zIndex: 10, borderTop: `1px solid ${C.inpBord}`, padding: '16px 20px 20px', background: C.aBar, backdropFilter: contrast ? 'none' : 'blur(16px)' }}>
+        <div style={{ position: 'relative', zIndex: 10, borderTop: `1px solid ${C.inpBord}`, padding: '16px 20px 20px', background: C.aBar, backdropFilter: contrast ? 'none' : 'blur(16px)', flexShrink: 0 }}>
 
           {listening && (
             <div role="status" aria-live="assertive" style={{ textAlign: 'center', marginBottom: 10, fontSize: '0.8em', fontWeight: 700, color: '#f87171' }} className="h-pulse">
