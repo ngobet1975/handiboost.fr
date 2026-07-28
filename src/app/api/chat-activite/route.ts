@@ -26,7 +26,7 @@ Tu aides les personnes en situation de handicap (et leurs proches, aidants) à t
 
 export async function POST(req: Request) {
   try {
-    const { history, message } = await req.json()
+    const { history, message, tts } = await req.json()
 
     if (!message) {
       return NextResponse.json({ error: 'Message requis' }, { status: 400 })
@@ -53,7 +53,53 @@ export async function POST(req: Request) {
       },
     })
 
-    return NextResponse.json({ text: response.text })
+    const text = response.text || ''
+    let audio = null
+
+    if (tts) {
+      // Nettoyer le texte pour la TTS
+      const clean = text
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+        .replace(/[▸•]/g, '')
+        .replace(/━+[^━]*━+/g, '')
+        .trim()
+        .slice(0, 1000)
+
+      const apiKey = process.env.GEMINI_API_KEY
+      if (apiKey && clean) {
+        try {
+          const ttsRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: clean }] }],
+                generationConfig: {
+                  responseModalities: ['AUDIO'],
+                  speechConfig: {
+                    voiceConfig: {
+                      prebuiltVoiceConfig: { voiceName: 'Aoede' },
+                    },
+                  },
+                },
+              }),
+            }
+          )
+          const data = await ttsRes.json()
+          const parts = data.candidates?.[0]?.content?.parts || []
+          const audioPart = parts.find((p: any) => p.inlineData?.mimeType?.startsWith('audio'))
+          if (audioPart && audioPart.inlineData) {
+            audio = audioPart.inlineData.data // base64
+          }
+        } catch (e) {
+          console.error('[chat-activite] TTS Error:', e)
+        }
+      }
+    }
+
+    return NextResponse.json({ text, audio })
   } catch (error: any) {
     console.error('[chat-activite] Error:', error?.message || error)
     console.error('[chat-activite] API Key set:', !!process.env.GEMINI_API_KEY)

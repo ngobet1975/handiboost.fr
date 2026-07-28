@@ -143,10 +143,42 @@ export default function HandiAssistant() {
   // ── TTS via Gemini ──────────────────────────────────────────────────────────
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  const speak = useCallback(async (text: string, id: string) => {
+  const playBase64Audio = async (base64Audio: string, id: string) => {
+    try {
+      const binary = atob(base64Audio)
+      const bytes = new Uint8Array(binary.length)
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+      const sampleRate = 24000
+      const wav = new ArrayBuffer(44 + bytes.length)
+      const v = new DataView(wav)
+      const s = (o: number, str: string) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)) }
+      s(0, 'RIFF'); v.setUint32(4, 36 + bytes.length, true); s(8, 'WAVE')
+      s(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true)
+      v.setUint16(22, 1, true); v.setUint32(24, sampleRate, true)
+      v.setUint32(28, sampleRate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true)
+      s(36, 'data'); v.setUint32(40, bytes.length, true)
+      new Uint8Array(wav).set(bytes, 44)
+      const url = URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }))
+      const audio = new Audio(url)
+      audioRef.current = audio
+      audio.onended = () => { setSpeakId(null); URL.revokeObjectURL(url) }
+      audio.onerror = () => { setSpeakId(null); URL.revokeObjectURL(url) }
+      await audio.play()
+    } catch (e) {
+      console.warn('[TTS] Error playing audio', e)
+      setSpeakId(null)
+    }
+  }
+
+  const speak = useCallback(async (text: string, id: string, providedAudioBase64?: string) => {
     if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
     window.speechSynthesis?.cancel()
     setSpeakId(id)
+
+    if (providedAudioBase64) {
+      await playBase64Audio(providedAudioBase64, id)
+      return
+    }
 
     const clean = text
       .replace(/\*\*(.+?)\*\*/g, '$1')
@@ -163,26 +195,7 @@ export default function HandiAssistant() {
       const data = await res.json()
 
       if (data.audio) {
-        // Décoder base64 PCM 24kHz 16-bit mono → WAV jouable
-        const binary = atob(data.audio)
-        const bytes = new Uint8Array(binary.length)
-        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
-        const sampleRate = 24000
-        const wav = new ArrayBuffer(44 + bytes.length)
-        const v = new DataView(wav)
-        const s = (o: number, str: string) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)) }
-        s(0, 'RIFF'); v.setUint32(4, 36 + bytes.length, true); s(8, 'WAVE')
-        s(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true)
-        v.setUint16(22, 1, true); v.setUint32(24, sampleRate, true)
-        v.setUint32(28, sampleRate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true)
-        s(36, 'data'); v.setUint32(40, bytes.length, true)
-        new Uint8Array(wav).set(bytes, 44)
-        const url = URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }))
-        const audio = new Audio(url)
-        audioRef.current = audio
-        audio.onended = () => { setSpeakId(null); URL.revokeObjectURL(url) }
-        audio.onerror = () => { setSpeakId(null); URL.revokeObjectURL(url) }
-        await audio.play()
+        await playBase64Audio(data.audio, id)
         return
       }
     } catch (e) {
@@ -409,7 +422,7 @@ export default function HandiAssistant() {
               aria-pressed={tts}
               title={tts ? 'Voix automatique : activée' : 'Activer la voix automatique'}
               className="h-btn"
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 12, background: tts ? 'rgba(99,102,241,0.28)' : C.btnBg, border: `1.5px solid ${tts ? '#6366f1' : C.btnBord}`, color: tts ? '#a5b4fc' : C.sub, fontWeight: 700, fontSize: '0.78em', cursor: 'pointer', transition: 'all 0.18s', whiteSpace: 'nowrap' }}>
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 12, background: tts ? 'rgba(99,102,241,0.28)' : C.btnBg, border: `1.5px solid ${tts ? '#6366f1' : C.btnBord}`, color: tts ? (contrast ? '#ffff00' : (lightMode ? '#4338ca' : '#a5b4fc')) : C.sub, fontWeight: 800, fontSize: '0.78em', cursor: 'pointer', transition: 'all 0.18s', whiteSpace: 'nowrap' }}>
               {tts ? <Volume2 size={15} /> : <VolumeX size={15} />}
               {tts ? '🔊 Voix ON' : '🔇 Voix'}
             </button>
