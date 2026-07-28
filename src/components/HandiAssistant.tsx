@@ -106,7 +106,7 @@ export default function HandiAssistant() {
   const [speakId, setSpeakId]       = useState<string | null>(null)
   const [fontSize, setFontSize]     = useState<0 | 1 | 2>(0) // 0=normal 1=large 2=huge
   const [contrast, setContrast]     = useState(false)
-  const [lightMode, setLightMode]   = useState(false)
+  const [lightMode, setLightMode]   = useState(true)
   const [showQuick, setShowQuick]   = useState(true)
 
   const chatRef   = useRef<HTMLDivElement>(null)
@@ -316,7 +316,7 @@ export default function HandiAssistant() {
     btnBg:    '#222222',
     btnBord:  '#ffffff',
   } : lightMode ? {
-    bg:       '#f4f6fb',
+    bg:       'transparent',
     chat:     'transparent',
     aBar:     'rgba(255,255,255,0.85)',
     aBubble:  '#ffffff',
