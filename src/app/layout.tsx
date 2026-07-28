@@ -4,7 +4,6 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { AIChatbot } from "@/components/AIChatbot";
 import { Footer } from "@/components/Footer";
-import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -26,13 +25,11 @@ export default function RootLayout({
       lang="fr"
       className={`${inter.variable} font-sans h-full antialiased scroll-smooth scroll-pt-28`}
     >
-      <body className="min-h-full flex flex-col text-base leading-relaxed transition-colors duration-300">
-        <ThemeProvider>
-          <Header />
-          {children}
-          <Footer />
-          <AIChatbot />
-        </ThemeProvider>
+      <body className="min-h-full flex flex-col text-base leading-relaxed">
+        <Header />
+        {children}
+        <Footer />
+        <AIChatbot />
       </body>
     </html>
   );
