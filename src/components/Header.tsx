@@ -4,18 +4,21 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { X, Menu } from 'lucide-react';
+import { X, Menu, Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
 
 export function Header() {
   const pathname = usePathname() || '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggle } = useTheme();
+  const isDark = theme === 'dark';
 
   const getLinkClass = (path: string, activeColorClass: string) => {
     const isActive = pathname.startsWith(path);
     return `text-xl xl:text-2xl font-bold underline-offset-8 decoration-4 transition-all ${
       isActive 
         ? `${activeColorClass} underline` 
-        : `text-slate-800 hover:${activeColorClass} hover:underline`
+        : `${isDark ? 'text-slate-200' : 'text-slate-800'} hover:${activeColorClass} hover:underline`
     }`;
   };
 
@@ -27,20 +30,34 @@ export function Header() {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
         Site en maintenance, attention informations non vérifiées pour le moment
       </div>
-      <header className="px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between bg-white border-b-4 border-slate-200 shadow-sm relative">
+      <header className={`px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between border-b-4 shadow-sm relative transition-colors duration-300 ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
       <div className="flex items-center gap-4 lg:gap-5">
         <Link href="/" onClick={closeMenu}>
           <img src="/logo-handiboost.png" alt="Handiboost" className="h-16 lg:h-24 w-auto object-contain" />
         </Link>
       </div>
-      <nav className="hidden xl:flex items-center gap-10 pr-10 border-r-4 border-slate-200">
-        <Link href="/association" className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
-        <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
-        <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
-        <Link href="/actualites" className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
-        <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
+      <nav className={`hidden xl:flex items-center gap-10 pr-10 border-r-4 ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
+        <Link href="/association" className={getLinkClass('/association', 'text-blue-400')}>L'Association</Link>
+        <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-400')}>Pratiquants</Link>
+        <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-400')}>Professionnels</Link>
+        <Link href="/actualites" className={getLinkClass('/actualites', 'text-pink-400')}>Actualités</Link>
+        <Link href="/contact" className={getLinkClass('/contact', 'text-blue-400')}>Contact</Link>
       </nav>
-      <div className="hidden xl:flex items-center gap-6 pl-2">
+      <div className="hidden xl:flex items-center gap-4 pl-2">
+        {/* Bouton thème clair/sombre */}
+        <button
+          onClick={toggle}
+          aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          title={isDark ? 'Mode clair' : 'Mode sombre'}
+          className={`flex items-center gap-2 h-12 px-4 rounded-xl border-2 font-bold text-base transition-all duration-300 ${
+            isDark 
+              ? 'bg-slate-800 border-slate-600 text-yellow-300 hover:bg-slate-700' 
+              : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
+          }`}
+        >
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+          {isDark ? 'Clair' : 'Sombre'}
+        </button>
         <Button nativeButton={false} render={<Link href="/dons" />} variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">
           ❤️ Faire un don
         </Button>
@@ -49,17 +66,27 @@ export function Header() {
         </Button>
       </div>
       {/* Mobile menu button */}
-      <button 
-        className="xl:hidden p-2 text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 border-2 border-slate-300 transition-colors z-50" 
-        aria-label="Menu"
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      >
-        {isMobileMenuOpen ? (
-          <X className="w-8 h-8" strokeWidth={2.5} />
-        ) : (
-          <Menu className="w-8 h-8" strokeWidth={2.5} />
-        )}
-      </button>
+      <div className="xl:hidden flex items-center gap-3">
+        {/* Toggle thème mobile */}
+        <button
+          onClick={toggle}
+          aria-label={isDark ? 'Mode clair' : 'Mode sombre'}
+          className={`p-2 rounded-xl border-2 transition-all ${isDark ? 'bg-slate-800 border-slate-600 text-yellow-300' : 'bg-slate-100 border-slate-300 text-slate-700'}`}
+        >
+          {isDark ? <Sun size={22} /> : <Moon size={22} />}
+        </button>
+        <button 
+          className={`p-2 rounded-xl border-2 transition-colors z-50 ${isDark ? 'text-slate-200 bg-slate-800 border-slate-600 hover:bg-slate-700' : 'text-slate-800 bg-slate-100 border-slate-300 hover:bg-slate-200'}`}
+          aria-label="Menu"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-8 h-8" strokeWidth={2.5} />
+          ) : (
+            <Menu className="w-8 h-8" strokeWidth={2.5} />
+          )}
+        </button>
+      </div>
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
@@ -71,15 +98,15 @@ export function Header() {
             aria-hidden="true"
           />
           {/* Menu déroulant scrollable */}
-          <div className="absolute top-full left-0 right-0 bg-white border-b-4 border-slate-200 shadow-xl p-6 flex flex-col gap-6 xl:hidden z-50 max-h-[calc(100vh-100px)] overflow-y-auto animate-in slide-in-from-top-4">
+          <div className={`absolute top-full left-0 right-0 border-b-4 shadow-xl p-6 flex flex-col gap-6 xl:hidden z-50 max-h-[calc(100vh-100px)] overflow-y-auto animate-in slide-in-from-top-4 ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
             <nav className="flex flex-col gap-6">
-              <Link href="/association" onClick={closeMenu} className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
-              <Link href="/pratiquants" onClick={closeMenu} className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
-              <Link href="/professionnels" onClick={closeMenu} className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
-              <Link href="/actualites" onClick={closeMenu} className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
-              <Link href="/contact" onClick={closeMenu} className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
+              <Link href="/association" onClick={closeMenu} className={getLinkClass('/association', 'text-blue-400')}>L'Association</Link>
+              <Link href="/pratiquants" onClick={closeMenu} className={getLinkClass('/pratiquants', 'text-blue-400')}>Pratiquants</Link>
+              <Link href="/professionnels" onClick={closeMenu} className={getLinkClass('/professionnels', 'text-purple-400')}>Professionnels</Link>
+              <Link href="/actualites" onClick={closeMenu} className={getLinkClass('/actualites', 'text-pink-400')}>Actualités</Link>
+              <Link href="/contact" onClick={closeMenu} className={getLinkClass('/contact', 'text-blue-400')}>Contact</Link>
             </nav>
-            <div className="flex flex-col gap-4 mt-4 pt-6 border-t-2 border-slate-100">
+            <div className={`flex flex-col gap-4 mt-4 pt-6 border-t-2 ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
               <Button nativeButton={false} render={<Link href="/dons" onClick={closeMenu} />} variant="outline" className="w-full text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 rounded-2xl transition-all">
                 ❤️ Faire un don
               </Button>
