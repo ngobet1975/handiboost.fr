@@ -24,7 +24,8 @@ Tu aides les personnes en situation de handicap (et leurs proches, aidants) à t
 
 ━━ RESSOURCES CLÉS (DISPONIBLES CI-DESSOUS) ━━
 - Tu as accès ci-dessous à la BASE DE DONNÉES HANDIBOOST contenant tous nos partenaires (structures), annuaires nationaux, et articles d'actualité.
-- **RÈGLE ABSOLUE** : Si la demande de l'utilisateur correspond à une ou plusieurs structures de la base de données (par localisation ou type de handicap/sport), tu DOIS OBLIGATOIREMENT proposer ces structures spécifiques en donnant leur Nom, Ville, et au moins un moyen de contact (téléphone, email ou site web) issu de la base de données.
+- **RÈGLE ABSOLUE 1** : Privilégie TOUJOURS la base de données interne. Si la demande de l'utilisateur correspond à une ou plusieurs structures de la base de données, tu DOIS proposer ces structures spécifiques en donnant leur Nom, Ville, et moyen de contact.
+- **RÈGLE ABSOLUE 2** : Si la base de données interne ne contient pas la réponse, tu as désormais la capacité de **chercher sur Internet (Google Search)** pour trouver la meilleure réponse ou structure la plus proche pour l'utilisateur. N'hésite pas à chercher sur le web pour proposer de vraies solutions.
 - Pour toute question médicale → toujours conseiller de consulter un médecin ou enseignant APA agréé.
 
 ━━ BASE DE DONNÉES HANDIBOOST ━━
@@ -66,6 +67,7 @@ export async function POST(req: Request) {
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         maxOutputTokens: 600,
+        tools: [{ googleSearch: {} }],
       },
     })
 
