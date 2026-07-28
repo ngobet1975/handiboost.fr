@@ -192,10 +192,15 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
         {/* PARTNER TAB */}
         {tab === 'partner' && (
           <>
-            <div className="flex items-center gap-3 mb-6 p-4 bg-orange-50 border-2 border-orange-200 rounded-2xl">
-              <Building2 className="w-6 h-6 text-orange-600 flex-shrink-0" />
-              <p className="text-sm font-bold text-orange-800">
-                Espace réservé aux clubs et structures partenaires. Accédez à votre fiche pour la consulter ou la mettre à jour.
+            <div className="flex flex-col gap-3 mb-6 p-4 bg-orange-50 border-2 border-orange-200 rounded-2xl">
+              <div className="flex items-center gap-3">
+                <Building2 className="w-6 h-6 text-orange-600 flex-shrink-0" />
+                <p className="text-sm font-bold text-orange-800">
+                  Espace réservé aux clubs et structures partenaires. Accédez à votre fiche ou créez-en une.
+                </p>
+              </div>
+              <p className="text-sm text-orange-700 ml-9 font-medium">
+                Vous n'êtes pas encore partenaire ? Entrez simplement votre email ci-dessous, un code vous sera envoyé pour créer votre espace gratuitement !
               </p>
             </div>
             {partnerStep === 'email' && (
