@@ -4,12 +4,22 @@ import Link from 'next/link'
 import fs from 'fs'
 import path from 'path'
 import { revalidatePath } from 'next/cache'
+import { getAdherents } from '@/app/admin/users/actions'
 
 async function updateProfile(formData: FormData) {
   'use server'
   
   const cookieStore = await cookies();
-  const email = cookieStore.get('pro_session')?.value;
+  const token = cookieStore.get('pro_session')?.value;
+  let email = null;
+  if (token) {
+    try {
+      const { jwtVerify } = await import('jose')
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
+      const { payload } = await jwtVerify(token, secret)
+      email = payload.email as string
+    } catch(e) {}
+  }
   if (!email) return;
 
   const nom = formData.get('nom') as string;
@@ -17,13 +27,7 @@ async function updateProfile(formData: FormData) {
   const profession = formData.get('profession') as string;
   const telephone = formData.get('telephone') as string;
 
-  const filePath = path.join(process.cwd(), 'src/data/adherents.json')
-  let adherents = []
-  try {
-    adherents = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  } catch (e) {
-    console.error("Error reading adherents.json", e);
-  }
+  const adherents = await getAdherents();
 
   const cleanEmail = email.replace(/['"]/g, '').toLowerCase().trim();
   const index = adherents.findIndex((a: any) => a.email && a.email.toLowerCase().trim() === cleanEmail);
@@ -37,10 +41,15 @@ async function updateProfile(formData: FormData) {
       telephone: telephone.trim()
     };
     try {
-      fs.writeFileSync(filePath, JSON.stringify(adherents, null, 2));
+      const { Redis } = await import('@upstash/redis')
+      const redis = new Redis({
+        url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '',
+        token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
+      })
+      await redis.set('handiboost_adherents', adherents)
       console.log(`[PROFIL] Informations mises à jour pour ${cleanEmail}`);
     } catch(err) {
-      console.error("Error writing adherents.json", err);
+      console.error("Error writing adherents.json to redis", err);
     }
     revalidatePath('/profil');
     revalidatePath('/guide-booster'); // Force refresh the public map if needed
@@ -60,17 +69,22 @@ export default async function ProfilPage(props: PageProps) {
   const isSuccess = params?.success === 'true';
   
   const cookieStore = await cookies();
-  const email = cookieStore.get('pro_session')?.value;
+  const token = cookieStore.get('pro_session')?.value;
+  let email = null;
+  if (token) {
+    try {
+      const { jwtVerify } = await import('jose')
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
+      const { payload } = await jwtVerify(token, secret)
+      email = payload.email as string
+    } catch(e) {}
+  }
 
   if (!email) {
     redirect('/login');
   }
 
-  const filePath = path.join(process.cwd(), 'src/data/adherents.json')
-  let adherents = []
-  try {
-    adherents = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  } catch (e) {}
+  const adherents = await getAdherents();
 
   const cleanEmail = email.replace(/['"]/g, '').toLowerCase().trim();
   const user = adherents.find((a: any) => a.email && a.email.toLowerCase().trim() === cleanEmail);

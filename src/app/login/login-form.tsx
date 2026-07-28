@@ -124,9 +124,14 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
         )}
         
         {successMsg && (
-          <div className="mb-6 flex items-start gap-3 text-lg font-semibold text-green-700 bg-green-50 border-2 border-green-200 p-5 rounded-2xl">
-            <span className="text-2xl">✅</span>
-            {successMsg}
+          <div className="mb-6 flex flex-col bg-green-50 border-2 border-green-200 p-5 rounded-2xl">
+            <div className="flex items-start gap-3 text-lg font-semibold text-green-700">
+              <span className="text-2xl shrink-0">✅</span>
+              <span className="break-all">{successMsg}</span>
+            </div>
+            <div className="mt-3 bg-green-100/80 p-3 rounded-xl border border-green-200 text-sm font-bold text-green-800 text-center shadow-sm">
+              ⚠️ Pensez à vérifier vos courriers indésirables (Spams)
+            </div>
           </div>
         )}
 

@@ -31,22 +31,22 @@ export default function ContactPage() {
           
           {/* Informations de contact (1/3) */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
-              <h2 className="text-2xl font-bold text-slate-800 mb-6">Nos coordonnées</h2>
+            <div className="bg-white p-5 sm:p-8 rounded-2xl shadow-lg border border-slate-100">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Nos coordonnées</h2>
               
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center shrink-0">
                     <Mail className="w-6 h-6" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-bold text-slate-800 text-lg">Par email</h3>
                     <p className="text-slate-600 mb-1">Pour toute demande générale :</p>
-                    <a href="mailto:handiboost.contact@gmail.com" className="text-blue-700 font-bold hover:underline">
-                      handiboost.contact@gmail.com
-                    </a>
                   </div>
                 </div>
+                <a href="mailto:handiboost.contact@gmail.com" className="block text-center text-blue-700 font-bold hover:underline text-[13px] min-[375px]:text-sm sm:text-base">
+                  handiboost.contact@gmail.com
+                </a>
               </div>
             </div>
 

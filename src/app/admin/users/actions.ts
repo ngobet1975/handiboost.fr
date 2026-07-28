@@ -2,13 +2,28 @@
 
 import fs from 'fs'
 import path from 'path'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
+import { Redis } from '@upstash/redis'
 
-const filePath = path.join(process.cwd(), 'src/data/adherents.json')
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '',
+  token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
+})
 
 export async function getAdherents() {
-  const data = fs.readFileSync(filePath, 'utf8')
-  return JSON.parse(data)
+  noStore()
+  let adherents: any[] | null = await redis.get('handiboost_adherents')
+  
+  if (!adherents) {
+    try {
+      const filePath = path.join(process.cwd(), 'src/data/adherents.json')
+      adherents = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+      if (adherents) await redis.set('handiboost_adherents', adherents)
+    } catch (e) {
+      adherents = []
+    }
+  }
+  return adherents || []
 }
 
 export async function addAdherent(formData: FormData) {
@@ -47,7 +62,7 @@ export async function addAdherent(formData: FormData) {
     typeAdhesion
   })
 
-  fs.writeFileSync(filePath, JSON.stringify(adherents, null, 2))
+  await redis.set('handiboost_adherents', adherents)
   revalidatePath('/admin/users')
 }
 
@@ -55,7 +70,7 @@ export async function deleteAdherent(id: string) {
   const adherents = await getAdherents()
   const filtered = adherents.filter((a: any) => a.id !== id)
   
-  fs.writeFileSync(filePath, JSON.stringify(filtered, null, 2))
+  await redis.set('handiboost_adherents', filtered)
   revalidatePath('/admin/users')
 }
 
@@ -96,7 +111,7 @@ export async function updateAdherent(id: string, formData: FormData) {
       profession: capitalize(profession),
       typeAdhesion
     }
-    fs.writeFileSync(filePath, JSON.stringify(adherents, null, 2))
+    await redis.set('handiboost_adherents', adherents)
     revalidatePath('/admin/users')
   }
 }

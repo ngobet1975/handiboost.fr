@@ -235,7 +235,7 @@ export function AIChatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-blue-800 hover:bg-blue-900 text-white rounded-full py-3 px-4 shadow-2xl border-4 border-white transition-all hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(30,64,175,0.3)] flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-blue-300 group"
+          className="fixed bottom-6 right-6 z-[110] bg-blue-800 hover:bg-blue-900 text-white rounded-full py-3 px-4 shadow-2xl border-4 border-white transition-all hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(30,64,175,0.3)] flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-blue-300 group"
           aria-label="Ouvrir l'assistant Handiboost"
         >
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-blue-100 shadow-inner relative">
@@ -247,7 +247,7 @@ export function AIChatbot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className={`fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 w-full ${isExpanded ? 'md:w-[800px] md:h-[80vh]' : 'md:w-[420px] md:h-[650px]'} h-[100dvh] max-h-[100dvh] bg-white md:rounded-[2rem] shadow-2xl flex flex-col border-4 border-blue-100 overflow-hidden animate-in slide-in-from-bottom-8 duration-300 transition-all`}>
+        <div className={`fixed bottom-0 right-0 md:bottom-6 md:right-6 z-[110] w-full ${isExpanded ? 'md:w-[800px] md:h-[80vh]' : 'md:w-[420px] md:h-[650px]'} h-[100dvh] max-h-[100dvh] bg-white md:rounded-[2rem] shadow-2xl flex flex-col border-4 border-blue-100 overflow-hidden animate-in slide-in-from-bottom-8 duration-300 transition-all`}>
           
           {/* Header */}
           <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 text-white p-5 flex items-center justify-between shrink-0 overflow-hidden">

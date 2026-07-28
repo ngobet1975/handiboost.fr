@@ -34,8 +34,14 @@ export function NewsletterPopup() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative">
+    <div 
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-in fade-in duration-300"
+      onClick={handleClose}
+    >
+      <div 
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button 
           onClick={handleClose}
           className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors"
@@ -76,9 +82,14 @@ export function NewsletterPopup() {
             />
           </div>
           
-          <Button type="submit" className="w-full h-14 text-lg font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl">
-            S'inscrire
-          </Button>
+          <div className="flex flex-col gap-3">
+            <Button type="submit" className="w-full h-14 text-lg font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl">
+              S'inscrire
+            </Button>
+            <Button type="button" variant="ghost" onClick={handleClose} className="w-full h-12 text-slate-500 hover:text-slate-800 rounded-xl">
+              Non merci, fermer
+            </Button>
+          </div>
         </form>
       </div>
     </div>

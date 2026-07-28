@@ -1,10 +1,32 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { jwtVerify } from 'jose'
 
-export function middleware(request: NextRequest) {
-  const hasAdminCookie = request.cookies.has('admin_session')
-  const hasProCookie = request.cookies.has('pro_session')
-  const isAdmin = hasAdminCookie
-  const isPro = hasProCookie
+export async function middleware(request: NextRequest) {
+  const adminCookie = request.cookies.get('admin_session')?.value
+  const proCookie = request.cookies.get('pro_session')?.value
+  
+  let isAdmin = false
+  let isPro = false
+
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
+
+  if (adminCookie) {
+    try {
+      await jwtVerify(adminCookie, secret)
+      isAdmin = true
+    } catch (e) {
+      // Invalid JWT
+    }
+  }
+
+  if (proCookie) {
+    try {
+      await jwtVerify(proCookie, secret)
+      isPro = true
+    } catch (e) {
+      // Invalid JWT
+    }
+  }
 
   // Protect /admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
@@ -20,8 +42,8 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Protect /profil route
-  if (request.nextUrl.pathname.startsWith('/profil')) {
+  // Protect /profil and /guide-booster routes
+  if (request.nextUrl.pathname.startsWith('/profil') || request.nextUrl.pathname.startsWith('/guide-booster')) {
     if (!isAdmin && !isPro) {
       const url = request.nextUrl.clone()
       url.pathname = '/login'

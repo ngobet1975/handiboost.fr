@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, Plus, Pencil, Trash2, Eye, EyeOff, Save, X } from 'lucide-react'
+import { ChevronLeft, Plus, Pencil, Trash2, Eye, EyeOff, Save, X, ExternalLink, Wand2, Loader2, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { getArticles, saveArticle, deleteArticle as deleteArticleAction, toggleArticleStatus, Article } from './actions'
+import { getArticles, saveArticle, deleteArticle as deleteArticleAction, toggleArticleStatus, Article, generateArticleAI, generateImagePromptAI } from './actions'
 
 export default function AdminArticlesPage() {
   const router = useRouter()
@@ -14,6 +14,8 @@ export default function AdminArticlesPage() {
   const [editing, setEditing] = useState<Article | null>(null)
   const [isNew, setIsNew] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false)
 
   useEffect(() => {
     loadArticles()
@@ -68,6 +70,36 @@ export default function AdminArticlesPage() {
     })
   }
 
+  async function handleGenerateAI() {
+    if (!editing || !editing.title) {
+      alert("Veuillez d'abord saisir un titre d'article pour orienter l'IA !");
+      return;
+    }
+    setIsGenerating(true);
+    const res = await generateArticleAI(editing.title);
+    if (res?.error) {
+      alert(res.error);
+    } else if (res?.success) {
+      setEditing({ ...editing, excerpt: res.excerpt, content: res.content });
+    }
+    setIsGenerating(false);
+  }
+
+  async function handleGenerateImageAI() {
+    if (!editing || !editing.title) {
+      alert("Veuillez d'abord saisir un titre d'article !");
+      return;
+    }
+    setIsGeneratingImage(true);
+    const res = await generateImagePromptAI(editing.title);
+    if (res?.error) {
+      alert(res.error);
+    } else if (res?.success) {
+      setEditing({ ...editing, cover_image: res.url });
+    }
+    setIsGeneratingImage(false);
+  }
+
   if (editing) {
     return (
       <div className="min-h-screen bg-slate-50 p-8">
@@ -83,7 +115,18 @@ export default function AdminArticlesPage() {
 
           <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 space-y-6">
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Titre *</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-bold text-slate-700">Titre *</label>
+                <Button 
+                  type="button" 
+                  onClick={handleGenerateAI} 
+                  disabled={isGenerating || !editing.title}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs h-8 px-3 shadow-md"
+                >
+                  {isGenerating ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Wand2 className="w-3 h-3 mr-2" />} 
+                  {isGenerating ? "Rédaction en cours..." : "Rédiger le contenu avec l'IA"}
+                </Button>
+              </div>
               <input
                 type="text"
                 value={editing.title}
@@ -156,14 +199,31 @@ export default function AdminArticlesPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Image de couverture (URL)</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-bold text-slate-700">Image de couverture (URL)</label>
+                <Button 
+                  type="button" 
+                  onClick={handleGenerateImageAI} 
+                  disabled={isGeneratingImage || !editing.title}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs h-8 px-3 shadow-md"
+                >
+                  {isGeneratingImage ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <ImageIcon className="w-3 h-3 mr-2" />} 
+                  {isGeneratingImage ? "Création..." : "Générer l'image avec l'IA"}
+                </Button>
+              </div>
               <input
                 type="text"
                 value={editing.cover_image ?? ''}
                 onChange={(e) => setEditing({ ...editing, cover_image: e.target.value })}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="https://..."
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm mb-4"
+                placeholder="Collez une URL d'image ou cliquez sur le bouton IA"
               />
+              {editing.cover_image && (
+                <div className="mt-2 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 relative aspect-video max-w-md shadow-sm">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={editing.cover_image} alt="Couverture" className="object-cover w-full h-full" />
+                </div>
+              )}
             </div>
 
             <div className="flex gap-6">
@@ -224,8 +284,11 @@ export default function AdminArticlesPage() {
                 {articles.map((article) => (
                   <tr key={article.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-slate-900">{article.title}</span>
-                      {article.featured && <span className="ml-2 bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded">⭐ Une</span>}
+                      <Link href={`/actualites/${article.slug}`} target="_blank" className="font-semibold text-blue-700 hover:underline inline-flex items-center gap-1.5">
+                        {article.title}
+                        <ExternalLink className="w-3 h-3 text-slate-400" />
+                      </Link>
+                      {article.featured && <span className="ml-2 bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded align-middle">⭐ Une</span>}
                     </td>
                     <td className="px-4 py-4 text-sm text-slate-600">{article.category}</td>
                     <td className="px-4 py-4">

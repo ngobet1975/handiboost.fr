@@ -209,7 +209,7 @@ export default function DonsPage() {
         <section className="text-center">
           <p className="text-lg text-slate-600">
             Vous avez une question ? Écrivez-nous à{' '}
-            <a href="mailto:handiboost.contact@gmail.com" className="font-bold text-blue-700 hover:underline">
+            <a href="mailto:handiboost.contact@gmail.com" className="font-bold text-blue-700 hover:underline text-[11px] min-[375px]:text-xs sm:text-sm md:text-base whitespace-nowrap tracking-tighter sm:tracking-normal">
               handiboost.contact@gmail.com
             </a>
           </p>

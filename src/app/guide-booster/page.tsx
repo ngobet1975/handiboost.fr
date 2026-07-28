@@ -7,6 +7,7 @@ import { GuideBoosterClient, GuideEntry } from '@/components/GuideBoosterClient'
 import fs from 'fs';
 import path from 'path';
 import { cookies } from 'next/headers';
+import { getStructures, getActivites } from '@/app/admin/annuaire/actions';
 
 export const metadata: Metadata = {
   title: 'Guide Booster — Annuaire APA & Parasport | Handiboost',
@@ -25,17 +26,8 @@ export default async function GuideBoosterPage() {
     rawEntries = [];
   }
 
-  const filePath = path.join(process.cwd(), 'src/data/structures.json');
-  let structures = [];
-  if (fs.existsSync(filePath)) {
-    structures = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  }
-
-  const activitesPath = path.join(process.cwd(), 'src/data/activites.json');
-  let activites: string[] = [];
-  if (fs.existsSync(activitesPath)) {
-    activites = JSON.parse(fs.readFileSync(activitesPath, 'utf8'));
-  }
+  const structures = await getStructures();
+  const activites = await getActivites();
 
   const entries: GuideEntry[] = rawEntries
     .filter((e: any) => e.status === 'published')

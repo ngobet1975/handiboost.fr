@@ -21,7 +21,7 @@ export default function MentionsLegalesPage() {
       <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
         <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-10">Mentions légales</h1>
 
-        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-200 prose prose-lg prose-slate max-w-none">
+        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-200 prose prose-lg prose-slate max-w-none break-words">
           <h2>Éditeur du site</h2>
           <p>
             Le site <strong>handiboost.fr</strong> est édité par l'association <strong>Handiboost</strong>, association loi 1901.<br />

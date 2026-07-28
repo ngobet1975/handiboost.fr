@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
-const Map = dynamic(() => import('@/components/Map'), { ssr: false, loading: () => <div className="h-[500px] bg-slate-100 flex items-center justify-center rounded-xl border border-slate-200">Chargement de la carte...</div> })
+const Map = dynamic(() => import('@/components/Map'), { ssr: false, loading: () => <div className="w-full h-[60vh] min-h-[500px] max-h-[800px] bg-slate-100 flex items-center justify-center rounded-xl border border-slate-200">Chargement de la carte...</div> })
 
 export interface GuideEntry {
   id: string

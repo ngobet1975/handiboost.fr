@@ -2,15 +2,27 @@
 
 import fs from 'fs'
 import path from 'path'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
+import { Redis } from '@upstash/redis'
 
-const filePath = path.join(process.cwd(), 'src/data/structures.json')
-const activitesFilePath = path.join(process.cwd(), 'src/data/activites.json')
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '',
+  token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
+})
 
 export async function getActivites() {
-  if (!fs.existsSync(activitesFilePath)) return []
-  const data = fs.readFileSync(activitesFilePath, 'utf8')
-  return JSON.parse(data)
+  noStore()
+  let activites: string[] | null = await redis.get('handiboost_activites')
+  if (!activites) {
+    try {
+      const filePath = path.join(process.cwd(), 'src/data/activites.json')
+      activites = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+      if (activites) await redis.set('handiboost_activites', activites)
+    } catch (e) {
+      activites = []
+    }
+  }
+  return activites || []
 }
 
 export async function addActivite(name: string) {
@@ -19,9 +31,8 @@ export async function addActivite(name: string) {
   
   if (!activites.includes(formattedName)) {
     activites.push(formattedName)
-    // Sort alphabetically
     activites.sort((a: string, b: string) => a.localeCompare(b, 'fr'))
-    fs.writeFileSync(activitesFilePath, JSON.stringify(activites, null, 2))
+    await redis.set('handiboost_activites', activites)
     revalidatePath('/admin/annuaire')
   }
 }
@@ -30,15 +41,23 @@ export async function deleteActivite(name: string) {
   const activites = await getActivites()
   const filtered = activites.filter((a: string) => a !== name)
   
-  fs.writeFileSync(activitesFilePath, JSON.stringify(filtered, null, 2))
+  await redis.set('handiboost_activites', filtered)
   revalidatePath('/admin/annuaire')
 }
 
-
 export async function getStructures() {
-  if (!fs.existsSync(filePath)) return []
-  const data = fs.readFileSync(filePath, 'utf8')
-  return JSON.parse(data)
+  noStore()
+  let structures: any[] | null = await redis.get('handiboost_structures')
+  if (!structures) {
+    try {
+      const filePath = path.join(process.cwd(), 'src/data/structures.json')
+      structures = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+      if (structures) await redis.set('handiboost_structures', structures)
+    } catch (e) {
+      structures = []
+    }
+  }
+  return structures || []
 }
 
 export async function addStructure(data: any) {
@@ -59,7 +78,7 @@ export async function addStructure(data: any) {
     longitude: data.longitude || null
   })
 
-  fs.writeFileSync(filePath, JSON.stringify(structures, null, 2))
+  await redis.set('handiboost_structures', structures)
   revalidatePath('/admin/annuaire')
 }
 
@@ -67,7 +86,7 @@ export async function deleteStructure(id: string) {
   const structures = await getStructures()
   const filtered = structures.filter((s: any) => s.id !== id)
   
-  fs.writeFileSync(filePath, JSON.stringify(filtered, null, 2))
+  await redis.set('handiboost_structures', filtered)
   revalidatePath('/admin/annuaire')
 }
 
@@ -91,11 +110,10 @@ export async function updateStructure(id: string, data: any) {
       longitude: data.longitude !== undefined ? data.longitude : structures[index].longitude,
       enAttenteMaj: false
     }
-    fs.writeFileSync(filePath, JSON.stringify(structures, null, 2))
+    await redis.set('handiboost_structures', structures)
     revalidatePath('/admin/annuaire')
   }
 }
-
 
 export async function reportStructureError(id: string) {
   const structures = await getStructures()
@@ -103,8 +121,7 @@ export async function reportStructureError(id: string) {
   
   if (index !== -1) {
     structures[index].enAttenteMaj = true
-    const filePath = require('path').join(process.cwd(), 'src/data/structures.json')
-    require('fs').writeFileSync(filePath, JSON.stringify(structures, null, 2))
+    await redis.set('handiboost_structures', structures)
     revalidatePath('/admin/annuaire')
     revalidatePath('/guide-booster')
   }

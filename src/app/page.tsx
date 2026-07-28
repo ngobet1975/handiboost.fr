@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { HomeSearchBar } from '@/components/HomeSearchBar'
 import { NewsletterPopup } from '@/components/NewsletterPopup'
-import actualitesData from '@/data/actualites.json'
+import { getArticles } from '@/app/admin/articles/actions'
 
 const defilementImages = [
   "Capture d’écran 2026-05-18 225414.png",
@@ -27,10 +27,10 @@ const images2 = [...defilementImages.slice(5), ...defilementImages.slice(0, 5)];
 const images3 = [...defilementImages.slice(10), ...defilementImages.slice(0, 10)];
 const images4 = [...defilementImages.slice(3), ...defilementImages.slice(0, 3)];
 
-export default function Home() {
-  const latestActus = actualitesData
+export default async function Home() {
+  const allArticles = await getArticles();
+  const latestActus = allArticles
     .filter(actu => actu.status === 'published')
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 3);
 
   return (
@@ -51,7 +51,7 @@ export default function Home() {
                 <div className="inline-flex items-center justify-center md:justify-start gap-2 bg-blue-100 text-blue-800 px-5 py-2 rounded-full font-bold text-lg mb-6">
                   💙 Association loi 1901
                 </div>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
                   L&apos;Activité Physique Adaptée,<br />
                   <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
                     pour la santé de tous.
@@ -97,7 +97,7 @@ export default function Home() {
         <section className="py-24 px-6 bg-white border-b-4 border-slate-200">
           <div className="max-w-[90rem] mx-auto space-y-16">
              <div className="text-center max-w-4xl mx-auto">
-                <h2 className="text-5xl lg:text-6xl font-black text-slate-900 mb-8">Une plateforme centralisée pour l'APA</h2>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-6 md:mb-8">Une plateforme centralisée pour l'APA</h2>
                 <p className="text-slate-800 text-2xl lg:text-3xl leading-normal font-medium">Tout ce dont vous avez besoin pour encourager ou pratiquer le sport adapté, facile à lire et à utiliser.</p>
              </div>
              
@@ -196,7 +196,7 @@ export default function Home() {
             {/* Blocs Actualités */}
             <div className="space-y-12">
               <div className="flex items-end justify-between border-b-4 border-slate-200 pb-6">
-                <h2 className="text-5xl font-black text-slate-900">Dernières Actualités</h2>
+                <h2 className="text-4xl sm:text-5xl font-black text-slate-900">Dernières Actualités</h2>
                 <Link href="/actualites" className="text-2xl font-extrabold text-blue-800 hover:underline hover:text-blue-900 hidden md:block">Toutes les actus →</Link>
               </div>
               
@@ -204,7 +204,7 @@ export default function Home() {
                 {latestActus.map((actu, i) => {
                   const colors = ["bg-orange-500", "bg-sky-500", "bg-pink-600"];
                   const color = colors[i % colors.length];
-                  const formattedDate = new Date(actu.publishedAt).toLocaleDateString('fr-FR', {
+                  const formattedDate = new Date(actu.published_at || new Date()).toLocaleDateString('fr-FR', {
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
@@ -213,7 +213,7 @@ export default function Home() {
                   <Link key={actu.id} href={`/actualites#${actu.id}`}>
                     <div className="bg-white rounded-[2rem] border-4 border-slate-100 shadow-xl overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col h-full">
                       <div className="h-64 relative overflow-hidden bg-slate-100 border-b-4 border-slate-100">
-                         <img src={actu.coverImage.startsWith('http') ? actu.coverImage : `/photos/${actu.coverImage}`} alt={actu.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                         <img src={actu.cover_image?.startsWith('http') ? actu.cover_image : `/photos/${actu.cover_image}`} alt={actu.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-80"></div>
                          <div className={`absolute bottom-4 left-6 px-4 py-2 font-extrabold text-sm rounded-full ${color} text-white shadow-lg`}>Actualité</div>
                       </div>
@@ -230,7 +230,7 @@ export default function Home() {
             {/* Blocs Témoignages */}
             <div className="space-y-12">
               <div className="border-b-4 border-slate-200 pb-6">
-                <h2 className="text-5xl font-black text-slate-900">Ils en parlent</h2>
+                <h2 className="text-4xl sm:text-5xl font-black text-slate-900">Ils en parlent</h2>
               </div>
               <div className="grid md:grid-cols-2 gap-10">
                 <Card className="border-4 border-blue-100 bg-blue-50/50 rounded-[2.5rem] shadow-xl p-6">

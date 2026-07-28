@@ -59,7 +59,7 @@ export default function Map({ structures }: { structures: any[] }) {
   }
 
   return (
-    <div className="h-[500px] w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm relative z-0">
+    <div className="w-full h-[60vh] min-h-[500px] max-h-[800px] rounded-xl overflow-hidden border border-slate-200 shadow-sm relative z-0">
       <MapContainer center={[46.603354, 1.888334]} zoom={6} scrollWheelZoom={true} style={{ height: '100%', width: '100%', zIndex: 0 }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { authenticator } from 'otplib'
+import { SignJWT } from 'jose'
 
 import fs from 'fs'
 import path from 'path'
@@ -15,12 +16,8 @@ const otpStore = new Map<string, { code: string; expiresAt: number }>();
 export async function sendOtp(email: string) {
   const emailLower = email.toLowerCase().trim();
   
-  // Check whitelist in adherents.json
-  const filePath = path.join(process.cwd(), 'src/data/adherents.json')
-  let adherents = []
-  try {
-    adherents = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  } catch (e) {}
+  const { getAdherents } = await import('@/app/admin/users/actions')
+  const adherents = await getAdherents()
 
   const isAdherent = adherents.some((a: any) => a.email?.toLowerCase() === emailLower)
 
@@ -80,7 +77,14 @@ export async function verifyOtp(email: string, token: string) {
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     const emailLower = email.toLowerCase().trim();
-    cookieStore.set('pro_session', emailLower, {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
+    const jwt = await new SignJWT({ email: emailLower, role: 'pro' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('7d')
+      .sign(secret)
+
+    cookieStore.set('pro_session', jwt, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
@@ -108,10 +112,18 @@ export async function verifyOtp(email: string, token: string) {
   // Remove the used OTP
   otpStore.delete(emailLower);
 
-  // Create session cookie (bypassing Supabase Auth)
+  // Create session cookie with JWT
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
-  cookieStore.set('pro_session', emailLower, {
+  
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
+  const jwt = await new SignJWT({ email: emailLower, role: 'pro' })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(secret)
+
+  cookieStore.set('pro_session', jwt, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -138,10 +150,18 @@ export async function verifyAdminTotp(code: string) {
     return { error: "Code d'accès invalide." };
   }
 
-  // 2. If valid, set a secure cookie (no Supabase needed)
+  // 2. If valid, set a secure cookie with JWT
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
-  cookieStore.set('admin_session', 'authenticated', {
+  
+  const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET || process.env.ADMIN_TOTP_SECRET || 'handiboost-fallback-secret-2026')
+  const jwt = await new SignJWT({ role: 'admin' })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(jwtSecret)
+
+  cookieStore.set('admin_session', jwt, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -155,11 +175,8 @@ export async function verifyAdminTotp(code: string) {
 }
 
 export async function registerPro(data: { nom: string, prenom: string, profession: string, email: string }) {
-  const filePath = path.join(process.cwd(), 'src/data/adherents.json')
-  let adherents = []
-  try {
-    adherents = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  } catch (e) {}
+  const { getAdherents } = await import('@/app/admin/users/actions')
+  const adherents = await getAdherents()
 
   const emailLower = data.email.trim().toLowerCase();
   const exists = adherents.some((a: any) => a.email?.toLowerCase() === emailLower)
@@ -177,7 +194,12 @@ export async function registerPro(data: { nom: string, prenom: string, professio
       dateAdhesion: new Date().toISOString().split('T')[0],
       typeAdhesion: "En cours d'adhésion"
     })
-    fs.writeFileSync(filePath, JSON.stringify(adherents, null, 2))
+    const { Redis } = await import('@upstash/redis')
+    const redis = new Redis({
+      url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '',
+      token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
+    })
+    await redis.set('handiboost_adherents', adherents)
   }
 
   return await sendOtp(emailLower)
