@@ -118,7 +118,21 @@ export default function HandiAssistant() {
   useEffect(() => { inputSnap.current = input }, [input])
 
   useEffect(() => {
-    chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
+    if (loading) {
+      chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
+    } else if (messages.length > 0) {
+      setTimeout(() => {
+        const lastMsg = messages[messages.length - 1]
+        const el = document.getElementById(`msg-${lastMsg.id}`)
+        if (el) {
+          if (lastMsg.role === 'assistant') {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          } else {
+            chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' })
+          }
+        }
+      }, 50)
+    }
   }, [messages, loading])
 
   const checkHandsFreeRestart = useCallback(() => {
@@ -289,7 +303,8 @@ export default function HandiAssistant() {
       const aMsg: Message = { id: aid, role: 'assistant', text: reply }
       setMessages(prev => [...prev, aMsg])
       if (tts) {
-        speak(reply, aid)
+        const textForSpeech = reply.replace(/\[SUGGESTION:\s*.+?\]/g, '').trim()
+        speak(textForSpeech, aid)
       } else {
         checkHandsFreeRestart()
       }
@@ -463,7 +478,7 @@ export default function HandiAssistant() {
             }
 
             return (
-            <div key={msg.id} className="h-slide">
+            <div key={msg.id} id={`msg-${msg.id}`} className="h-slide" style={{ scrollMarginTop: '20px' }}>
               {msg.role === 'assistant' ? (
                 <div style={{ display: 'flex', gap: 14, maxWidth: '78%' }}>
                   <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 4, boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
