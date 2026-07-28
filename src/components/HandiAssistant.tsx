@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Mic, MicOff, Send, Volume2, VolumeX, Bot, Loader2, MapPin, Phone, Globe, RotateCcw } from 'lucide-react'
+import { useTheme } from '@/components/ThemeProvider'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -106,8 +107,10 @@ export default function HandiAssistant() {
   const [speakId, setSpeakId]       = useState<string | null>(null)
   const [fontSize, setFontSize]     = useState<0 | 1 | 2>(0) // 0=normal 1=large 2=huge
   const [contrast, setContrast]     = useState(false)
-  const [lightMode, setLightMode]   = useState(false)
   const [showQuick, setShowQuick]   = useState(true)
+
+  const { theme, toggle: toggleTheme } = useTheme()
+  const lightMode = theme === 'light'
 
   const chatRef   = useRef<HTMLDivElement>(null)
   const inputRef  = useRef<HTMLTextAreaElement>(null)
@@ -411,7 +414,7 @@ export default function HandiAssistant() {
             {/* Light / Dark toggle */}
             {!contrast && (
               <button
-                onClick={() => setLightMode(p => !p)}
+                onClick={toggleTheme}
                 aria-label={lightMode ? 'Passer en mode sombre' : 'Passer en mode clair'}
                 aria-pressed={lightMode}
                 title={lightMode ? 'Mode sombre' : 'Mode clair'}
