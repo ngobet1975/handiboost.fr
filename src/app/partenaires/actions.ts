@@ -79,12 +79,13 @@ export async function sendPartnerOtp(email: string) {
 
 // ─── 2. Vérifier OTP + créer session ─────────────────────────────────────────
 export async function verifyPartnerOtp(email: string, token: string) {
+  const cleanToken = token.replace(/\s+/g, '').trim()
   const emailLower = email.toLowerCase().trim()
-  if (process.env.NODE_ENV === 'development' && token === '000000') {
+  if (process.env.NODE_ENV === 'development' && cleanToken === '000000') {
     return await createPartnerSession(emailLower)
   }
   const record = partnerOtpStore.get(emailLower)
-  if (!record || record.code !== token) return { error: 'Code incorrect.' }
+  if (!record || record.code !== cleanToken) return { error: 'Code incorrect.' }
   if (Date.now() > record.expiresAt) {
     partnerOtpStore.delete(emailLower)
     return { error: 'Code expiré. Veuillez recommencer.' }

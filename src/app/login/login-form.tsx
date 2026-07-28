@@ -173,7 +173,7 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
                   <Label htmlFor="code" className="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
                     <KeyRound className="w-5 h-5 text-slate-500" /> Code de sécurité reçu par email
                   </Label>
-                  <Input id="code" type="text" value={code} onChange={(e) => setCode(e.target.value)} required placeholder="123456" maxLength={6} className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-blue-500" />
+                  <Input id="code" type="text" value={code} onChange={(e) => setCode(e.target.value.replace(/\s+/g, ''))} required placeholder="123456" maxLength={6} className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-blue-500" />
                 </div>
                 <Button type="submit" className="w-full h-16 text-xl rounded-2xl font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xl transition-all hover:-translate-y-1" disabled={loading || code.length < 6}>
                   {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Me connecter'}
@@ -223,7 +223,7 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
                   <Label htmlFor="partnerCode" className="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
                     <KeyRound className="w-5 h-5 text-slate-500" /> Code reçu par email
                   </Label>
-                  <Input id="partnerCode" type="text" value={partnerCode} onChange={(e) => setPartnerCode(e.target.value)} required placeholder="123456" maxLength={6} className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-orange-500" />
+                  <Input id="partnerCode" type="text" value={partnerCode} onChange={(e) => setPartnerCode(e.target.value.replace(/\s+/g, ''))} required placeholder="123456" maxLength={6} className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-orange-500" />
                 </div>
                 <Button type="submit" className="w-full h-16 text-xl rounded-2xl font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-xl transition-all hover:-translate-y-1" disabled={loading || partnerCode.length < 6}>
                   {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Accéder à mon espace'}
@@ -246,7 +246,7 @@ export function LoginForm({ initialMessage }: { initialMessage: string | null })
               <Label htmlFor="adminCode" className="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
                 <KeyRound className="w-5 h-5 text-slate-500" /> Code d'accès sécurisé
               </Label>
-              <Input id="adminCode" type="text" value={adminCode} onChange={(e) => setAdminCode(e.target.value)} required placeholder="123456" maxLength={6} className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-indigo-500" />
+              <Input id="adminCode" type="text" value={adminCode} onChange={(e) => setAdminCode(e.target.value.replace(/\s+/g, ''))} required placeholder="123456" maxLength={6} className="h-16 text-2xl tracking-[0.5em] text-center bg-slate-50 border-3 border-slate-200 rounded-2xl font-bold placeholder:tracking-normal placeholder:text-slate-300 focus-visible:ring-indigo-500" />
             </div>
             <Button type="submit" className="w-full h-16 text-xl rounded-2xl font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl transition-all hover:-translate-y-1" disabled={loading || adminCode.length < 6}>
               {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Connexion Admin'}

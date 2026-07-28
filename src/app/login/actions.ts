@@ -72,8 +72,9 @@ export async function sendOtp(email: string) {
 }
 
 export async function verifyOtp(email: string, token: string) {
+  const cleanToken = token.replace(/\s+/g, '').trim();
   // Developer bypass for local testing
-  if (process.env.NODE_ENV === 'development' && token === '000000') {
+  if (process.env.NODE_ENV === 'development' && cleanToken === '000000') {
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     const emailLower = email.toLowerCase().trim();
@@ -100,7 +101,7 @@ export async function verifyOtp(email: string, token: string) {
   const emailLower = email.toLowerCase().trim();
   const record = otpStore.get(emailLower);
 
-  if (!record || record.code !== token) {
+  if (!record || record.code !== cleanToken) {
     return { error: 'Code incorrect.' }
   }
 
