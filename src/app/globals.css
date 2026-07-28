@@ -232,3 +232,13 @@ html {
 body {
   letter-spacing: var(--access-letter-spacing) !important;
 }
+
+/* Fix Leaflet marker focus outline on click */
+.leaflet-marker-icon:focus {
+  outline: none !important;
+}
+.leaflet-marker-icon:focus-visible {
+  outline: 3px solid #3b82f6 !important;
+  outline-offset: 4px;
+}
+
