@@ -75,11 +75,16 @@ export async function addStructure(data: any) {
     informations: data.informations?.trim() || '',
     appele: data.appele?.trim() || 'non',
     latitude: data.latitude || null,
-    longitude: data.longitude || null
+    longitude: data.longitude || null,
+    est_itinerant: data.est_itinerant || false,
+    rayon_intervention: data.rayon_intervention ? Number(data.rayon_intervention) : null,
+    verifiedAt: null,
+    enAttenteMaj: false,
   })
 
   await redis.set('handiboost_structures', structures)
   revalidatePath('/admin/annuaire')
+  revalidatePath('/guide-booster')
 }
 
 export async function deleteStructure(id: string) {
@@ -108,9 +113,24 @@ export async function updateStructure(id: string, data: any) {
       appele: data.appele?.trim() || 'non',
       latitude: data.latitude !== undefined ? data.latitude : structures[index].latitude,
       longitude: data.longitude !== undefined ? data.longitude : structures[index].longitude,
-      enAttenteMaj: false
+      est_itinerant: data.est_itinerant ?? structures[index].est_itinerant ?? false,
+      rayon_intervention: data.rayon_intervention != null ? Number(data.rayon_intervention) : (structures[index].rayon_intervention ?? null),
+      enAttenteMaj: false,
     }
     await redis.set('handiboost_structures', structures)
+    revalidatePath('/admin/annuaire')
+    revalidatePath('/guide-booster')
+  }
+}
+
+export async function validateStructure(id: string) {
+  const structures = await getStructures()
+  const index = structures.findIndex((s: any) => s.id === id)
+  if (index !== -1) {
+    structures[index].verifiedAt = new Date().toISOString()
+    structures[index].enAttenteMaj = false
+    await redis.set('handiboost_structures', structures)
+    revalidatePath('/guide-booster')
     revalidatePath('/admin/annuaire')
   }
 }

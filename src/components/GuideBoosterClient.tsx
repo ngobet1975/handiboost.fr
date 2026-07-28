@@ -197,16 +197,26 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
                 </div>
               )}
             </div>
-            <select
-              value={radius}
-              onChange={(e) => setRadius(Number(e.target.value))}
-              className="bg-white border-2 border-slate-300 rounded-xl py-3 px-4 text-lg font-medium focus:outline-none focus:border-blue-500 w-full md:w-auto"
-            >
-              <option value={10}>Rayon : 10 km</option>
-              <option value={30}>Rayon : 30 km</option>
-              <option value={50}>Rayon : 50 km</option>
-              <option value={100}>Rayon : 100 km</option>
-            </select>
+            {/* Curseur rayon */}
+            <div style={{ marginTop: 12 }}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-bold text-slate-600">Rayon de recherche</span>
+                <span className="text-base font-black text-blue-700 bg-blue-50 px-3 py-1 rounded-xl border border-blue-200">{radius} km</span>
+              </div>
+              <input
+                type="range"
+                min={5}
+                max={100}
+                step={5}
+                value={radius}
+                onChange={(e) => setRadius(Number(e.target.value))}
+                className="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-600"
+              />
+              <div className="flex justify-between text-xs text-slate-400 font-medium mt-1">
+                <span>5 km</span>
+                <span>100 km</span>
+              </div>
+            </div>
             <Button type="submit" disabled={isSearchingLocation} className="h-auto py-3 px-6 text-lg font-bold rounded-xl bg-slate-800 hover:bg-slate-900 text-white shadow-md">
               {isSearchingLocation ? 'Recherche...' : 'Filtrer'}
             </Button>
@@ -288,7 +298,7 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
       </div>
 
       <div className="mb-16">
-        <Map structures={filteredMapStructures} />
+        <Map structures={filteredMapStructures} userLocation={userLocation} searchRadius={userLocation ? radius : undefined} />
       </div>
 
       <div className="flex items-center justify-between mb-8">

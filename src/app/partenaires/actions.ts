@@ -1,23 +1,21 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { Redis } from '@upstash/redis'
 import nodemailer from 'nodemailer'
 import { SignJWT } from 'jose'
 
-// ─── Store OTP en mémoire (même pattern que le login pro) ────────────────────
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '',
+  token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '',
+})
+
+const REDIS_KEY = 'handiboost_partners'
+
+// ─── Store OTP en mémoire ────────────────────────────────────────────────────
 const partnerOtpStore = new Map<string, { code: string; expiresAt: number }>()
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function getSupabaseHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-    'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''}`,
-  }
-}
-
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-
+// ─── Email helper ─────────────────────────────────────────────────────────────
 async function sendEmail(to: string, subject: string, html: string) {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -33,28 +31,22 @@ async function sendEmail(to: string, subject: string, html: string) {
   })
 }
 
-// ─── Récupérer un partenaire par email ────────────────────────────────────────
-export async function getPartnerByEmail(email: string) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/partners?email=eq.${encodeURIComponent(email.toLowerCase())}&limit=1`,
-    { headers: getSupabaseHeaders(), cache: 'no-store' }
-  )
-  if (!res.ok) return null
-  const data = await res.json()
-  return data?.[0] || null
+// ─── CRUD Redis ───────────────────────────────────────────────────────────────
+export async function getAllPartners(): Promise<any[]> {
+  const data: any[] | null = await redis.get(REDIS_KEY)
+  return data || []
 }
 
-// ─── Récupérer tous les partenaires (admin) ───────────────────────────────────
-export async function getAllPartners() {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/partners?order=created_at.desc`,
-    { headers: getSupabaseHeaders(), cache: 'no-store' }
-  )
-  if (!res.ok) return []
-  return await res.json()
+export async function getPartnerByEmail(email: string): Promise<any | null> {
+  const all = await getAllPartners()
+  return all.find((p) => p.email === email.toLowerCase().trim()) || null
 }
 
-// ─── 1. Inscription / Connexion — envoyer un OTP ──────────────────────────────
+async function saveAllPartners(partners: any[]) {
+  await redis.set(REDIS_KEY, partners)
+}
+
+// ─── 1. Envoyer OTP ──────────────────────────────────────────────────────────
 export async function sendPartnerOtp(email: string) {
   const emailLower = email.toLowerCase().trim()
   const code = Math.floor(100000 + Math.random() * 900000).toString()
@@ -63,7 +55,7 @@ export async function sendPartnerOtp(email: string) {
   try {
     await sendEmail(
       emailLower,
-      'Votre code d\'accès — Espace Partenaires Handiboost',
+      "Votre code d'accès — Espace Partenaires Handiboost",
       `<div style="font-family:sans-serif;text-align:center;padding:30px;color:#334155;">
         <h2 style="color:#1d4ed8;">Espace Partenaires Handiboost</h2>
         <p>Voici votre code de connexion :</p>
@@ -85,15 +77,12 @@ export async function sendPartnerOtp(email: string) {
   return { success: true }
 }
 
-// ─── 2. Vérifier l'OTP et créer une session partenaire ───────────────────────
+// ─── 2. Vérifier OTP + créer session ─────────────────────────────────────────
 export async function verifyPartnerOtp(email: string, token: string) {
   const emailLower = email.toLowerCase().trim()
-
-  // Bypass développement
   if (process.env.NODE_ENV === 'development' && token === '000000') {
     return await createPartnerSession(emailLower)
   }
-
   const record = partnerOtpStore.get(emailLower)
   if (!record || record.code !== token) return { error: 'Code incorrect.' }
   if (Date.now() > record.expiresAt) {
@@ -128,7 +117,7 @@ async function createPartnerSession(email: string) {
   return { success: true, redirect: '/partenaires/dashboard' }
 }
 
-// ─── 3. Sauvegarder / mettre à jour la fiche partenaire ──────────────────────
+// ─── 3. Sauvegarder / mettre à jour la fiche ─────────────────────────────────
 export async function savePartnerProfile(email: string, data: {
   nom_structure: string
   nom_contact: string
@@ -139,38 +128,28 @@ export async function savePartnerProfile(email: string, data: {
   site_web: string
   description: string
   activites: string
+  est_itinerant?: boolean
+  rayon_intervention?: number | null
 }) {
   const emailLower = email.toLowerCase().trim()
-  const existing = await getPartnerByEmail(emailLower)
+  const all = await getAllPartners()
+  const index = all.findIndex((p) => p.email === emailLower)
+  const isNew = index === -1
 
-  let res: Response
-  if (existing) {
-    // UPDATE
-    res = await fetch(
-      `${SUPABASE_URL}/rest/v1/partners?email=eq.${encodeURIComponent(emailLower)}`,
-      {
-        method: 'PATCH',
-        headers: { ...getSupabaseHeaders(), Prefer: 'return=minimal' },
-        body: JSON.stringify(data),
-      }
-    )
+  const entry = isNew
+    ? { id: crypto.randomUUID(), email: emailLower, charte_signee: false, charte_signee_le: null, charte_signee_par: null, created_at: new Date().toISOString(), ...data }
+    : { ...all[index], ...data, updated_at: new Date().toISOString() }
+
+  if (isNew) {
+    all.push(entry)
   } else {
-    // INSERT
-    res = await fetch(`${SUPABASE_URL}/rest/v1/partners`, {
-      method: 'POST',
-      headers: { ...getSupabaseHeaders(), Prefer: 'return=minimal' },
-      body: JSON.stringify({ email: emailLower, ...data }),
-    })
+    all[index] = entry
   }
 
-  if (!res.ok) {
-    const err = await res.text()
-    console.error('Supabase error:', err)
-    return { error: 'Erreur lors de la sauvegarde. Réessayez.' }
-  }
+  await saveAllPartners(all)
 
-  // Notification email à l'admin
-  const action = existing ? 'mis à jour' : 'créé'
+  // Notification admin
+  const action = isNew ? 'créé' : 'mis à jour'
   try {
     await sendEmail(
       'handiboost.contact@gmail.com',
@@ -181,9 +160,9 @@ export async function savePartnerProfile(email: string, data: {
         <table style="border-collapse:collapse;width:100%;margin-top:16px;">
           <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:700;">Email</td><td style="padding:8px;border:1px solid #e2e8f0;">${emailLower}</td></tr>
           <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:700;">Contact</td><td style="padding:8px;border:1px solid #e2e8f0;">${data.nom_contact}</td></tr>
-          <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:700;">Téléphone</td><td style="padding:8px;border:1px solid #e2e8f0;">${data.telephone}</td></tr>
           <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:700;">Ville</td><td style="padding:8px;border:1px solid #e2e8f0;">${data.ville} ${data.code_postal}</td></tr>
           <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:700;">Activités</td><td style="padding:8px;border:1px solid #e2e8f0;">${data.activites}</td></tr>
+          ${data.est_itinerant ? `<tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:700;">Itinérant</td><td style="padding:8px;border:1px solid #e2e8f0;">🚗 Oui — rayon ${data.rayon_intervention} km</td></tr>` : ''}
         </table>
         <p style="margin-top:20px;"><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://handiboost.fr'}/admin/partenaires" style="background:#1d4ed8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">Voir dans l'admin</a></p>
       </div>`
@@ -200,91 +179,64 @@ export async function savePartnerProfile(email: string, data: {
 // ─── 4. Signer la charte ──────────────────────────────────────────────────────
 export async function signCharter(email: string, signataireName: string) {
   const emailLower = email.toLowerCase().trim()
+  const all = await getAllPartners()
+  const index = all.findIndex((p) => p.email === emailLower)
+
   const now = new Date().toISOString()
 
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/partners?email=eq.${encodeURIComponent(emailLower)}`,
-    {
-      method: 'PATCH',
-      headers: { ...getSupabaseHeaders(), Prefer: 'return=minimal' },
-      body: JSON.stringify({
-        charte_signee: true,
-        charte_signee_le: now,
-        charte_signee_par: signataireName,
-      }),
-    }
-  )
+  if (index !== -1) {
+    all[index] = { ...all[index], charte_signee: true, charte_signee_le: now, charte_signee_par: signataireName }
+  } else {
+    // Créer la fiche minimale si elle n'existe pas encore
+    all.push({
+      id: crypto.randomUUID(), email: emailLower,
+      nom_structure: '', nom_contact: signataireName, telephone: '', adresse: '', ville: '', code_postal: '',
+      site_web: '', description: '', activites: '', est_itinerant: false, rayon_intervention: null,
+      charte_signee: true, charte_signee_le: now, charte_signee_par: signataireName,
+      created_at: now,
+    })
+  }
 
-  if (!res.ok) return { error: 'Erreur lors de la signature.' }
+  await saveAllPartners(all)
 
-  // Notification admin
   try {
     await sendEmail(
       'handiboost.contact@gmail.com',
       `✅ Charte signée par ${signataireName} (${emailLower})`,
-      `<div style="font-family:sans-serif;padding:30px;color:#334155;">
-        <h2 style="color:#16a34a;">Charte Handiboost signée !</h2>
-        <p><strong>${signataireName}</strong> (${emailLower}) a signé la Charte Handiboost le <strong>${new Date(now).toLocaleDateString('fr-FR', { dateStyle: 'full' })}</strong>.</p>
-      </div>`
+      `<p><strong>${signataireName}</strong> (${emailLower}) a signé la Charte Handiboost le <strong>${new Date(now).toLocaleDateString('fr-FR', { dateStyle: 'full' })}</strong>.</p>`
     )
-  } catch (e) {
-    console.error('Email admin error:', e)
-  }
-
-  // Notification au partenaire
-  try {
     await sendEmail(
       emailLower,
       '✅ Votre signature de la Charte Handiboost a bien été enregistrée',
       `<div style="font-family:sans-serif;padding:30px;color:#334155;">
         <h2 style="color:#1d4ed8;">Bienvenue dans le Réseau Handiboost !</h2>
-        <p>Bonjour <strong>${signataireName}</strong>,</p>
-        <p>Nous avons bien enregistré votre signature de la Charte Handiboost en date du <strong>${new Date(now).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</strong>.</p>
-        <p>Vous faites désormais officiellement partie du Réseau Handiboost. Vous pouvez dès maintenant compléter votre fiche partenaire depuis votre espace personnel.</p>
-        <p style="margin-top:20px;"><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://handiboost.fr'}/partenaires/dashboard" style="background:#1d4ed8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">Accéder à mon espace</a></p>
+        <p>Nous avons bien enregistré votre signature de la Charte Handiboost le <strong>${new Date(now).toLocaleDateString('fr-FR', { dateStyle: 'long' })}</strong>.</p>
       </div>`
     )
   } catch (e) {
-    console.error('Email partenaire error:', e)
+    console.error('Email error:', e)
   }
 
   revalidatePath('/partenaires/dashboard')
   return { success: true }
 }
 
-// ─── 5. Admin — modifier la fiche d'un partenaire ────────────────────────────
-export async function adminUpdatePartner(id: string, data: Partial<{
-  nom_structure: string
-  nom_contact: string
-  telephone: string
-  adresse: string
-  ville: string
-  code_postal: string
-  site_web: string
-  description: string
-  activites: string
-  charte_signee: boolean
-}>) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/partners?id=eq.${id}`,
-    {
-      method: 'PATCH',
-      headers: { ...getSupabaseHeaders(), Prefer: 'return=minimal' },
-      body: JSON.stringify(data),
-    }
-  )
-  if (!res.ok) return { error: 'Erreur lors de la mise à jour.' }
+// ─── 5. Admin — modifier ─────────────────────────────────────────────────────
+export async function adminUpdatePartner(id: string, data: Partial<any>) {
+  const all = await getAllPartners()
+  const index = all.findIndex((p) => p.id === id)
+  if (index === -1) return { error: 'Partenaire non trouvé.' }
+  all[index] = { ...all[index], ...data, updated_at: new Date().toISOString() }
+  await saveAllPartners(all)
   revalidatePath('/admin/partenaires')
   return { success: true }
 }
 
-// ─── 6. Admin — supprimer un partenaire ──────────────────────────────────────
+// ─── 6. Admin — supprimer ────────────────────────────────────────────────────
 export async function adminDeletePartner(id: string) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/partners?id=eq.${id}`,
-    { method: 'DELETE', headers: getSupabaseHeaders() }
-  )
-  if (!res.ok) return { error: 'Erreur lors de la suppression.' }
+  const all = await getAllPartners()
+  const filtered = all.filter((p) => p.id !== id)
+  await saveAllPartners(filtered)
   revalidatePath('/admin/partenaires')
   return { success: true }
 }

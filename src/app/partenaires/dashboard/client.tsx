@@ -68,6 +68,8 @@ export default function PartnerDashboardClient({
     site_web: initialPartner?.site_web || '',
     description: initialPartner?.description || '',
     activites: initialPartner?.activites || '',
+    est_itinerant: initialPartner?.est_itinerant || false,
+    rayon_intervention: initialPartner?.rayon_intervention || '',
   })
   const [savingFiche, setSavingFiche] = useState(false)
   const [ficheMsg, setFicheMsg] = useState('')
@@ -383,6 +385,34 @@ export default function PartnerDashboardClient({
                 className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-2xl font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none"
                 placeholder="Décrivez votre structure, vos valeurs, vos modalités d'accueil..."
               />
+            </div>
+
+            {/* Itinérant */}
+            <div className="md:col-span-2 border-2 border-orange-100 bg-orange-50 rounded-2xl p-5">
+              <label className="flex items-center gap-3 cursor-pointer mb-1">
+                <input
+                  type="checkbox"
+                  checked={form.est_itinerant as boolean}
+                  onChange={e => setForm(f => ({ ...f, est_itinerant: e.target.checked }))}
+                  className="w-5 h-5 rounded accent-orange-500"
+                />
+                <span className="text-base font-bold text-orange-800">🚗 Notre structure se déplace chez les pratiquants</span>
+              </label>
+              <p className="text-sm text-orange-600 ml-8 mb-3">Si votre club propose des séances à domicile, cochez cette case.</p>
+              {form.est_itinerant && (
+                <div className="ml-8">
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Rayon d'intervention (km)</label>
+                  <input
+                    type="number"
+                    min={1} max={500}
+                    value={form.rayon_intervention as number}
+                    onChange={e => setForm(f => ({ ...f, rayon_intervention: Number(e.target.value) }))}
+                    className="w-40 px-4 py-3 border-2 border-slate-200 rounded-2xl font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                    placeholder="Ex: 30"
+                  />
+                  <span className="ml-2 text-sm text-slate-500 font-medium">km autour de votre adresse</span>
+                </div>
+              )}
             </div>
           </div>
 

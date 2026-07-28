@@ -2,291 +2,263 @@
 
 import React, { useState, useMemo } from 'react';
 import { EventData, EventCard } from './EventCard';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Calendar, MapPin, Users, Activity } from 'lucide-react';
+import { Search, Calendar, MapPin, Users, Activity, X, SlidersHorizontal } from 'lucide-react';
+
+const TODAY_STR = new Date().toISOString().split('T')[0];
+
+const TYPE_PILLS: { value: string; label: string; color: string; bg: string; border: string }[] = [
+  { value: 'sport',              label: '🏆 Sport / Compétition',    color: 'text-blue-700',   bg: 'bg-blue-50',   border: 'border-blue-300' },
+  { value: 'apa',                label: '🏃 Séance APA',             color: 'text-teal-700',   bg: 'bg-teal-50',   border: 'border-teal-300' },
+  { value: 'atelier',            label: '🔧 Atelier pratique',       color: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-300' },
+  { value: 'rencontre',          label: '🎤 Rencontre / Conférence', color: 'text-orange-700', bg: 'bg-orange-50', border: 'border-orange-300' },
+  { value: 'journee-handiboost', label: '✨ Journée Handiboost',    color: 'text-pink-700',   bg: 'bg-pink-50',   border: 'border-pink-300' },
+];
+
+const PUBLIC_PILLS = ["moteur", "sensoriel", "psychique", "cognitif", "mental", "maladies chroniques"];
 
 export function EvenementsClient({ data }: { data: EventData[] }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [hospitalTab, setHospitalTab] = useState<'hors-hopital' | 'ghe'>('hors-hopital');
-  const [monthFilter, setMonthFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [regionFilter, setRegionFilter] = useState('all');
-  const [selectedPublics, setSelectedPublics] = useState<string[]>([]);
-  const [ageFilter, setAgeFilter] = useState('all');
+  const [searchQuery,    setSearchQuery]    = useState('');
+  const [hospitalTab,    setHospitalTab]    = useState<'hors-hopital' | 'ghe'>('hors-hopital');
+  const [typeFilter,     setTypeFilter]     = useState('');
+  const [regionFilter,   setRegionFilter]   = useState('all');
+  const [selectedPublics,setSelectedPublics]= useState<string[]>([]);
+  const [dateFrom,       setDateFrom]       = useState('');
+  const [showFilters,    setShowFilters]    = useState(false);
 
-  const publicOptions = ["moteur", "sensoriel", "psychique", "cognitif", "mental", "maladies chroniques"];
+  const togglePublic = (p: string) =>
+    setSelectedPublics(prev => prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]);
 
-  // Filtrage
-  const filteredData = useMemo(() => {
-    const now = new Date();
-    
-    return data.filter(evt => {
-      // 1. Recherche textuelle
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const text = `${evt.title} ${evt.description} ${evt.city || ''} ${evt.locationName || ''}`.toLowerCase();
-        if (!text.includes(query)) return false;
-      }
-
-      // 2. Filtre Hopital (GHE vs Hors Hopital)
-      const isGHE = evt.title.toLowerCase().includes('ghe') || 
-                    (evt.locationName && evt.locationName.toLowerCase().includes('ghe')) ||
-                    evt.description.toLowerCase().includes('ghe');
-      if (hospitalTab === 'ghe' && !isGHE) return false;
-      if (hospitalTab === 'hors-hopital' && isGHE) return false;
-
-      // 3. Filtre de Mois
-      const evtDate = new Date(evt.startDate);
-      if (monthFilter !== 'all') {
-        if (evtDate.getMonth().toString() !== monthFilter) return false;
-      }
-
-      // 4. Filtre de Type
-      if (typeFilter !== 'all' && evt.eventType !== typeFilter) return false;
-
-      // 5. Filtre de Région
-      if (regionFilter !== 'all' && evt.region !== regionFilter && regionFilter !== 'Toutes les régions') return false;
-
-      // 6. Filtre Public (Multi-choix)
-      if (selectedPublics.length > 0) {
-        if (!evt.publics) return false;
-        // Si un des publics cochés est présent dans l'événement
-        const hasMatchingPublic = selectedPublics.some(p => evt.publics?.includes(p));
-        // On considère que "tous publics" matche tout
-        const isTousPublics = evt.publics.includes('tous publics');
-        if (!hasMatchingPublic && !isTousPublics) return false;
-      }
-
-      // 7. Filtre Âge
-      if (ageFilter !== 'all') {
-        if (!evt.ageCategories || !evt.ageCategories.includes(ageFilter)) return false;
-      }
-
-      return true;
-    }).sort((a, b) => {
-      // Tri par date : les événements à venir les plus proches d'abord.
-      // Les événements passés : les plus récents d'abord.
-      const dateA = new Date(a.startDate).getTime();
-      const dateB = new Date(b.startDate).getTime();
-      
-      if (monthFilter !== 'all') {
-        // If a specific month is selected, just sort naturally (already done below)
-      } else {
-        // Just sort nearest events first
-      }
-      return dateA - dateB; // Croissant pour les futurs
-    });
-  }, [data, searchQuery, hospitalTab, monthFilter, typeFilter, regionFilter, selectedPublics, ageFilter]);
-
-  const typeLabels: Record<string, string> = {
-    all: "Tous les types",
-    sport: "Sport / Compétition",
-    apa: "Séance APA",
-    atelier: "Atelier pratique",
-    rencontre: "Rencontre / Conférence",
-    "journee-handiboost": "Journée Handiboost"
+  const resetAll = () => {
+    setSearchQuery(''); setTypeFilter(''); setRegionFilter('all');
+    setSelectedPublics([]); setDateFrom('');
   };
 
+  const activeCount = [searchQuery, typeFilter, regionFilter !== 'all', dateFrom, selectedPublics.length > 0].filter(Boolean).length;
+
+  const filteredData = useMemo(() => {
+    return data.filter(evt => {
+      // Recherche textuelle
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const text = `${evt.title} ${evt.description} ${evt.city || ''} ${evt.locationName || ''}`.toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      // Onglet hôpital
+      const isGHE = evt.title.toLowerCase().includes('ghe') ||
+        (evt.locationName && evt.locationName.toLowerCase().includes('ghe')) ||
+        evt.description.toLowerCase().includes('ghe');
+      if (hospitalTab === 'ghe' && !isGHE) return false;
+      if (hospitalTab === 'hors-hopital' && isGHE) return false;
+      // Filtre type
+      if (typeFilter && evt.eventType !== typeFilter) return false;
+      // Filtre région
+      if (regionFilter !== 'all' && evt.region !== regionFilter) return false;
+      // Filtre public
+      if (selectedPublics.length > 0) {
+        const isTousPublics = evt.publics?.includes('tous publics');
+        const hasMatch = selectedPublics.some(p => evt.publics?.includes(p));
+        if (!hasMatch && !isTousPublics) return false;
+      }
+      // Filtre date à partir de
+      if (dateFrom && new Date(evt.startDate) < new Date(dateFrom)) return false;
+      return true;
+    });
+  }, [data, searchQuery, hospitalTab, typeFilter, regionFilter, selectedPublics, dateFrom]);
+
   return (
-    <div className="flex flex-col lg:flex-row gap-8">
-      {/* Sidebar Filtres */}
-      <aside className="w-full lg:w-1/3 xl:w-1/4 flex flex-col gap-6">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border-2 border-slate-100 sticky top-32">
-          <h2 className="text-xl font-extrabold text-slate-800 mb-6 flex items-center gap-2">
-            <Search className="w-5 h-5" />
-            Trouver un événement
-          </h2>
+    <div>
+      {/* ── Onglets hôpital ─────────────────────────────────────────────── */}
+      <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-8 gap-2">
+        {[
+          { key: 'hors-hopital', label: '🏟️ Événements grand public' },
+          { key: 'ghe',          label: '🏥 Événements GHE (hôpital)' },
+        ].map(t => (
+          <button
+            key={t.key}
+            onClick={() => setHospitalTab(t.key as any)}
+            className={`flex-1 py-4 px-4 rounded-xl font-bold text-base transition-all ${
+              hospitalTab === t.key
+                ? 'bg-white shadow-lg text-blue-700 ring-2 ring-blue-100'
+                : 'text-slate-600 hover:text-slate-800 hover:bg-white/60'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
 
-          <div className="space-y-6">
-            {/* Recherche textuelle */}
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-600">Mots-clés</label>
-              <Input 
-                placeholder="Ex: natation, Lyon, atelier..." 
-                className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* ── Sidebar filtres ──────────────────────────────────────────────── */}
+        <aside className="w-full lg:w-72 flex-shrink-0">
+          <div className="bg-white rounded-3xl shadow-sm border-2 border-slate-100 overflow-hidden sticky top-24">
+            {/* En-tête sidebar */}
+            <div className="bg-gradient-to-r from-blue-700 to-blue-800 px-6 py-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-white font-black text-lg flex items-center gap-2">
+                  <SlidersHorizontal className="w-5 h-5" /> Filtres
+                </h2>
+                {activeCount > 0 && (
+                  <button onClick={resetAll} className="text-blue-200 hover:text-white text-sm font-bold flex items-center gap-1">
+                    <X className="w-3.5 h-3.5" /> Effacer ({activeCount})
+                  </button>
+                )}
+              </div>
+              {/* Compteur résultats */}
+              <p className="text-blue-100 text-sm font-medium mt-1">
+                {filteredData.length} événement{filteredData.length !== 1 ? 's' : ''} à venir
+              </p>
             </div>
 
-            {/* Filtre Mois */}
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <Calendar className="w-4 h-4" /> Mois de l'année
-              </label>
-              <Select value={monthFilter} onValueChange={(v) => setMonthFilter(v || "all")}>
-                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-800 capitalize">
-                  <SelectValue>{monthFilter === 'all' ? 'Tous les mois' : new Date(2000, parseInt(monthFilter), 1).toLocaleString('fr-FR', { month: 'long' })}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les mois</SelectItem>
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <SelectItem key={i} value={i.toString()} className="capitalize">{new Date(2000, i, 1).toLocaleString('fr-FR', { month: 'long' })}</SelectItem>
+            <div className="p-5 space-y-6">
+              {/* Recherche */}
+              <div>
+                <label className="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                  Recherche libre
+                </label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    placeholder="Nom, ville, description..."
+                    className="w-full pl-9 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                  />
+                  {searchQuery && (
+                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* À partir du */}
+              <div>
+                <label className="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" /> À partir du
+                </label>
+                <input
+                  type="date"
+                  min={TODAY_STR}
+                  value={dateFrom}
+                  onChange={e => setDateFrom(e.target.value)}
+                  className="w-full px-3 py-3 border-2 border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                />
+                {dateFrom && (
+                  <button onClick={() => setDateFrom('')} className="text-xs text-blue-600 hover:underline mt-1 font-bold">Effacer la date</button>
+                )}
+              </div>
+
+              {/* Type d'événement */}
+              <div>
+                <label className="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5" /> Type d'événement
+                </label>
+                <div className="flex flex-col gap-1.5">
+                  {TYPE_PILLS.map(t => (
+                    <button
+                      key={t.value}
+                      onClick={() => setTypeFilter(typeFilter === t.value ? '' : t.value)}
+                      className={`text-left px-3 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${
+                        typeFilter === t.value
+                          ? `${t.bg} ${t.border} ${t.color} shadow-sm`
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-100'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
+                </div>
+              </div>
 
-            {/* Filtre Type */}
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <Activity className="w-4 h-4" /> Type d'événement
-              </label>
-              <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v || "all")}>
-                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
-                  <SelectValue>{typeLabels[typeFilter]}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les types</SelectItem>
-                  <SelectItem value="sport">Sport / Compétition</SelectItem>
-                  <SelectItem value="apa">Séance APA</SelectItem>
-                  <SelectItem value="atelier">Atelier pratique</SelectItem>
-                  <SelectItem value="rencontre">Rencontre / Conférence</SelectItem>
-                  <SelectItem value="journee-handiboost">Journée Handiboost</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              {/* Région */}
+              <div>
+                <label className="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5" /> Région
+                </label>
+                <select
+                  value={regionFilter}
+                  onChange={e => setRegionFilter(e.target.value)}
+                  className="w-full px-3 py-3 border-2 border-slate-200 rounded-xl text-sm font-medium bg-white focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                >
+                  <option value="all">Toutes les régions</option>
+                  <option value="Auvergne-Rhône-Alpes">Auvergne-Rhône-Alpes</option>
+                  <option value="Bretagne">Bretagne</option>
+                  <option value="Île-de-France">Île-de-France</option>
+                  <option value="Nouvelle-Aquitaine">Nouvelle-Aquitaine</option>
+                  <option value="Occitanie">Occitanie</option>
+                  <option value="Grand Est">Grand Est</option>
+                  <option value="Hauts-de-France">Hauts-de-France</option>
+                  <option value="Normandie">Normandie</option>
+                  <option value="Pays de la Loire">Pays de la Loire</option>
+                  <option value="PACA">Provence-Alpes-Côte d'Azur</option>
+                </select>
+              </div>
 
-            {/* Filtre Région */}
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <MapPin className="w-4 h-4" /> Région
-              </label>
-              <Select value={regionFilter} onValueChange={(v) => setRegionFilter(v || "all")}>
-                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
-                  <SelectValue>{regionFilter === 'all' ? 'Toutes les régions' : regionFilter}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Toutes les régions</SelectItem>
-                  <SelectItem value="Auvergne-Rhône-Alpes">Auvergne-Rhône-Alpes</SelectItem>
-                  <SelectItem value="Bretagne">Bretagne</SelectItem>
-                  <SelectItem value="Île-de-France">Île-de-France</SelectItem>
-                  <SelectItem value="Nouvelle-Aquitaine">Nouvelle-Aquitaine</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Filtre Public Concerné (Cases à cocher) */}
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <Users className="w-4 h-4" /> Public (handicaps)
-              </label>
-              <div className="grid grid-cols-1 gap-2">
-                {publicOptions.map(option => (
-                  <label key={option} className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border-2 border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
-                    <input 
-                      type="checkbox" 
-                      className="w-5 h-5 rounded text-blue-600 focus:ring-blue-500 border-gray-300"
-                      checked={selectedPublics.includes(option)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedPublics([...selectedPublics, option]);
-                        } else {
-                          setSelectedPublics(selectedPublics.filter(p => p !== option));
-                        }
-                      }}
-                    />
-                    <span className="text-slate-700 font-medium capitalize">{option}</span>
-                  </label>
-                ))}
+              {/* Public handicap */}
+              <div>
+                <label className="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5" /> Type de handicap
+                </label>
+                <div className="flex flex-col gap-1.5">
+                  {PUBLIC_PILLS.map(p => (
+                    <label key={p} className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 cursor-pointer transition-all ${
+                      selectedPublics.includes(p)
+                        ? 'bg-teal-50 border-teal-300 text-teal-800'
+                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
+                    }`}>
+                      <input
+                        type="checkbox"
+                        checked={selectedPublics.includes(p)}
+                        onChange={() => togglePublic(p)}
+                        className="w-4 h-4 accent-teal-600 rounded"
+                      />
+                      <span className="text-sm font-bold capitalize">{p}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
+          </div>
+        </aside>
 
-            {/* Filtre Âge */}
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <Users className="w-4 h-4" /> Âge
-              </label>
-              <Select value={ageFilter} onValueChange={(v) => setAgeFilter(v || "all")}>
-                <SelectTrigger className="h-14 text-lg bg-slate-50 border-2 border-slate-200 rounded-xl">
-                  <SelectValue>
-                    {ageFilter === 'all' ? 'Tous les âges' : 
-                     ageFilter === 'enfant' ? 'Enfant' : 
-                     ageFilter === 'adulte' ? 'Adulte' : 
-                     'Senior'}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tous les âges</SelectItem>
-                  <SelectItem value="enfant">Enfant</SelectItem>
-                  <SelectItem value="adulte">Adulte</SelectItem>
-                  <SelectItem value="senior">Senior</SelectItem>
-                </SelectContent>
-              </Select>
+        {/* ── Grille résultats ─────────────────────────────────────────────── */}
+        <main className="flex-1 min-w-0">
+          {/* Résumé + tri */}
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+            <div>
+              <span className="text-2xl font-black text-slate-800">{filteredData.length}</span>
+              <span className="text-xl font-bold text-slate-500 ml-2">
+                événement{filteredData.length !== 1 ? 's' : ''} trouvé{filteredData.length !== 1 ? 's' : ''}
+              </span>
+              {activeCount > 0 && (
+                <span className="ml-3 text-sm font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                  {activeCount} filtre{activeCount > 1 ? 's' : ''} actif{activeCount > 1 ? 's' : ''}
+                </span>
+              )}
             </div>
-            
-            <button 
-              onClick={() => {
-                setSearchQuery('');
-                setMonthFilter('all');
-                setTypeFilter('all');
-                setRegionFilter('all');
-                setSelectedPublics([]);
-                setAgeFilter('all');
-              }}
-              className="w-full text-slate-500 hover:text-slate-800 font-bold underline mt-4"
-            >
-              Réinitialiser les filtres
-            </button>
           </div>
-        </div>
-      </aside>
 
-      {/* Grille Résultats */}
-      <main className="w-full lg:w-2/3 xl:w-3/4">
-        {/* Tabs Hôpital / Hors Hôpital */}
-        <div className="flex bg-slate-200/50 p-1.5 rounded-2xl mb-8">
-          <button
-            onClick={() => setHospitalTab('hors-hopital')}
-            className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all ${hospitalTab === 'hors-hopital' ? 'bg-white shadow-md text-blue-700' : 'text-slate-600 hover:text-slate-800'}`}
-          >
-            Événements hors hôpital
-          </button>
-          <button
-            onClick={() => setHospitalTab('ghe')}
-            className={`flex-1 py-4 px-6 rounded-xl font-bold text-lg transition-all ${hospitalTab === 'ghe' ? 'bg-white shadow-md text-blue-700' : 'text-slate-600 hover:text-slate-800'}`}
-          >
-            Événements de l'hôpital GHE
-          </button>
-        </div>
-
-        {/* Résumé des résultats */}
-        <div className="mb-6 flex items-center justify-between">
-          <p className="text-slate-600 font-bold text-lg">
-            {filteredData.length} événement{filteredData.length > 1 ? 's' : ''} trouvé{filteredData.length > 1 ? 's' : ''}
-          </p>
-        </div>
-
-        {filteredData.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredData.map((evt) => (
-              <EventCard key={evt.id} data={evt} />
-            ))}
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border-2 border-dashed border-slate-300 p-12 text-center">
-            <Calendar className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-slate-800 mb-2">Aucun événement trouvé</h3>
-            <p className="text-lg text-slate-600 mb-6 max-w-md mx-auto">
-              Nous n'avons pas trouvé d'événement correspondant à vos critères.
-            </p>
-            <button 
-              onClick={() => { 
-                setMonthFilter('all'); 
-                setTypeFilter('all'); 
-                setRegionFilter('all'); 
-                setSearchQuery(''); 
-                setSelectedPublics([]);
-                setAgeFilter('all');
-              }}
-              className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-6 rounded-xl transition-colors"
-            >
-              Voir tous les événements à venir
-            </button>
-          </div>
-        )}
-      </main>
+          {filteredData.length > 0 ? (
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              {filteredData.map(evt => <EventCard key={evt.id} data={evt} />)}
+            </div>
+          ) : (
+            <div className="bg-white rounded-3xl border-2 border-dashed border-slate-300 p-16 text-center">
+              <Calendar className="w-20 h-20 text-slate-200 mx-auto mb-6" />
+              <h3 className="text-2xl font-black text-slate-700 mb-3">Aucun événement à venir</h3>
+              <p className="text-slate-500 font-medium mb-8 max-w-sm mx-auto">
+                Aucun événement ne correspond à vos critères de recherche.
+              </p>
+              <button
+                onClick={resetAll}
+                className="bg-blue-700 hover:bg-blue-800 text-white font-black px-8 py-4 rounded-2xl transition-all shadow-md hover:shadow-lg"
+              >
+                Voir tous les événements à venir
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

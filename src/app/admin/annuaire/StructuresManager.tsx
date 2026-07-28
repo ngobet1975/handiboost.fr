@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Plus, Trash2, MapPin } from 'lucide-react'
+import { Plus, Trash2, MapPin, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { addStructure, deleteStructure, updateStructure, addActivite, deleteActivite } from './actions'
 import AddressAutocomplete from '@/components/AddressAutocomplete'
@@ -20,7 +20,8 @@ export default function StructuresManager({ initialStructures, initialActivites 
   const [newActiviteInput, setNewActiviteInput] = useState('')
   const [formData, setFormData] = useState({
     nom: '', activite: '', public: '', site: '', telephone: '', mail: '', informations: '', appele: 'non',
-    adresse: '', latitude: null as number | null, longitude: null as number | null
+    adresse: '', latitude: null as number | null, longitude: null as number | null,
+    est_itinerant: false, rayon_intervention: '' as string | number
   })
 
   function handleEditInit(s: any) {
@@ -28,7 +29,8 @@ export default function StructuresManager({ initialStructures, initialActivites 
     setFormData({
       nom: s.nom || '', activite: s.activite || '', public: s.public || '', site: s.site || '',
       telephone: s.telephone || '', mail: s.mail || '', informations: s.informations || '', appele: s.appele || 'non',
-      adresse: s.adresse || '', latitude: s.latitude, longitude: s.longitude
+      adresse: s.adresse || '', latitude: s.latitude, longitude: s.longitude,
+      est_itinerant: s.est_itinerant || false, rayon_intervention: s.rayon_intervention || ''
     })
   }
 
@@ -36,7 +38,7 @@ export default function StructuresManager({ initialStructures, initialActivites 
     setEditingId(null)
     setFormData({
       nom: '', activite: '', public: '', site: '', telephone: '', mail: '', informations: '', appele: 'non',
-      adresse: '', latitude: null, longitude: null
+      adresse: '', latitude: null, longitude: null, est_itinerant: false, rayon_intervention: ''
     })
   }
 
@@ -53,10 +55,12 @@ export default function StructuresManager({ initialStructures, initialActivites 
     router.refresh()
   }
 
-  const filteredStructures = initialStructures.filter(s => 
-    s.nom.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    (s.activite && s.activite.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
+  const filteredStructures = [...initialStructures]
+    .sort((a, b) => (b.enAttenteMaj ? 1 : 0) - (a.enAttenteMaj ? 1 : 0))
+    .filter(s =>
+      s.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (s.activite && s.activite.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -222,6 +226,31 @@ export default function StructuresManager({ initialStructures, initialActivites 
                 <option value="non">Non</option>
                 <option value="oui">Oui</option>
               </select>
+            </div>
+            {/* Itinérant */}
+            <div className="border-t border-slate-200 pt-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.est_itinerant}
+                  onChange={e => setFormData({...formData, est_itinerant: e.target.checked})}
+                  className="w-5 h-5 rounded accent-orange-500"
+                />
+                <span className="text-sm font-bold text-slate-700">🚗 Ce club se déplace chez les pratiquants</span>
+              </label>
+              {formData.est_itinerant && (
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Rayon d'intervention (km)</label>
+                  <input
+                    type="number"
+                    min={1} max={500}
+                    value={formData.rayon_intervention}
+                    onChange={e => setFormData({...formData, rayon_intervention: e.target.value})}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                    placeholder="Ex: 30"
+                  />
+                </div>
+              )}
             </div>
             <div className="flex gap-3 pt-2">
               <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">

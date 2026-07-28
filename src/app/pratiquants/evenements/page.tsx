@@ -22,11 +22,11 @@ export default async function EvenementsPage() {
     rawEvents = [];
   }
 
-  const twoMonthsAgo = new Date();
-  twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
 
   const data: EventData[] = rawEvents
-    .filter((evt: any) => evt.status === 'published' && new Date(evt.startDate) >= twoMonthsAgo)
+    .filter((evt: any) => evt.status === 'published' && new Date(evt.startDate) >= today)
     .sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
     .map((evt: any) => ({
       id: evt.id,
