@@ -406,7 +406,7 @@ export default function BoostyAssistant() {
         <div role="banner" style={{ position: 'relative', zIndex: 10, background: C.aBar, borderBottom: `1px solid ${C.inpBord}`, backdropFilter: 'blur(16px)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}>
-              <img src="/boosty.png" alt="Boosty" style={{ width: '75%', height: '75%', objectFit: 'contain' }} />
+              <img src="/boosty.png?v=2" alt="Boosty" style={{ width: '75%', height: '75%', objectFit: 'contain' }} />
             </div>
             <div>
               <div style={{ color: C.text, fontWeight: 900, fontSize: '1.1em', lineHeight: 1.2, letterSpacing: '-0.3px' }}>BoostyAssistant</div>
@@ -482,7 +482,7 @@ export default function BoostyAssistant() {
               {msg.role === 'assistant' ? (
                 <div style={{ display: 'flex', gap: 14, maxWidth: '78%' }}>
                   <div aria-hidden="true" style={{ width: 34, height: 34, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
-                    <img src="/boosty.png" alt="Boosty" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
+                    <img src="/boosty.png?v=2" alt="Boosty" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
                   </div>
 
                   <div>
@@ -554,7 +554,7 @@ export default function BoostyAssistant() {
           {loading && (
             <div className="h-slide" style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
               <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
-                <img src="/boosty.png" alt="Boosty" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
+                <img src="/boosty.png?v=2" alt="Boosty" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
               </div>
               <div role="status" aria-label="BoostyAssistant est en train de répondre…" style={{ background: C.aBubble, border: `1px solid ${C.aBorder}`, borderRadius: '6px 20px 20px 20px', padding: '20px 24px', backdropFilter: 'blur(12px)', display: 'flex', gap: 7, alignItems: 'center' }}>
                 {[0,1,2].map(i => <div key={i} className="h-dot" style={{ width: 9, height: 9, borderRadius: '50%', background: C.sub }} />)}
