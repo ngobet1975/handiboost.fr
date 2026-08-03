@@ -5,7 +5,7 @@ import { HandiAssistantLoader } from '@/components/HandiAssistantLoader';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Trouver une activité — HandiAssistant · Handiboost',
+  title: 'Trouver une activité — BoostyAssistant · Handiboost',
   description: 'HandiAssistant vous guide par la conversation pour trouver l\'activité sportive adaptée à votre handicap. Interface accessible : voix, grand texte, contraste élevé.',
   alternates: { canonical: '/pratiquants/ou-pratiquer' },
 };
@@ -35,7 +35,7 @@ export default function OuPratiquerPage() {
             </span>
           </h1>
           <p className="text-slate-600 text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-            HandiAssistant vous guide par la conversation.
+            BoostyAssistant vous guide par la conversation.
             <br />
             <span className="text-slate-500 text-base">Voix, grand texte, contraste élevé — pour tout le monde.</span>
           </p>
