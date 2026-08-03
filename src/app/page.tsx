@@ -62,7 +62,7 @@ export default async function Home() {
                 </p>
               </div>
               <div className="w-48 md:w-1/3 max-w-[250px] mx-auto md:mx-0">
-                 <img src="/mascotte-ia.png" alt="Mascotte Handiboost" className="w-full h-auto object-contain drop-shadow-2xl animate-bounce-slow" />
+                 <img src="/boosty.png" alt="Mascotte Boosty" className="w-full h-auto object-contain drop-shadow-2xl animate-bounce-slow" />
               </div>
             </div>
 
