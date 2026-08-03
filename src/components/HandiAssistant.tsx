@@ -93,11 +93,11 @@ function renderMarkdown(text: string, textColor: string): React.ReactNode {
 // ─────────────────────────────────────────────────────────────────────────────
 // Main component
 // ─────────────────────────────────────────────────────────────────────────────
-export default function HandiAssistant() {
+export default function BoostyAssistant() {
   const [messages, setMessages] = useState<Message[]>([{
     id: 'welcome',
     role: 'assistant',
-    text: 'Bonjour ! 👋 Je suis **HandiAssistant**.\n\nJe suis là pour vous aider à trouver une activité sportive adaptée à votre situation.\n\nComment puis-je vous aider ?',
+    text: 'Bonjour ! 👋 Je suis **BoostyAssistant**.\n\nJe suis là pour vous aider à trouver une activité sportive adaptée à votre situation.\n\nComment puis-je vous aider ?',
   }])
   const [input, setInput]           = useState('')
   const [loading, setLoading]       = useState(false)
@@ -322,7 +322,7 @@ export default function HandiAssistant() {
 
   const reset = () => {
     stopSpeak()
-    setMessages([{ id: 'welcome', role: 'assistant', text: 'Bonjour ! 👋 Je suis **HandiAssistant**.\n\nJe suis là pour vous aider à trouver une activité sportive adaptée à votre situation.\n\nComment puis-je vous aider ?' }])
+    setMessages([{ id: 'welcome', role: 'assistant', text: 'Bonjour ! 👋 Je suis **BoostyAssistant**.\n\nJe suis là pour vous aider à trouver une activité sportive adaptée à votre situation.\n\nComment puis-je vous aider ?' }])
     setInput('')
     setShowQuick(true)
   }
@@ -406,10 +406,10 @@ export default function HandiAssistant() {
         <div role="banner" style={{ position: 'relative', zIndex: 10, background: C.aBar, borderBottom: `1px solid ${C.inpBord}`, backdropFilter: 'blur(16px)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}>
-              <Bot size={20} color="white" />
+              <img src="/boosty.png" alt="Boosty" style={{ width: '75%', height: '75%', objectFit: 'contain' }} />
             </div>
             <div>
-              <div style={{ color: C.text, fontWeight: 900, fontSize: '1.1em', lineHeight: 1.2, letterSpacing: '-0.3px' }}>HandiAssistant</div>
+              <div style={{ color: C.text, fontWeight: 900, fontSize: '1.1em', lineHeight: 1.2, letterSpacing: '-0.3px' }}>BoostyAssistant</div>
               <div style={{ color: C.sub, fontSize: '0.72em', fontWeight: 600 }}>Assistant IA · Sport adapté</div>
             </div>
           </div>
@@ -459,7 +459,7 @@ export default function HandiAssistant() {
         <div
           ref={chatRef}
           role="log"
-          aria-label="Conversation avec HandiAssistant"
+          aria-label="Conversation avec BoostyAssistant"
           aria-live="polite"
           aria-relevant="additions"
           style={{ position: 'relative', zIndex: 5, flex: 1, overflowY: 'auto', padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 24 }}
@@ -481,14 +481,14 @@ export default function HandiAssistant() {
             <div key={msg.id} id={`msg-${msg.id}`} className="h-slide" style={{ scrollMarginTop: '20px' }}>
               {msg.role === 'assistant' ? (
                 <div style={{ display: 'flex', gap: 14, maxWidth: '78%' }}>
-                  <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 4, boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
-                    <Bot size={18} color="white" />
+                  <div aria-hidden="true" style={{ width: 34, height: 34, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
+                    <img src="/boosty.png" alt="Boosty" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
                   </div>
 
                   <div>
                     <div
                       role="article"
-                      aria-label="Réponse de HandiAssistant"
+                      aria-label="Réponse de BoostyAssistant"
                       style={{ background: C.aBubble, border: `1px solid ${C.aBorder}`, borderRadius: '6px 20px 20px 20px', padding: '16px 20px', backdropFilter: contrast ? 'none' : 'blur(12px)', color: C.text, lineHeight: 1.65 }}>
                       {renderMarkdown(cleanText, C.text)}
                     </div>
@@ -554,9 +554,9 @@ export default function HandiAssistant() {
           {loading && (
             <div className="h-slide" style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
               <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 14px rgba(99,102,241,0.35)' }}>
-                <Bot size={18} color="white" />
+                <img src="/boosty.png" alt="Boosty" style={{ width: '70%', height: '70%', objectFit: 'contain' }} />
               </div>
-              <div role="status" aria-label="HandiAssistant est en train de répondre…" style={{ background: C.aBubble, border: `1px solid ${C.aBorder}`, borderRadius: '6px 20px 20px 20px', padding: '20px 24px', backdropFilter: 'blur(12px)', display: 'flex', gap: 7, alignItems: 'center' }}>
+              <div role="status" aria-label="BoostyAssistant est en train de répondre…" style={{ background: C.aBubble, border: `1px solid ${C.aBorder}`, borderRadius: '6px 20px 20px 20px', padding: '20px 24px', backdropFilter: 'blur(12px)', display: 'flex', gap: 7, alignItems: 'center' }}>
                 {[0,1,2].map(i => <div key={i} className="h-dot" style={{ width: 9, height: 9, borderRadius: '50%', background: C.sub }} />)}
               </div>
             </div>
@@ -597,7 +597,7 @@ export default function HandiAssistant() {
             {/* ── Textarea ─────────────────────────────────────────────────── */}
             <div style={{ flex: 1, position: 'relative' }}>
               <label htmlFor="handi-input" className="sr-only" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
-                Votre message à HandiAssistant. Appuyez sur Entrée pour envoyer.
+                Votre message à BoostyAssistant. Appuyez sur Entrée pour envoyer.
               </label>
               <textarea
                 id="handi-input"
