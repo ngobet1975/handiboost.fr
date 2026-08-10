@@ -5,22 +5,7 @@ import { HomeSearchBar } from '@/components/HomeSearchBar'
 import { NewsletterPopup } from '@/components/NewsletterPopup'
 import { getArticles } from '@/app/admin/articles/actions'
 
-const defilementImages = [
-  "Capture d’écran 2026-05-18 225414.png",
-  "Capture d’écran 2026-05-18 225450.png",
-  "Capture d’écran 2026-05-18 225501.png",
-  "Capture d’écran 2026-05-18 225512.png",
-  "Capture d’écran 2026-05-18 225523.png",
-  "Capture d’écran 2026-05-18 225534.png",
-  "Capture d’écran 2026-05-18 225545.png",
-  "Capture d’écran 2026-05-18 225556.png",
-  "Capture d’écran 2026-05-18 225607.png",
-  "Capture d’écran 2026-05-18 225617.png",
-  "Capture d’écran 2026-05-18 225628.png",
-  "Capture d’écran 2026-05-18 225638.png",
-  "Capture d’écran 2026-05-18 225649.png",
-  "Capture d’écran 2026-05-18 225700.png"
-];
+const defilementImages = Array.from({ length: 15 }, (_, i) => `${i + 1}.png`);
 
 const images1 = defilementImages;
 const images2 = [...defilementImages.slice(5), ...defilementImages.slice(0, 5)];
@@ -109,7 +94,7 @@ export default async function Home() {
                     <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-sky-100 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '45s' }}>
                         {[...images1, ...images1].map((img, idx) => (
-                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3}s` }} />
                         ))}
                       </div>
                     </div>
@@ -130,7 +115,7 @@ export default async function Home() {
                     <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-orange-100 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '38s', animationDelay: '-15s' }}>
                         {[...images2, ...images2].map((img, idx) => (
-                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3 + 0.4}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.4}s` }} />
                         ))}
                       </div>
                     </div>
@@ -151,7 +136,7 @@ export default async function Home() {
                     <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-pink-100 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '50s', animationDelay: '-5s' }}>
                         {[...images3, ...images3].map((img, idx) => (
-                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3 + 0.8}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.8}s` }} />
                         ))}
                       </div>
                     </div>
@@ -172,7 +157,7 @@ export default async function Home() {
                     <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-purple-100 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '42s', animationDelay: '-25s' }}>
                         {[...images4, ...images4].map((img, idx) => (
-                          <img key={idx} src={`/defilement/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 14) * 0.3 + 1.2}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 1.2}s` }} />
                         ))}
                       </div>
                     </div>
