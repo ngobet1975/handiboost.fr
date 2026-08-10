@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { ArrowRight, BookOpen, FileText, HeartHandshake, ShieldCheck, Stethoscope } from 'lucide-react';
+import { ArrowRight, FileText, HeartHandshake, ShieldCheck, Stethoscope } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Espace Professionnels | Handiboost',
@@ -18,7 +18,8 @@ export default function ProfessionnelsHubPage() {
       description: "Comprendre les étapes et trouver les ressources utiles.",
       href: "/professionnels/prescription-apa",
       icon: <Stethoscope className="h-10 w-10 text-white" />,
-      colorClass: "bg-blue-800 hover:bg-blue-900 border-blue-900",
+      bg: "#1566B1",
+      buttonBg: "#3B89D1",
       textColor: "text-white",
       buttonText: "Voir l'aide à la prescription"
     },
@@ -27,7 +28,8 @@ export default function ProfessionnelsHubPage() {
       description: "Accéder à l'annuaire réservé aux professionnels.",
       href: "/professionnels/guide-booster",
       icon: <ShieldCheck className="h-10 w-10 text-white" />,
-      colorClass: "bg-purple-700 hover:bg-purple-800 border-purple-800",
+      bg: "#ED1B5F",
+      buttonBg: "#E96282",
       textColor: "text-white",
       buttonText: "Accéder au Guide Booster"
     },
@@ -36,7 +38,8 @@ export default function ProfessionnelsHubPage() {
       description: "Retrouver tests, questionnaires et supports pédagogiques.",
       href: "/professionnels/outils-accompagnement",
       icon: <HeartHandshake className="h-10 w-10 text-white" />,
-      colorClass: "bg-sky-600 hover:bg-sky-700 border-sky-700",
+      bg: "#FBA91C",
+      buttonBg: "#FFBD4B",
       textColor: "text-white",
       buttonText: "Voir les outils"
     },
@@ -45,25 +48,17 @@ export default function ProfessionnelsHubPage() {
       description: "Consulter les textes et recommandations officielles.",
       href: "/professionnels/references",
       icon: <FileText className="h-10 w-10 text-white" />,
-      colorClass: "bg-orange-600 hover:bg-orange-700 border-orange-700",
+      bg: "#654B9E",
+      buttonBg: "#8F77C4",
       textColor: "text-white",
       buttonText: "Consulter les références"
-    },
-    {
-      title: "Formateurs",
-      description: "Trouver un formateur pour accompagner les clubs et structures sportives.",
-      href: "/professionnels/formateurs",
-      icon: <BookOpen className="h-10 w-10 text-white" />,
-      colorClass: "bg-pink-600 hover:bg-pink-700 border-pink-700",
-      textColor: "text-white",
-      buttonText: "Trouver un formateur"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-slate-50 pb-20 relative overflow-hidden">
       {/* Fil d'Ariane */}
-      <div className="bg-white border-b border-slate-200 py-4 px-6">
+      <div className="bg-white border-b border-slate-200 py-4 px-6 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center gap-2 text-lg font-bold text-slate-500">
           <Link href="/" className="hover:text-blue-800 hover:underline transition-all">Accueil</Link>
           <span>&gt;</span>
@@ -71,7 +66,7 @@ export default function ProfessionnelsHubPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16">
+      <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16 relative z-10">
         
         {/* Hero Section */}
         <section className="mb-16 text-center max-w-4xl mx-auto">
@@ -84,12 +79,13 @@ export default function ProfessionnelsHubPage() {
         </section>
 
         {/* Grille de Cartes */}
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 mb-20">
           {cards.map((card, idx) => (
             <Link 
               key={idx} 
               href={card.href}
-              className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg border-b-8 transition-all hover:-translate-y-2 hover:shadow-2xl ${card.colorClass}`}
+              className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl`}
+              style={{ backgroundColor: card.bg }}
             >
               <div>
                 <div className="mb-8">
@@ -103,7 +99,10 @@ export default function ProfessionnelsHubPage() {
                 </p>
               </div>
               <div className={`mt-10 flex justify-start ${card.textColor}`}>
-                <div className="bg-white/20 px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-3 group-hover:bg-white/40 transition-colors">
+                <div 
+                  className="px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-3 transition-transform group-hover:scale-105"
+                  style={{ backgroundColor: card.buttonBg }}
+                >
                   {card.buttonText}
                   <ArrowRight className="h-6 w-6" />
                 </div>

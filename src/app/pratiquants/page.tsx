@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight, Activity, Heart, Brain, Bone, Eye, Dumbbell, Smile, Ribbon, PersonStanding, Apple, Users, Flower, Sun, HeartPulse } from 'lucide-react';
+import { MapPin, Calendar, Coins, Stethoscope, Lightbulb, ArrowRight, Activity, Heart, Brain, Bone, Eye, Dumbbell, Ribbon, PersonStanding, Apple, Users, Flower, Sun, HeartPulse } from 'lucide-react';
 import fs from 'fs';
 import path from 'path';
 
@@ -48,66 +48,51 @@ export default async function PratiquantsHubPage() {
 
   const cards = [
     {
-      title: "Trouver une activité",
-      description: "Trouver une activité, un club, un enseignant en APA ou un kiné près de chez vous.",
+      title: "Trouver une activité physique",
+      description: "Trouver un club, une maison sport santé, un enseignant en APA et/ou un kiné près de chez vous.",
       href: "/pratiquants/ou-pratiquer",
-      icon: <MapPin className="h-8 w-8" />,
-      theme: {
-        iconBg: "bg-blue-100 text-blue-700",
-        hoverBorder: "hover:border-blue-400",
-        hoverArrow: "group-hover:bg-blue-600 group-hover:text-white"
-      }
+      bg: "#1566B1",
+      buttonBg: "#3B89D1",
+      buttonText: "Trouver une activité"
     },
     {
-      title: "Lire les conseils",
-      description: "Lire nos fiches conseils & activité physique pour pratiquer en toute sécurité.",
-      href: "/pratiquants/conseils-par-pathologie",
-      icon: <Stethoscope className="h-8 w-8" />,
-      theme: {
-        iconBg: "bg-purple-100 text-purple-700",
-        hoverBorder: "hover:border-purple-400",
-        hoverArrow: "group-hover:bg-purple-600 group-hover:text-white"
-      }
-    },
-    {
-      title: "Voir les aides",
-      description: "Comprendre comment financer votre pratique sportive.",
-      href: "/pratiquants/aides-financieres",
-      icon: <Coins className="h-8 w-8" />,
-      theme: {
-        iconBg: "bg-sky-100 text-sky-700",
-        hoverBorder: "hover:border-sky-400",
-        hoverArrow: "group-hover:bg-sky-600 group-hover:text-white"
-      }
-    },
-    {
-      title: "Voir les événements",
-      description: "Découvrir les ateliers, rencontres et événements sportifs à venir.",
+      title: "Trouver un événement sportif",
+      description: "Découvrir les événements sportifs adaptés proche de chez vous.",
       href: "/pratiquants/evenements",
-      icon: <Calendar className="h-8 w-8" />,
-      theme: {
-        iconBg: "bg-orange-100 text-orange-700",
-        hoverBorder: "hover:border-orange-400",
-        hoverArrow: "group-hover:bg-orange-600 group-hover:text-white"
-      }
+      bg: "#ED1B5F",
+      buttonBg: "#E96282",
+      buttonText: "Voir l'agenda"
     },
     {
-      title: "Faire le quiz",
-      description: "Faire le quiz pour tout savoir sur l'Activité Physique Adaptée.",
+      title: "Conseils pour la pratique d'une activité physique",
+      description: "Lire nos fiches conseils pour en apprendre plus sur votre pathologie et votre pratique d'activité physique.",
+      href: "/pratiquants/conseils-par-pathologie",
+      bg: "#FBA91C",
+      buttonBg: "#FFBD4B",
+      buttonText: "Voir les fiches"
+    },
+    {
+      title: "Aides financières à la pratique d'activité physique",
+      description: "Découvrir les aides existantes pour votre pratique d'activité physique.",
+      href: "/pratiquants/aides-financieres",
+      bg: "#654B9E",
+      buttonBg: "#8F77C4",
+      buttonText: "Voir les aides"
+    },
+    {
+      title: "Tester vos connaissances sur l'activité physique",
+      description: "Faire les quiz pour tout savoir sur l'Activité Physique Adaptée, la sédentarité, les recommandations ...",
       href: "/pratiquants/tester-ses-connaissances",
-      icon: <Lightbulb className="h-8 w-8" />,
-      theme: {
-        iconBg: "bg-pink-100 text-pink-700",
-        hoverBorder: "hover:border-pink-400",
-        hoverArrow: "group-hover:bg-pink-600 group-hover:text-white"
-      }
+      bg: "#38B2AC",
+      buttonBg: "#4FD1C5",
+      buttonText: "Voir les tests"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-slate-50 pb-20 relative overflow-hidden">
       {/* Fil d'Ariane */}
-      <div className="bg-white border-b border-slate-200 py-4 px-6">
+      <div className="bg-white border-b border-slate-200 py-4 px-6 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center gap-2 text-lg font-bold text-slate-500">
           <Link href="/" className="hover:text-blue-800 hover:underline transition-all">Accueil</Link>
           <span>&gt;</span>
@@ -115,7 +100,7 @@ export default async function PratiquantsHubPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16">
+      <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16 relative z-10">
         
         {/* Hero Section */}
         <section className="mb-16 text-center max-w-4xl mx-auto">
@@ -123,36 +108,37 @@ export default async function PratiquantsHubPage() {
             Espace Pratiquants
           </h1>
           <p className="text-2xl text-slate-700 font-medium leading-relaxed">
-            Trouvez rapidement une activité sportive, un événement près de chez vous, ou des conseils pour bouger en toute sécurité.
+            Trouvez rapidement une activité physique, un événement près de chez vous, ou des conseils pour bouger en toute sécurité.
           </p>
         </section>
 
         {/* ═══════════════════════════════════════════════ */}
         {/* Grille de Cartes Navigation — Accès rapide EN PREMIER */}
         {/* ═══════════════════════════════════════════════ */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Accès rapide</h2>
+        <section className="mb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
             {cards.map((card, idx) => (
               <Link 
                 key={idx} 
                 href={card.href}
-                className={`group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] bg-white border-2 border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${card.theme.hoverBorder}`}
+                className="group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden"
+                style={{ backgroundColor: card.bg }}
               >
-                <div>
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${card.theme.iconBg}`}>
-                    {card.icon}
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-extrabold mb-4 text-slate-900 group-hover:text-slate-950 transition-colors">
+                <div className="relative z-10">
+                  <h2 className="text-3xl font-extrabold mb-6 text-white leading-tight">
                     {card.title}
                   </h2>
-                  <p className="text-lg md:text-xl font-medium text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors">
+                  <p className="text-xl font-medium text-white/90 leading-relaxed mb-8">
                     {card.description}
                   </p>
                 </div>
-                <div className="mt-10 flex justify-end">
-                  <div className={`p-4 rounded-full bg-slate-50 text-slate-400 transition-all duration-300 shadow-sm ${card.theme.hoverArrow}`}>
-                    <ArrowRight className="h-8 w-8" />
+                <div className="mt-auto flex justify-end relative z-10">
+                  <div 
+                    className="px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-3 text-white transition-transform group-hover:scale-105"
+                    style={{ backgroundColor: card.buttonBg }}
+                  >
+                    {card.buttonText}
+                    <ArrowRight className="h-6 w-6" />
                   </div>
                 </div>
               </Link>

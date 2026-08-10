@@ -3,26 +3,41 @@
     "id": "sclerose-en-plaques",
     "slug": "sclerose-en-plaques",
     "title": "Sclérose en plaques",
-    "description": "Sclérose en plaques : pourquoi pratiquer une activité physique adaptée ? Article initialement réalisé par Estelle Durand, Enseignante en APA.",
+    "subtitle": "Article réalisé par Estelle Durand – Enseignante en APA à l’hôpital Pierre Wertheimer de Bron",
+    "description": "LA SEP EN BREF :\nLa sclérose en plaques (SEP) est une maladie inflammatoire chronique et auto-immune du système nerveux central.\n\nElle touche le cerveau et la moelle épinière, provoquant des lésions qui perturbent la transmission des informations entre le cerveau et le reste du corps.\n\nEn France, plus de 130 000 personnes vivent avec la SEP, avec un diagnostic souvent posé entre 25 et 35 ans. La maladie concerne 3 femmes pour 1 homme.\n\nLa SEP constitue la première cause de handicap neurologique non traumatique chez l’adulte jeune.\n\nLes symptômes les plus fréquents :\n• Fatigue chronique\n• Faiblesse musculaire\n• Troubles de l’équilibre et de la coordination\n• Spasticité (raideurs, spasmes musculaires)\n• Troubles cognitifs, visuels, urinaires et parfois sexuels\n\nLa maladie évolue différemment d’une personne à l’autre : sous forme de poussées suivies de rémissions (dans 85 % des cas) ou de manière progressive.\n\nAujourd’hui, bien qu’aucun traitement ne permette de guérir la maladie, une prise en charge précoce et multidisciplinaire – incluant traitements médicamenteux, rééducation et activité physique adaptée (APA) – s’avère essentielle pour limiter les séquelles et maintenir la qualité de vie.",
+    "benefits_intro": "Activité physique : alliée et non ennemie\n\nLongtemps exclue, l’activité physique adaptée (APA) est aujourd’hui fortement recommandée par la Haute Autorité de Santé (HAS). Elle a pour objectif d’améliorer la qualité de vie, l’autonomie et la participation sociale des personnes atteintes de SEP.",
     "benefits": [
-      "Améliore la condition physique générale",
-      "Aide à lutter contre la fatigue (à faire valider médicalement)"
+      "Elle ne déclenche pas de poussées",
+      "Elle réduit la fatigue",
+      "Elle améliore la force musculaire, l’équilibre et la mobilité",
+      "Elle prévient les complications (spasticité, troubles sphinctériens, escarres…)",
+      "Elle aide à renforcer la participation sociale"
     ],
+    "benefits_outro": "L’APA est désormais considérée comme un véritable traitement non médicamenteux de la SEP.",
+    "precautions_intro": "Aides pratiques pour bien commencer",
     "precautions": [
-      "Adapter l'intensité selon l'état de fatigue du jour",
-      "Éviter la pratique en cas de forte chaleur"
+      "Écouter son corps : s’arrêter en cas de douleur ou de grande fatigue.",
+      "Hydratation régulière : la SEP peut accentuer les problèmes de régulation thermique.",
+      "Être accompagné : un enseignant en activité physique adaptée (EAPA) peut aider à personnaliser le programme.",
+      "Privilégier la régularité : mieux vaut 20 minutes plusieurs fois par semaine qu’une grosse séance épuisante."
     ],
+    "recommendedActivities_intro": "Quelles activités privilégier ?\n\nPas besoin d’être sportif de haut niveau pour profiter des bienfaits de l’APA.\nL’essentiel est de bouger régulièrement, en adaptant l’intensité et la durée à son niveau d’énergie.\nLe mix gagnant : L’association de renforcement musculaire et d’activité d’endurance est recommandée pour optimiser les effets sur la fatigue et la condition physique.",
     "recommendedActivities": [
-      "Marche, renforcement musculaire doux (à préciser par le médecin)"
+      "Renforcement musculaire : 2 à 3 fois par semaine (poids du corps, petits haltères)",
+      "Activité d’endurance : marche, vélo, natation, 30 min à intensité modérée, 2 à 3 fois par semaine.",
+      "Étirements et mobilité : pour limiter les raideurs, tous les jours de la semaine si possible ou autant de fois.",
+      "Exercices d’équilibre et de coordination : régulièrement, pour prévenir les chutes."
     ],
+    "recommendedActivities_outro": "Des activités douces comme le Pilates, le yoga, l’équitation ou la balnéothérapie montrent également des effets positifs.",
+    "resources_intro": "Le Centre de Ressources et de Compétences Sclérose en Plaques propose plusieurs ressources pour accompagner votre pratique d’activité physique adaptée :\n\n• Brochures et guides sur l’activité physique et la SEP (FranceSEP, ExoSEP, Sport et SEP)\n• Applications et podcasts sur le mouvement et l’exercice quotidien\n• Webinaires et conseils pratiques\n• Vidéo YouTube pour réaliser des exercices à la maison",
     "resources": [
       {
-        "label": "Consulter un médecin pour un avis personnalisé",
-        "url": "/professionnels",
+        "label": "Accéder aux ressources",
+        "url": "https://www.chu-bordeaux.fr/Les-unit%C3%A9s-m%C3%A9dicales/Centre-de-ressources-et-de-comp%C3%A9tences-SEP-%28CRCSEP%29/Vie-quotidienne/Activit%C3%A9-physique-et-sport/",
         "type": "link"
       }
     ],
-    "validationStatus": "to-review",
+    "validationStatus": "validated",
     "oldUrls": ["/sclerose-en-plaque/"]
   },
   {
