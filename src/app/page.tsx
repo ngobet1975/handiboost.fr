@@ -39,7 +39,7 @@ export default async function Home() {
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1]">
                   L&apos;Activité Physique Adaptée,<br />
                   <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-                    pour la santé de tous.
+                    accessible à tous.
                   </span>
                 </h1>
                 <p className="text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto md:mx-0 leading-relaxed font-medium mt-6">
