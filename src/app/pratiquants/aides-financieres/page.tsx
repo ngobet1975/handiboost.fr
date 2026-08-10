@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { AideCard, AideData } from '@/components/AideCard';
 import { Button } from '@/components/ui/button';
-import { Landmark, ShieldPlus, Heart, Building, Users } from 'lucide-react';
+import { Search } from 'lucide-react';
 import fs from 'fs';
 import path from 'path';
 
@@ -14,14 +14,6 @@ export const metadata: Metadata = {
     canonical: '/pratiquants/aides-financieres',
   }
 };
-
-const CATEGORIES = [
-  { id: 'etat', title: 'Aides Nationales (État)', icon: <Landmark className="w-8 h-8 text-blue-700" />, desc: "Aides forfaitaires versées par l'État pour tous." },
-  { id: 'mdph', title: 'Aides liées au Handicap (MDPH)', icon: <ShieldPlus className="w-8 h-8 text-purple-700" />, desc: "Aides spécifiques pour le surcoût lié au handicap (matériel, aide humaine)." },
-  { id: 'mutuelle', title: 'Mutuelles & Complémentaires Santé', icon: <Heart className="w-8 h-8 text-teal-700" />, desc: "Remboursements du Sport sur Ordonnance (APA)." },
-  { id: 'collectivite', title: 'Aides Locales (Régions, Départements)', icon: <Building className="w-8 h-8 text-orange-700" />, desc: "Coupons sport et aides spécifiques à votre territoire." },
-  { id: 'association', title: 'Aides Associatives et Clubs', icon: <Users className="w-8 h-8 text-pink-700" />, desc: "Fonds de dotation et aides internes des fédérations." }
-];
 
 export default async function AidesFinancieresPage() {
   let rawAides: any[] = [];
@@ -36,7 +28,7 @@ export default async function AidesFinancieresPage() {
     title: item.title,
     slug: item.slug,
     description: item.description ?? "",
-    category: "etat",
+    category: item.category || "etat",
     eligibility: item.conditions ?? [],
     amountLabel: item.amount,
     externalUrl: item.resources?.[0]?.url,
@@ -44,88 +36,82 @@ export default async function AidesFinancieresPage() {
     status: "published"
   }));
 
-  // Regroupement des aides par catégorie
-  const aidesByCategory = CATEGORIES.map(cat => ({
-    ...cat,
-    aides: allAides.filter(aide => aide.category === cat.id && aide.status === 'published')
-  })).filter(cat => cat.aides.length > 0);
-
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
-      {/* Fil d'Ariane */}
-      <div className="bg-white border-b border-slate-200 py-4 px-6">
-        <div className="max-w-7xl mx-auto flex items-center gap-2 text-lg font-bold text-slate-500">
-          <Link href="/" className="hover:text-blue-800 hover:underline transition-all">Accueil</Link>
-          <span>&gt;</span>
-          <Link href="/pratiquants" className="hover:text-blue-800 hover:underline transition-all">Pratiquants</Link>
-          <span>&gt;</span>
-          <span className="text-slate-800">Aides Financières</span>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 mt-8 pt-8 md:mt-12 md:pt-16">
-        {/* Hero Section */}
-        <section className="mb-16 text-center max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-black text-slate-900 mb-6 leading-tight">
-            Financer sa pratique <span className="text-blue-700">sportive adaptée</span>
-          </h1>
-          <div className="mt-8 bg-blue-50 border border-blue-200 text-slate-800 p-6 md:p-8 rounded-2xl text-left shadow-sm">
-            <p className="text-xl md:text-2xl font-medium leading-relaxed">
-              Certaines aides peuvent financer une activité physique adaptée. Les conditions changent selon votre situation. Vérifiez toujours les informations sur le site officiel.
+    <div className="min-h-screen bg-[#FDF8F5] pb-20">
+      
+      {/* Container principal contraint comme sur la maquette */}
+      <div className="max-w-4xl mx-auto bg-[#FDF8F5] px-4 md:px-8 pt-12">
+        
+        {/* Header (Titre + Sous-titre) */}
+        <div className="text-center mb-10 flex flex-col items-center">
+          <div className="flex flex-col items-center relative w-full">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight z-10 relative">
+              Aides financières à la pratique <br/>
+              <span style={{ color: '#ED1B5F' }}>d'Activité Physique</span>
+            </h1>
+            {/* L'illustration se trouve en haut à gauche de ce bloc sur la maquette, je la mets en absolu */}
+            <div className="absolute left-0 top-0 hidden md:block">
+              <img src="/illustrations/7.png" alt="" className="h-24 w-auto object-contain" />
+            </div>
+          </div>
+          
+          <div className="mt-8 bg-blue-50/50 border border-blue-100 text-slate-700 p-6 rounded-xl max-w-2xl text-center shadow-sm">
+            <p className="text-sm font-medium leading-relaxed">
+              Selon votre situation, des aides et dispositifs peuvent vous permettre de réduire le coût de votre pratique d'activité physique.
+            </p>
+            <p className="text-sm font-medium leading-relaxed mt-4">
+              Retrouvez les principales solutions et les démarches à connaître.
             </p>
           </div>
-        </section>
+        </div>
 
-        {/* Sommaire des sections (Optionnel pour la V1 mais utile) */}
-        <nav className="mb-16 bg-white p-6 md:p-8 rounded-2xl shadow-sm border-2 border-slate-100 hidden md:block">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Accès rapide :</h2>
-          <div className="flex flex-wrap gap-4">
-            {aidesByCategory.map((cat) => (
-              <a 
-                key={`link-${cat.id}`} 
-                href={`#cat-${cat.id}`}
-                className="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 font-bold px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-              >
-                {cat.icon}
-                {cat.title}
-              </a>
-            ))}
+        {/* Barre de recherche */}
+        <div className="mb-6 max-w-sm">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <input 
+              type="text" 
+              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:border-blue-500 bg-white"
+            />
           </div>
-        </nav>
+        </div>
 
-        {/* Sections des aides */}
-        <div className="space-y-16">
-          {aidesByCategory.map((cat) => (
-            <section key={`cat-${cat.id}`} id={`cat-${cat.id}`} className="scroll-mt-32">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-                  {cat.icon}
-                </div>
-                <div>
-                  <h2 className="text-3xl font-extrabold text-slate-900">{cat.title}</h2>
-                  <p className="text-lg text-slate-600 font-medium mt-1">{cat.desc}</p>
-                </div>
-              </div>
+        {/* Accès rapide / Filtres */}
+        <div className="mb-12">
+          <h2 className="text-lg font-bold text-slate-800 mb-3">Accès rapide :</h2>
+          <div className="flex flex-wrap gap-4">
+            <div className="bg-white border border-slate-200 text-slate-700 font-bold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors">
+              <span className="bg-[#ED1B5F] text-white px-2 py-0.5 rounded">N</span>
+              Aides Nationales (État)
+            </div>
+            <div className="bg-white border border-slate-200 text-slate-700 font-bold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors">
+              <span className="bg-[#1566B1] text-white px-2 py-0.5 rounded">R</span>
+              Aides régionales
+            </div>
+            <div className="bg-white border border-slate-200 text-slate-700 font-bold px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors">
+              <span className="bg-[#FBA91C] text-white px-2 py-0.5 rounded">L</span>
+              Aides locales
+            </div>
+          </div>
+        </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-8">
-                {cat.aides.map((aide) => (
-                  <AideCard key={aide.id} aide={aide} />
-                ))}
-              </div>
-            </section>
+        {/* Grille des cartes d'aides */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {allAides.map((aide) => (
+            <AideCard key={aide.id} aide={aide} />
           ))}
         </div>
 
         {/* Call to action bas de page */}
-        <section className="mt-20 bg-blue-800 text-white p-8 md:p-12 rounded-3xl text-center shadow-xl">
-          <h3 className="text-3xl font-bold mb-4">Vous ne trouvez pas la bonne aide ?</h3>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-blue-100">
-            Les assistants sociaux de votre MDPH ou de votre Centre Communal d'Action Sociale (CCAS) peuvent vous accompagner gratuitement dans le montage d'un dossier de financement.
+        <div className="mt-16 bg-[#1566B1] text-white p-8 rounded-2xl text-center shadow-lg">
+          <h3 className="text-2xl font-bold mb-4">Vous ne trouvez pas la bonne aide ?</h3>
+          <p className="text-sm mb-6 max-w-2xl mx-auto text-blue-50 font-medium leading-relaxed">
+            Vous ne trouvez pas l'aide adaptée à votre situation ? La MDPH, votre CCAS ou un assistant social peuvent vous informer sur vos droits et vous accompagner dans vos démarches.
           </p>
-          <Button nativeButton={false} render={<Link href="/contact" />} className="bg-white text-blue-900 hover:bg-slate-100 font-bold text-lg h-14 px-8 rounded-xl">
+          <Button nativeButton={false} render={<Link href="/contact" />} className="bg-white text-[#1566B1] hover:bg-slate-100 font-bold text-sm h-10 px-6 rounded-md">
             Nous contacter pour un conseil
           </Button>
-        </section>
+        </div>
 
       </div>
     </div>

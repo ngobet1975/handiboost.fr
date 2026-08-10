@@ -41,11 +41,18 @@ export default async function PathologiePage({ params }: { params: Promise<{ slu
     id: raw.id,
     slug: raw.slug,
     title: raw.title,
+    subtitle: raw.subtitle,
     description: raw.description ?? "",
     benefits: raw.benefits ?? [],
+    benefits_intro: raw.benefits_intro,
+    benefits_outro: raw.benefits_outro,
     precautions: raw.precautions ?? [],
+    precautions_intro: raw.precautions_intro,
     recommendedActivities: raw.recommendedActivities ?? [],
+    recommendedActivities_intro: raw.recommendedActivities_intro,
+    recommendedActivities_outro: raw.recommendedActivities_outro,
     resources: raw.resources ?? [],
+    resources_intro: raw.resources_intro,
     validationStatus: raw.validationStatus,
     whenToAskDoctor: "En cas de douleur inhabituelle ou de doute, consultez votre médecin traitant.",
     status: "published" as const,
@@ -79,6 +86,11 @@ export default async function PathologiePage({ params }: { params: Promise<{ slu
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-tight">
             {patho.title}
           </h1>
+          {patho.subtitle && (
+            <p className="mt-6 text-xl font-medium text-slate-700">
+              {patho.subtitle}
+            </p>
+          )}
         </header>
 
         {/* Composant de rendu de la fiche structurée */}

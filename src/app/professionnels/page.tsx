@@ -111,6 +111,11 @@ export default function ProfessionnelsHubPage() {
           ))}
         </section>
 
+        {/* Illustration Footer */}
+        <div className="flex justify-center mt-12 mb-8">
+          <img src="/illustrations/7.png" alt="Illustration professionnels" className="max-w-full h-auto md:h-64 object-contain" />
+        </div>
+
       </div>
     </div>
   );

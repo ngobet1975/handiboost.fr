@@ -137,150 +137,16 @@ function MapClickHandler({ onClose }: { onClose: () => void }) {
   return null
 }
 
-// ─── Panneau latéral ─────────────────────────────────────────────────────────
-function SidePanel({ structure, onClose, onValidate, onReport }: {
-  structure: any
-  onClose: () => void
-  onValidate: () => void
-  onReport: () => void
-}) {
-  const conf = getActivityConfig(structure.activite)
-  const [validating, setValidating] = useState(false)
-  const [localVerifiedAt, setLocalVerifiedAt] = useState<string | null>(structure.verifiedAt || null)
-
-  const handleValidate = async () => {
-    setValidating(true)
-    await onValidate()
-    const now = new Date().toISOString()
-    setLocalVerifiedAt(now)
-    setValidating(false)
-  }
-
-  return (
-    <div style={{
-      position: 'absolute', left: 0, top: 0, bottom: 0, width: 340, zIndex: 900,
-      background: 'white', boxShadow: '4px 0 24px rgba(0,0,0,0.15)',
-      display: 'flex', flexDirection: 'column', overflowY: 'auto',
-      borderRight: '2px solid #e2e8f0',
-    }}>
-      {/* Header coloré */}
-      <div style={{ background: conf.color, padding: '20px 16px 16px', position: 'relative' }}>
-        <button onClick={onClose} style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8, padding: 6, cursor: 'pointer', color: 'white', display: 'flex' }}>
-          <X size={18} />
-        </button>
-        <div style={{ fontSize: 36, marginBottom: 8 }}>{conf.emoji}</div>
-        <h2 style={{ color: 'white', fontWeight: 900, fontSize: 18, lineHeight: 1.3, margin: 0, paddingRight: 32 }}>{structure.nom}</h2>
-        {structure.activite && (
-          <span style={{ display: 'inline-block', marginTop: 8, background: 'rgba(255,255,255,0.25)', color: 'white', fontWeight: 700, fontSize: 12, padding: '4px 10px', borderRadius: 20 }}>
-            {structure.activite}
-          </span>
-        )}
-      </div>
-
-      {/* Corps */}
-      <div style={{ padding: 16, flex: 1 }}>
-        {/* Badges état */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
-          {localVerifiedAt && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', fontWeight: 700, fontSize: 11, padding: '4px 10px', borderRadius: 20 }}>
-              <CheckCircle2 size={12} /> Vérifié le {new Date(localVerifiedAt).toLocaleDateString('fr-FR')}
-            </span>
-          )}
-          {structure.est_itinerant && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#fff7ed', border: '1px solid #fed7aa', color: '#c2410c', fontWeight: 700, fontSize: 11, padding: '4px 10px', borderRadius: 20 }}>
-              <Car size={12} /> Se déplace — {structure.rayon_intervention} km
-            </span>
-          )}
-          {structure.enAttenteMaj && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#fefce8', border: '1px solid #fde047', color: '#a16207', fontWeight: 700, fontSize: 11, padding: '4px 10px', borderRadius: 20 }}>
-              <AlertTriangle size={12} /> Signalée
-            </span>
-          )}
-          {structure.appele === 'oui' && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', fontWeight: 700, fontSize: 11, padding: '4px 10px', borderRadius: 20 }}>
-              ✓ Contactée
-            </span>
-          )}
-        </div>
-
-        {/* Infos */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {structure.adresse && (
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-              <MapPin size={16} color={conf.color} style={{ flexShrink: 0, marginTop: 2 }} />
-              <span style={{ fontSize: 14, color: '#374151', fontWeight: 500 }}>{structure.adresse}</span>
-            </div>
-          )}
-          {structure.public && (
-            <div style={{ background: '#f8fafc', borderRadius: 10, padding: '10px 12px' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: 4 }}>Public</div>
-              <div style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>{structure.public}</div>
-            </div>
-          )}
-          {structure.telephone && (
-            <a href={`tel:${structure.telephone}`} style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#1d4ed8', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
-              <Phone size={16} /> {structure.telephone}
-            </a>
-          )}
-          {structure.mail && (
-            <a href={`mailto:${structure.mail}`} style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#1d4ed8', fontWeight: 600, fontSize: 14, textDecoration: 'none', wordBreak: 'break-all' }}>
-              <Mail size={16} /> {structure.mail}
-            </a>
-          )}
-          {structure.site && (
-            <a href={structure.site.startsWith('http') ? structure.site : `https://${structure.site}`} target="_blank" rel="noopener noreferrer"
-              style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#1d4ed8', fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
-              <Globe size={16} /> Site web
-            </a>
-          )}
-          {structure.informations && (
-            <div style={{ background: '#f8fafc', borderRadius: 10, padding: '10px 12px', fontSize: 13, color: '#64748b', fontStyle: 'italic' }}>
-              {structure.informations}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div style={{ padding: 16, borderTop: '2px solid #f1f5f9', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <button
-          onClick={handleValidate}
-          disabled={validating}
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            background: '#16a34a', color: 'white', border: 'none', borderRadius: 12,
-            padding: '12px 16px', fontWeight: 700, fontSize: 14, cursor: 'pointer',
-            opacity: validating ? 0.7 : 1
-          }}
-        >
-          <ShieldCheck size={16} />
-          {validating ? 'Validation...' : '✅ Valider les informations'}
-        </button>
-        <button
-          onClick={onReport}
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            background: '#fef2f2', color: '#dc2626', border: '2px solid #fecaca', borderRadius: 12,
-            padding: '11px 16px', fontWeight: 700, fontSize: 14, cursor: 'pointer'
-          }}
-        >
-          <AlertTriangle size={15} /> ⚠️ Signaler une erreur
-        </button>
-      </div>
-    </div>
-  )
-}
-
 // ─── Composant principal ──────────────────────────────────────────────────────
 interface MapProps {
   structures: any[]
   userLocation?: { lat: number; lon: number } | null
   searchRadius?: number
+  onMarkerClick?: (structure: any) => void
 }
 
-export default function Map({ structures, userLocation, searchRadius }: MapProps) {
-  const [selectedStructure, setSelectedStructure] = useState<any | null>(null)
-  const [reportStructure, setReportStructure] = useState<any | null>(null)
+export default function Map({ structures, userLocation, searchRadius, onMarkerClick }: MapProps) {
+  const [selectedStructureId, setSelectedStructureId] = useState<string | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -300,20 +166,6 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
     return () => document.removeEventListener('fullscreenchange', handler)
   }, [])
 
-  const handleValidate = useCallback(async () => {
-    if (!selectedStructure) return
-    await validateStructure(selectedStructure.id)
-  }, [selectedStructure])
-
-  const handleConfirmReport = async () => {
-    if (!reportStructure) return
-    try {
-      await reportStructureError(reportStructure.id)
-      window.location.href = `mailto:handiboost.contact@gmail.com?subject=${encodeURIComponent('Erreur sur la structure ' + reportStructure.nom)}&body=${encodeURIComponent('Bonjour,\n\nJe souhaite signaler des informations erronées concernant la structure "' + reportStructure.nom + '".\n\n')}`
-      setReportStructure(null)
-    } catch (e) { console.error(e) }
-  }
-
   return (
     <div
       ref={containerRef}
@@ -331,15 +183,18 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
         style={{ height: '100%', width: '100%', zIndex: 0 }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
         />
 
         {/* Barre de recherche */}
-        <MapSearch structures={structures} onSelect={setSelectedStructure} />
+        <MapSearch structures={structures} onSelect={(s) => {
+          setSelectedStructureId(s.id)
+          if (onMarkerClick) onMarkerClick(s)
+        }} />
 
         {/* Fermer panneau si clic sur la carte */}
-        <MapClickHandler onClose={() => setSelectedStructure(null)} />
+        <MapClickHandler onClose={() => setSelectedStructureId(null)} />
 
         {/* Cercle rayon de recherche */}
         {userLocation && searchRadius && (
@@ -355,7 +210,7 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
           if (!s.latitude || !s.longitude) return null
           const conf = getActivityConfig(s.activite)
           const faviconUrl = s.site ? getFavicon(s.site) : null
-          const isSelected = selectedStructure?.id === s.id
+          const isSelected = selectedStructureId === s.id
           const icon = createCustomIcon(conf.color, conf.emoji, faviconUrl, isSelected)
 
           return (
@@ -366,7 +221,8 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
                 eventHandlers={{
                   click: (e) => {
                     e.originalEvent.stopPropagation()
-                    setSelectedStructure(s)
+                    setSelectedStructureId(s.id)
+                    if (onMarkerClick) onMarkerClick(s)
                   }
                 }}
               />
@@ -383,16 +239,6 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
         })}
       </MapContainer>
 
-      {/* Panneau latéral */}
-      {selectedStructure && (
-        <SidePanel
-          structure={selectedStructure}
-          onClose={() => setSelectedStructure(null)}
-          onValidate={handleValidate}
-          onReport={() => { setReportStructure(selectedStructure); setSelectedStructure(null) }}
-        />
-      )}
-
       {/* Bouton plein écran */}
       <button
         onClick={toggleFullscreen}
@@ -407,32 +253,6 @@ export default function Map({ structures, userLocation, searchRadius }: MapProps
         {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
         {isFullscreen ? 'Réduire' : 'Plein écran'}
       </button>
-
-      {/* Modal signalement */}
-      {reportStructure && (
-        <div className="absolute inset-0 z-[2000] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full border border-slate-100 relative">
-            <button onClick={() => setReportStructure(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-100 rounded-full">
-              <X className="w-5 h-5" />
-            </button>
-            <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mb-6 border border-red-100 shadow-sm mx-auto">
-              <AlertTriangle className="w-8 h-8 text-red-500" />
-            </div>
-            <h3 className="text-2xl font-black text-slate-900 mb-3 text-center">Signaler une erreur</h3>
-            <p className="text-slate-600 text-center mb-8 font-medium">
-              Voulez-vous nous aider à corriger les informations de <span className="text-slate-900 font-bold">"{reportStructure.nom}"</span> ?
-            </p>
-            <div className="flex flex-col gap-3">
-              <button onClick={handleConfirmReport} className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md">
-                <Mail className="w-5 h-5" /> Signaler par email
-              </button>
-              <button onClick={() => setReportStructure(null)} className="w-full font-bold text-slate-600 hover:text-slate-800 py-3.5 rounded-xl hover:bg-slate-100">
-                Annuler
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

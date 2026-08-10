@@ -5,6 +5,7 @@ import { Search, ExternalLink, MapPin, Building2, Users, Landmark, AlertTriangle
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
+import { validateStructure, reportStructureError } from '@/app/admin/annuaire/actions'
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false, loading: () => <div className="w-full h-[60vh] min-h-[500px] max-h-[800px] bg-slate-100 flex items-center justify-center rounded-xl border border-slate-200">Chargement de la carte...</div> })
 
@@ -35,6 +36,8 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
   
   const [typeFilter, setTypeFilter] = useState<string | null>(null)
   const [activityFilter, setActivityFilter] = useState<string | null>(null)
+  const [ageFilter, setAgeFilter] = useState<string | null>(null)
+  const [publicFilter, setPublicFilter] = useState<string | null>(null)
 
   const fetchSuggestions = async (query: string) => {
     setAddressSearch(query)
@@ -95,34 +98,38 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
       )
     }
     if (userLocation && radius) {
-      result = result.filter((s: any) => {
-        if (!s.latitude || !s.longitude) return false
-        return getDistance(userLocation.lat, userLocation.lon, s.latitude, s.longitude) <= radius
-      })
+      // PDF instruction: "Quand le cercle de localisation se cree ne pas enlever les autres structures qui sont en dehors du cercle"
+      // We don't filter by radius here anymore. The radius is visual only.
     }
-    if (activityFilter) {
-      const matchActivity = (rawActivite: string, filter: string) => {
-        const a = (rawActivite || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const f = filter.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (activityFilter) {
+        const matchActivity = (rawActivite: string, filter: string) => {
+          const a = (rawActivite || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          const f = filter.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          
+          if (f.includes('art')) return a.includes('martial') || a.includes('judo') || a.includes('karat') || a.includes('boxe') || a.includes('taekwondo') || a.includes('escrime');
+          if (f.includes('athletisme')) return a.includes('athl') || a.includes('course');
+          if (f.includes('cyclisme')) return a.includes('cycl') || a.includes('velo') || a.includes('vtt');
+          if (f.includes('danse')) return a.includes('danse');
+          if (f.includes('equitation')) return a.includes('equitation') || a.includes('cheval') || a.includes('poney');
+          if (f.includes('gym')) return a.includes('gym') || a.includes('fit') || a.includes('yoga') || a.includes('pilate') || a.includes('renforcement');
+          if (f.includes('natation')) return a.includes('nautiq') || a.includes('natation') || a.includes('eau') || a.includes('piscine') || a.includes('plonge') || a.includes('aquagym');
+          if (f.includes('randonnee')) return a.includes('nature') || a.includes('randonnee') || a.includes('marche') || a.includes('montagne') || a.includes('escalade');
+          if (f.includes('balle')) return a.includes('ball') || a.includes('foot') || a.includes('basket') || a.includes('rugby') || a.includes('tennis') || a.includes('ping') || a.includes('volley') || a.includes('boccia');
+          if (f.includes('multisport')) return a.includes('multi') || a.includes('omnisport');
+          
+          return a.includes(f);
+        }
         
-        if (f.includes('art')) return a.includes('martial') || a.includes('judo') || a.includes('karat') || a.includes('boxe') || a.includes('taekwondo') || a.includes('escrime');
-        if (f.includes('athletisme')) return a.includes('athl') || a.includes('course');
-        if (f.includes('cyclisme')) return a.includes('cycl') || a.includes('velo') || a.includes('vtt');
-        if (f.includes('danse')) return a.includes('danse');
-        if (f.includes('equitation')) return a.includes('equitation') || a.includes('cheval') || a.includes('poney');
-        if (f.includes('gym')) return a.includes('gym') || a.includes('fit') || a.includes('yoga') || a.includes('pilate') || a.includes('renforcement');
-        if (f.includes('natation')) return a.includes('nautiq') || a.includes('natation') || a.includes('eau') || a.includes('piscine') || a.includes('plonge') || a.includes('aquagym');
-        if (f.includes('randonnee')) return a.includes('nature') || a.includes('randonnee') || a.includes('marche') || a.includes('montagne') || a.includes('escalade');
-        if (f.includes('balle')) return a.includes('ball') || a.includes('foot') || a.includes('basket') || a.includes('rugby') || a.includes('tennis') || a.includes('ping') || a.includes('volley') || a.includes('boccia');
-        if (f.includes('multisport')) return a.includes('multi') || a.includes('omnisport');
-        
-        return a.includes(f);
+        result = result.filter((s: any) => matchActivity(s.activite, activityFilter))
       }
-      
-      result = result.filter((s: any) => matchActivity(s.activite, activityFilter))
-    }
-    return result
-  }, [structures, search, userLocation, radius, activityFilter])
+      if (ageFilter) {
+        result = result.filter((s: any) => !s.age || s.age.includes('Tous âges') || s.age.includes(ageFilter))
+      }
+      if (publicFilter) {
+        result = result.filter((s: any) => !s.public || s.public.includes('Tous types') || s.public.includes(publicFilter))
+      }
+      return result
+    }, [structures, search, userLocation, radius, activityFilter, ageFilter, publicFilter])
 
   const filtered = useMemo(() => {
     return entries.filter((e) => {
@@ -135,7 +142,7 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
     })
   }, [entries, search, typeFilter])
 
-  const activeFilters = (typeFilter ? 1 : 0) + (activityFilter ? 1 : 0)
+  const activeFilters = (typeFilter ? 1 : 0) + (activityFilter ? 1 : 0) + (ageFilter ? 1 : 0) + (publicFilter ? 1 : 0)
 
   return (
     <div>
@@ -254,13 +261,13 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
           {/* Activity filter */}
           <div>
             <p className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-              <Filter className="w-5 h-5 text-slate-500" /> Par activité (sur la carte)
+              <Filter className="w-5 h-5 text-slate-500" /> Filtres de la carte
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col gap-3">
               <select
                 value={activityFilter || ''}
                 onChange={(e) => setActivityFilter(e.target.value || null)}
-                className="w-full bg-white border-2 border-slate-200 rounded-2xl py-4 px-6 text-lg font-bold text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all cursor-pointer"
+                className="w-full bg-white border-2 border-slate-200 rounded-xl py-3 px-4 font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
               >
                 <option value="">Toutes les activités</option>
                 {activites.map((act) => (
@@ -269,6 +276,30 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
                   </option>
                 ))}
               </select>
+              <div className="flex gap-3">
+                <select
+                  value={ageFilter || ''}
+                  onChange={(e) => setAgeFilter(e.target.value || null)}
+                  className="w-1/2 bg-white border-2 border-slate-200 rounded-xl py-3 px-4 font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+                >
+                  <option value="">Tous les âges</option>
+                  <option value="Enfants">Enfants (0-11 ans)</option>
+                  <option value="Ados">Ados (12-17 ans)</option>
+                  <option value="Adultes">Adultes</option>
+                  <option value="Seniors">Seniors</option>
+                </select>
+                <select
+                  value={publicFilter || ''}
+                  onChange={(e) => setPublicFilter(e.target.value || null)}
+                  className="w-1/2 bg-white border-2 border-slate-200 rounded-xl py-3 px-4 font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+                >
+                  <option value="">Tous les publics</option>
+                  <option value="Moteur">Handicap Moteur</option>
+                  <option value="Visuel">Handicap Visuel</option>
+                  <option value="Auditif">Handicap Auditif</option>
+                  <option value="Mental / Psychique">Handicap Mental / Psychique</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -280,7 +311,7 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
               {activeFilters} filtre{activeFilters > 1 ? 's' : ''} actif{activeFilters > 1 ? 's' : ''}
             </p>
             <button
-              onClick={() => { setTypeFilter(null); setActivityFilter(null); setSearch(''); }}
+              onClick={() => { setTypeFilter(null); setActivityFilter(null); setAgeFilter(null); setPublicFilter(null); setSearch(''); }}
               className="text-lg text-red-600 font-bold hover:underline px-4 py-2 rounded-lg hover:bg-red-50 transition-colors"
             >
               ✕ Tout effacer
@@ -298,7 +329,14 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
       </div>
 
       <div className="mb-16">
-        <Map structures={filteredMapStructures} userLocation={userLocation} searchRadius={userLocation ? radius : undefined} />
+        <Map structures={filteredMapStructures} userLocation={userLocation} searchRadius={userLocation ? radius : undefined} onMarkerClick={(s) => {
+          const el = document.getElementById(`structure-${s.id}`)
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            el.classList.add('ring-4', 'ring-blue-500', 'ring-offset-2')
+            setTimeout(() => el.classList.remove('ring-4', 'ring-blue-500', 'ring-offset-2'), 2000)
+          }
+        }} />
       </div>
 
       <div className="flex items-center justify-between mb-8">
@@ -326,6 +364,7 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
             return (
               <div
                 key={entry.id}
+                id={`structure-${entry.id}`}
                 className={`bg-white rounded-2xl border-2 ${typeConf.border} shadow-sm hover:shadow-lg transition-all flex flex-col overflow-hidden group`}
               >
                 {/* Type bar */}
@@ -363,19 +402,51 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
                   </div>
                 </div>
 
-                {/* Action */}
-                {entry.url && (
-                  <div className="px-6 pb-6">
+                {/* Actions */}
+                <div className="px-6 pb-6 flex flex-col gap-2 mt-auto">
+                  <div className="flex gap-2 w-full">
+                    <button
+                      onClick={async () => {
+                        try {
+                          await validateStructure(entry.id)
+                          alert("Merci d'avoir validé ces informations !");
+                        } catch (e) {
+                          console.error(e)
+                        }
+                      }}
+                      className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors text-sm"
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      Valider
+                    </button>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await reportStructureError(entry.id)
+                          alert("Problème signalé, merci !");
+                          window.location.href = `mailto:handiboost.contact@gmail.com?subject=Erreur sur la structure ${entry.name}`;
+                        } catch (e) {
+                          console.error(e)
+                        }
+                      }}
+                      className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors text-sm"
+                    >
+                      <AlertTriangle className="w-4 h-4" />
+                      Signaler
+                    </button>
+                  </div>
+
+                  {entry.url && (
                     <a
                       href={entry.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-base transition-all ${typeConf.bg} ${typeConf.color} border-2 ${typeConf.border} hover:shadow-md hover:scale-[1.02]`}
+                      className={`w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-base transition-all ${typeConf.bg} ${typeConf.color} border-2 ${typeConf.border} hover:shadow-md hover:scale-[1.02]`}
                     >
                       Consulter l'annuaire <ExternalLink className="w-4 h-4" />
                     </a>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             )
           })}
@@ -389,6 +460,16 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
             <strong>ℹ️ Important :</strong> Ces liens renvoient vers les annuaires officiels des fédérations et institutions.
             Contactez directement la structure pour vérifier les activités proposées et les disponibilités.
           </p>
+        </div>
+
+        <div className="bg-white border-2 border-slate-200 p-6 md:p-8 rounded-2xl text-center flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-left">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Vous êtes un professionnel du sport santé ou de l'APA ?</h3>
+            <p className="text-slate-600">Rejoignez le réseau Handiboost et référencez gratuitement votre structure sur la carte.</p>
+          </div>
+          <Button nativeButton={false} render={<Link href="/rejoindre-le-guide" />} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 h-12 rounded-xl whitespace-nowrap">
+            Demander mon intégration
+          </Button>
         </div>
 
         <div className="bg-white border-2 border-slate-200 p-6 md:p-8 rounded-2xl text-center">
