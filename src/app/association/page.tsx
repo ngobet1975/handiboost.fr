@@ -31,12 +31,12 @@ export default function AssociationPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {/* Mission */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '100ms' }}>
-            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-blue-200 border-4 border-blue-300 shadow-inner p-4">
-              <img src="/bonhomme-1.png" alt="Personnage Handiboost" className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500" />
+            <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
+              <img src="/bonhomme-1.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-blue-700 transition-colors">Notre mission</h2>
+            <h2 className="text-2xl font-black text-[#1566B1] mb-4 transition-colors">Notre mission</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
-              HandiBoost est un guichet unique dédié à l’activité physique adaptée. Il centralise les informations, les contacts et les ressources pour aider les personnes et les professionnels à trouver facilement des solutions adaptées à leurs besoins, sans avoir à chercher sur plusieurs plateformes.
+              Handiboost est un guichet unique dédié à l’activité physique adaptée. Il centralise les informations, les contacts et les ressources pour aider les personnes et les professionnels à trouver facilement des solutions adaptées à leurs besoins, sans avoir à chercher sur plusieurs plateformes.
             </p>
           </div>
 
