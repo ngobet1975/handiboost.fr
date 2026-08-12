@@ -82,37 +82,37 @@ export default async function Home() {
         <section className="py-24 px-6 bg-white border-b-4 border-slate-200">
           <div className="max-w-[90rem] mx-auto space-y-16">
              <div className="text-center max-w-4xl mx-auto">
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-6 md:mb-8">Une plateforme centralisée pour l'APA</h2>
-                <p className="text-slate-800 text-2xl lg:text-3xl leading-normal font-medium">Tout ce dont vous avez besoin pour encourager ou pratiquer le sport adapté, facile à lire et à utiliser.</p>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-6 md:mb-8">Une plateforme unique dédiée à l'Activité Physique Adaptée (APA)</h2>
+                <p className="text-slate-800 text-2xl lg:text-3xl leading-normal font-medium">Retrouvez en un seul endroit tous les outils, ressources et informations pour pratiquer, promouvoir et développer l'Activité Physique Adaptée.</p>
              </div>
              
              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 xl:gap-10">
-                {/* Carte Infos Pratiques (Bleu Clair) */}
-                <Card className="border-4 border-sky-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
-                  <div className="h-6 bg-sky-500 w-full"></div>
+                {/* Carte Infos Pratiques (Bleu) */}
+                <Card className="border-4 border-[#1566B1]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
+                  <div className="h-6 bg-[#1566B1] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-sky-100 bg-white">
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#1566B1]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '45s' }}>
                         {[...images1, ...images1].map((img, idx) => (
                           <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3}s` }} />
                         ))}
                       </div>
                     </div>
-                    <CardTitle className="text-3xl font-black text-slate-900 text-center">Infos Pratiques</CardTitle>
+                    <CardTitle className="text-3xl font-black text-slate-900 text-center">Où pratiquer ?</CardTitle>
                   </CardHeader>
                   <CardContent className="px-6 xl:px-8 text-slate-800 text-xl xl:text-2xl leading-relaxed font-medium flex-1 pb-8 xl:pb-10">
-                    Trouver une activité physique proche de chez vous, des informations et des ressources
+                    Trouver une activité physique proche de chez vous.
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/pratiquants/aides-financieres" className="block w-full text-center text-2xl font-extrabold border-4 border-sky-200 text-sky-700 hover:bg-sky-50 py-4 rounded-2xl transition-all no-underline">Trouver une activité</Link>
+                     <Link href="/pratiquants/ou-pratiquer" className="block w-full text-center text-2xl font-extrabold border-4 border-[#1566B1]/30 text-[#1566B1] hover:bg-[#1566B1]/10 py-4 rounded-2xl transition-all no-underline">Trouver une activité</Link>
                   </div>
                 </Card>
 
                 {/* Carte Agenda (Orange) */}
-                <Card className="border-4 border-orange-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
-                  <div className="h-6 bg-orange-500 w-full"></div>
+                <Card className="border-4 border-[#FBA91C]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
+                  <div className="h-6 bg-[#FBA91C] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-orange-100 bg-white">
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#FBA91C]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '38s', animationDelay: '-15s' }}>
                         {[...images2, ...images2].map((img, idx) => (
                           <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.4}s` }} />
@@ -125,15 +125,15 @@ export default async function Home() {
                     Trouver des événements sportifs adaptés proches de chez vous
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/pratiquants/evenements" className="block w-full text-center text-2xl font-extrabold border-4 border-orange-200 text-orange-700 hover:bg-orange-50 py-4 rounded-2xl transition-all no-underline">Voir l&apos;Agenda</Link>
+                     <Link href="/pratiquants/evenements" className="block w-full text-center text-2xl font-extrabold border-4 border-[#FBA91C]/30 text-[#FBA91C] hover:bg-[#FBA91C]/10 py-4 rounded-2xl transition-all no-underline">Voir l'Agenda</Link>
                   </div>
                 </Card>
 
                 {/* Carte Actualités (Rose) */}
-                <Card className="border-4 border-pink-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
-                  <div className="h-6 bg-pink-600 w-full"></div>
+                <Card className="border-4 border-[#ED1B5F]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
+                  <div className="h-6 bg-[#ED1B5F] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-pink-100 bg-white">
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#ED1B5F]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '50s', animationDelay: '-5s' }}>
                         {[...images3, ...images3].map((img, idx) => (
                           <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.8}s` }} />
@@ -146,15 +146,15 @@ export default async function Home() {
                     Lire les nouvelles sur l'APA et l'association
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/actualites" className="block w-full text-center text-2xl font-extrabold border-4 border-pink-200 text-pink-700 hover:bg-pink-50 py-4 rounded-2xl transition-all no-underline">Lire les actualités</Link>
+                     <Link href="/actualites" className="block w-full text-center text-2xl font-extrabold border-4 border-[#ED1B5F]/30 text-[#ED1B5F] hover:bg-[#ED1B5F]/10 py-4 rounded-2xl transition-all no-underline">Lire l'actualité</Link>
                   </div>
                 </Card>
 
                 {/* Carte Espace Pro (Violet) */}
-                <Card className="border-4 border-purple-100 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
-                  <div className="h-6 bg-purple-700 w-full"></div>
+                <Card className="border-4 border-[#654B9E]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
+                  <div className="h-6 bg-[#654B9E] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-purple-100 bg-white">
+                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#654B9E]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '42s', animationDelay: '-25s' }}>
                         {[...images4, ...images4].map((img, idx) => (
                           <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 1.2}s` }} />
@@ -167,7 +167,7 @@ export default async function Home() {
                     Ressources et outils pour les professionnels du sport et de la santé
                   </CardContent>
                   <div className="p-6 xl:p-8 pt-0 mt-auto">
-                     <Link href="/professionnels" className="block w-full text-center text-2xl font-extrabold border-4 border-purple-200 text-purple-700 hover:bg-purple-50 py-4 rounded-2xl transition-all no-underline">Espace Professionnels</Link>
+                     <Link href="/professionnels" className="block w-full text-center text-2xl font-extrabold border-4 border-[#654B9E]/30 text-[#654B9E] hover:bg-[#654B9E]/10 py-4 rounded-2xl transition-all no-underline">Espace professionnels</Link>
                   </div>
                 </Card>
              </div>
@@ -209,46 +209,6 @@ export default async function Home() {
                     </div>
                   </Link>
                 )})}
-              </div>
-            </div>
-
-            {/* Blocs Témoignages */}
-            <div className="space-y-12">
-              <div className="border-b-4 border-slate-200 pb-6">
-                <h2 className="text-4xl sm:text-5xl font-black text-slate-900">Ils en parlent</h2>
-              </div>
-              <div className="grid md:grid-cols-2 gap-10">
-                <Card className="border-4 border-blue-100 bg-blue-50/50 rounded-[2.5rem] shadow-xl p-6">
-                  <CardContent className="pt-8">
-                    <span className="text-6xl text-blue-300 font-serif leading-none">"</span>
-                    <p className="text-2xl font-medium text-slate-800 leading-relaxed italic mb-8 mt-4">
-                      Grâce au Guide Booster, j'ai pu trouver un club d'escrime adapté à mes capacités en moins de cinq minutes. Les informations étaient claires et à jour.
-                    </p>
-                    <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 bg-blue-200 rounded-full flex-shrink-0"></div>
-                      <div>
-                        <p className="text-3xl font-black text-slate-900">Marc D.</p>
-                        <p className="text-xl font-medium text-slate-600">Pratiquant Handisport</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-4 border-purple-100 bg-purple-50/50 rounded-[2.5rem] shadow-xl p-6">
-                  <CardContent className="pt-8">
-                    <span className="text-6xl text-purple-300 font-serif leading-none">"</span>
-                    <p className="text-2xl font-medium text-slate-800 leading-relaxed italic mb-8 mt-4">
-                      Cet outil est une vraie révolution pour nous, médecins. On peut enfin prescrire de l'Activité Physique Adaptée en sachant exactement où envoyer nos patients et vers qui.
-                    </p>
-                    <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 bg-purple-200 rounded-full flex-shrink-0"></div>
-                      <div>
-                        <p className="text-3xl font-black text-slate-900">Dr. Sophie L.</p>
-                        <p className="text-xl font-medium text-slate-600">Médecin Généraliste</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
             </div>
 
