@@ -31,7 +31,7 @@ export function Header() {
       <div className="flex items-center gap-8 xl:gap-12">
         <div className="flex items-center">
           <Link href="/" onClick={closeMenu} className="block shrink-0">
-            <img src="/logo-handiboost.png" alt="Handiboost" className="h-12 lg:h-16 w-auto object-contain -mt-2 lg:-mt-3" />
+            <img src="/logo-handiboost.png" alt="Handiboost" className="h-12 lg:h-16 w-auto object-contain -mt-4 lg:-mt-6" />
           </Link>
         </div>
         <nav className="hidden xl:flex items-center gap-6 2xl:gap-10 border-r-4 border-slate-200 pr-6 2xl:pr-10">
