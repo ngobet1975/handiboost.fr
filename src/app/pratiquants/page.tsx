@@ -49,43 +49,43 @@ export default async function PratiquantsHubPage() {
   const cards = [
     {
       title: "Trouver une activité physique",
-      description: "Trouver un club, une maison sport santé, un enseignant en APA et/ou un kiné près de chez vous.",
+      description: "Clubs, maisons sport santé, enseignants en APA, kinés — trouvez le professionnel ou la structure adaptée près de chez vous.",
       href: "/pratiquants/ou-pratiquer",
-      bg: "#1566B1",
-      buttonBg: "#3B89D1",
+      color: "#1566B1",
+      icon: <MapPin className="w-7 h-7" />,
       buttonText: "Trouver une activité"
     },
     {
-      title: "Trouver un événement sportif",
-      description: "Découvrir les événements sportifs adaptés proche de chez vous.",
+      title: "Événements sportifs adaptés",
+      description: "Découvrez les événements et compétitions de sport adapté organisés près de chez vous.",
       href: "/pratiquants/evenements",
-      bg: "#ED1B5F",
-      buttonBg: "#E96282",
+      color: "#ED1B5F",
+      icon: <Calendar className="w-7 h-7" />,
       buttonText: "Voir l'agenda"
     },
     {
-      title: "Conseils pour la pratique d'une activité physique",
-      description: "Lire nos fiches conseils pour en apprendre plus sur votre pathologie et votre pratique d'activité physique.",
+      title: "Conseils par pathologie",
+      description: "Fiches pratiques pour mieux comprendre votre pathologie et adapter votre pratique d'activité physique en toute sécurité.",
       href: "/pratiquants/conseils-par-pathologie",
-      bg: "#FBA91C",
-      buttonBg: "#FFBD4B",
+      color: "#FBA91C",
+      icon: <Stethoscope className="w-7 h-7" />,
       buttonText: "Voir les fiches"
     },
     {
-      title: "Aides financières à la pratique d'activité physique",
-      description: "Découvrir les aides existantes pour votre pratique d'activité physique.",
+      title: "Aides financières",
+      description: "Toutes les aides et dispositifs existants pour financer votre pratique sportive adaptée.",
       href: "/pratiquants/aides-financieres",
-      bg: "#654B9E",
-      buttonBg: "#8F77C4",
+      color: "#654B9E",
+      icon: <Coins className="w-7 h-7" />,
       buttonText: "Voir les aides"
     },
     {
-      title: "Tester vos connaissances sur l'activité physique",
-      description: "Faire les quiz pour tout savoir sur l'Activité Physique Adaptée, la sédentarité, les recommandations ...",
+      title: "Tester ses connaissances",
+      description: "Quiz et auto-évaluations pour tout savoir sur l'APA, la sédentarité et les recommandations de pratique.",
       href: "/pratiquants/tester-ses-connaissances",
-      bg: "#38B2AC",
-      buttonBg: "#4FD1C5",
-      buttonText: "Voir les tests"
+      color: "#38B2AC",
+      icon: <Lightbulb className="w-7 h-7" />,
+      buttonText: "Démarrer un quiz"
     }
   ];
 
@@ -107,38 +107,41 @@ export default async function PratiquantsHubPage() {
           <h1 className="text-5xl md:text-6xl font-black text-slate-900 mb-6">
             Espace Pratiquants
           </h1>
-          <p className="text-2xl text-slate-700 font-medium leading-relaxed">
+          <p className="text-2xl text-slate-600 font-medium leading-relaxed">
             Trouvez rapidement une activité physique, un événement près de chez vous, ou des conseils pour bouger en toute sécurité.
           </p>
         </section>
 
-        {/* ═══════════════════════════════════════════════ */}
-        {/* Grille de Cartes Navigation — Accès rapide EN PREMIER */}
-        {/* ═══════════════════════════════════════════════ */}
+        {/* Grille de Cartes Navigation */}
         <section className="mb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
             {cards.map((card, idx) => (
               <Link 
                 key={idx} 
                 href={card.href}
-                className="group flex flex-col justify-between p-8 md:p-10 rounded-[2.5rem] shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden"
-                style={{ backgroundColor: card.bg }}
+                className="group bg-white flex flex-col justify-between p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 relative overflow-hidden"
               >
-                <div className="relative z-10">
-                  <h2 className="text-3xl font-extrabold mb-6 text-white leading-tight">
+                {/* Accent coloré en haut */}
+                <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ backgroundColor: card.color }} />
+                
+                <div>
+                  {/* Icône */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ backgroundColor: `${card.color}18`, color: card.color }}>
+                    {card.icon}
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-900 mb-3 leading-snug">
                     {card.title}
                   </h2>
-                  <p className="text-xl font-medium text-white/90 leading-relaxed mb-8">
+                  <p className="text-base text-slate-500 leading-relaxed">
                     {card.description}
                   </p>
                 </div>
-                <div className="mt-auto flex justify-end relative z-10">
-                  <div 
-                    className="px-6 py-3 rounded-full font-bold text-lg inline-flex items-center gap-3 text-white transition-transform group-hover:scale-105"
-                    style={{ backgroundColor: card.buttonBg }}
-                  >
-                    {card.buttonText}
-                    <ArrowRight className="h-6 w-6" />
+
+                {/* Bouton sobre */}
+                <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-sm font-bold" style={{ color: card.color }}>{card.buttonText}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform" style={{ backgroundColor: `${card.color}15`, color: card.color }}>
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
               </Link>
