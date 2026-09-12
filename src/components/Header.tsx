@@ -28,13 +28,13 @@ export function Header() {
         Site en maintenance, attention informations non vérifiées pour le moment
       </div>
       <header className="px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between bg-white border-b-4 border-slate-200 shadow-sm relative">
-      <div className="flex items-center gap-8 xl:gap-12">
+      <div className="flex items-center gap-4 xl:gap-8 2xl:gap-12">
         <div className="flex items-center">
           <Link href="/" onClick={closeMenu} className="block shrink-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent]">
-            <img src="/logo-handiboost.png" alt="Handiboost" className="h-16 md:h-20 lg:h-28 w-auto object-contain -ml-2 lg:-ml-4 -mt-1 lg:-mt-2" />
+            <img src="/logo-handiboost.png" alt="Handiboost" className="h-16 md:h-20 xl:h-28 w-auto object-contain -ml-2 lg:-ml-4 -mt-1 lg:-mt-2" />
           </Link>
         </div>
-        <nav className="hidden xl:flex items-center gap-6 2xl:gap-10 border-r-4 border-slate-200 pr-6 2xl:pr-10">
+        <nav className="hidden xl:flex items-center gap-4 2xl:gap-10 border-r-4 border-slate-200 pr-4 2xl:pr-10">
           <Link href="/association" className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
           <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
           <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
@@ -42,11 +42,11 @@ export function Header() {
           <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
         </nav>
       </div>
-      <div className="hidden xl:flex items-center gap-4 2xl:gap-6">
-        <Button nativeButton={false} render={<Link href="/dons" />} variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">
+      <div className="hidden xl:flex items-center gap-3 2xl:gap-6">
+        <Button nativeButton={false} render={<Link href="/dons" />} variant="outline" className="text-base 2xl:text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-12 2xl:h-16 px-4 2xl:px-8 rounded-xl 2xl:rounded-2xl transition-all outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent]">
           ❤️ Faire un don
         </Button>
-        <Button nativeButton={false} render={<Link href="/login" />} className="bg-purple-700 hover:bg-purple-800 text-xl font-extrabold h-16 px-8 shadow-xl rounded-2xl transition-all text-white">
+        <Button nativeButton={false} render={<Link href="/login" />} className="bg-purple-700 hover:bg-purple-800 text-base 2xl:text-xl font-extrabold h-12 2xl:h-16 px-4 2xl:px-8 shadow-xl rounded-xl 2xl:rounded-2xl transition-all text-white outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent]">
           Accès Guide Booster
         </Button>
       </div>
