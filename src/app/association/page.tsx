@@ -42,8 +42,8 @@ export default function AssociationPage() {
 
           {/* Valeurs */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '300ms' }}>
-            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-emerald-200 border-4 border-emerald-300 shadow-inner p-4">
-              <img src="/bonhomme-2.png" alt="Personnage Handiboost" className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500" />
+            <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
+              <img src="/bonhomme-2.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-emerald-700 transition-colors">Nos valeurs</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
@@ -53,8 +53,8 @@ export default function AssociationPage() {
 
           {/* Réseau */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '500ms' }}>
-            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-amber-200 border-4 border-amber-300 shadow-inner p-4">
-              <img src="/bonhomme-3.png" alt="Personnage Handiboost" className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500" />
+            <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
+              <img src="/bonhomme-3.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-amber-700 transition-colors">Notre réseau</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
@@ -64,8 +64,8 @@ export default function AssociationPage() {
 
           {/* Objectif */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '700ms' }}>
-            <div className="w-32 h-32 mb-6 rounded-full group-hover:scale-110 transition-transform duration-500 overflow-hidden flex items-center justify-center bg-purple-200 border-4 border-purple-300 shadow-inner p-4">
-              <img src="/bonhomme-4.png" alt="Personnage Handiboost" className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500" />
+            <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
+              <img src="/bonhomme-4.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-purple-700 transition-colors">Notre objectif</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
