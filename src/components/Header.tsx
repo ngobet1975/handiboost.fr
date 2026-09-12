@@ -12,7 +12,7 @@ export function Header() {
 
   const getLinkClass = (path: string, activeColorClass: string) => {
     const isActive = pathname.startsWith(path);
-    return `text-xl xl:text-2xl font-bold underline-offset-8 decoration-4 outline-none focus:outline-none transition-all ${
+    return `text-xl xl:text-2xl font-bold underline-offset-8 decoration-4 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent] transition-all ${
       isActive 
         ? `${activeColorClass} underline` 
         : `text-slate-800 hover:${activeColorClass} hover:underline`
@@ -30,7 +30,7 @@ export function Header() {
       <header className="px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between bg-white border-b-4 border-slate-200 shadow-sm relative">
       <div className="flex items-center gap-8 xl:gap-12">
         <div className="flex items-center">
-          <Link href="/" onClick={closeMenu} className="block shrink-0 outline-none focus:outline-none">
+          <Link href="/" onClick={closeMenu} className="block shrink-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent]">
             <img src="/logo-handiboost.png" alt="Handiboost" className="h-12 lg:h-16 w-auto object-contain -mt-4 lg:-mt-6" />
           </Link>
         </div>

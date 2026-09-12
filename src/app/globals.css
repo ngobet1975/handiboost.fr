@@ -242,3 +242,5 @@ body {
   outline-offset: 4px;
 }
 
+
+*:focus, *:focus-visible, a:focus, button:focus { outline: none !important; box-shadow: none !important; -webkit-tap-highlight-color: transparent !important; }
