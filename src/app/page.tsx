@@ -57,7 +57,7 @@ export default async function Home() {
             {/* CTA - Choix du profil */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
               <Link href="/pratiquants" className="group bg-blue-800 hover:bg-blue-900 text-white py-7 px-8 flex items-center gap-5 rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all no-underline">
-                <img src="/illustrations/2.png" alt="Icone Pratiquant" className="w-14 h-14 object-contain flex-shrink-0 drop-shadow-md" />
+                <img src="/illustrations/2.png" alt="Icone Pratiquant" className="w-14 h-14 object-contain flex-shrink-0 drop-shadow-md mix-blend-multiply" />
                 <div>
                   <span className="block text-2xl font-bold">Je suis pratiquant</span>
                   <span className="block text-sm font-medium text-blue-200 mt-1">Recherche de clubs et d'événements, aides financières, conseils sur la pratique par pathologie</span>
@@ -65,7 +65,7 @@ export default async function Home() {
               </Link>
               
               <Link href="/professionnels" className="group bg-purple-700 hover:bg-purple-800 text-white py-7 px-8 flex items-center gap-5 rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all no-underline">
-                <img src="/illustrations/3.png" alt="Icone Professionnel" className="w-14 h-14 object-contain flex-shrink-0 drop-shadow-md" />
+                <img src="/illustrations/3.png" alt="Icone Professionnel" className="w-14 h-14 object-contain flex-shrink-0 drop-shadow-md mix-blend-multiply" />
                 <div>
                   <span className="block text-2xl font-bold">Je suis professionnel</span>
                   <span className="block text-sm font-medium text-purple-200 mt-1">Outils de prescription, d'accompagnement, Guide Booster, références</span>
