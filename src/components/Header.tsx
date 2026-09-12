@@ -28,13 +28,11 @@ export function Header() {
         Site en maintenance, attention informations non vérifiées pour le moment
       </div>
       <header className="px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between bg-white border-b-4 border-slate-200 shadow-sm relative">
-      <div className="flex items-center gap-4 xl:gap-8 2xl:gap-12">
-        <div className="flex items-center">
-          <Link href="/" onClick={closeMenu} className="block shrink-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent]">
-            <img src="/logo-handiboost.png" alt="Handiboost" className="h-16 md:h-20 xl:h-28 w-auto object-contain -ml-2 lg:-ml-4 -mt-1 lg:-mt-2" />
-          </Link>
-        </div>
-        <nav className="hidden xl:flex items-center gap-4 2xl:gap-10 border-r-4 border-slate-200 pr-4 2xl:pr-10">
+      <div className="flex items-center gap-6 xl:gap-10">
+        <Link href="/" onClick={closeMenu} className="block shrink-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 [-webkit-tap-highlight-color:transparent]">
+          <img src="/logo-handiboost.png" alt="Handiboost" className="h-14 xl:h-16 w-auto object-contain" />
+        </Link>
+        <nav className="hidden xl:flex items-center gap-6 border-r-4 border-slate-200 pr-8">
           <Link href="/association" className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
           <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
           <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>

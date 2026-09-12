@@ -35,7 +35,7 @@ export default function AssociationPage() {
               <img src="/illustrations/15.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-[#1566B1] mb-4 transition-colors">Notre mission</h2>
-            <p className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
+            <p className="text-lg text-slate-600 leading-relaxed font-medium text-left">
               Handiboost est un guichet unique dédié à l’activité physique adaptée. Il centralise les informations, les contacts et les ressources pour aider les personnes et les professionnels à trouver facilement des solutions adaptées à leurs besoins, sans avoir à chercher sur plusieurs plateformes.
             </p>
           </div>
@@ -46,7 +46,7 @@ export default function AssociationPage() {
               <img src="/illustrations/7.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-[#1566B1] mb-4 transition-colors">Nos valeurs</h2>
-            <p className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
+            <p className="text-lg text-slate-600 leading-relaxed font-medium text-left">
               Accessibilité, inclusion, coopération. Nos valeurs reposent sur l’écoute, le partage et l’échange afin de développer les réseaux selon les spécialités et les retours d’expérience de chacun.
             </p>
           </div>
@@ -57,7 +57,7 @@ export default function AssociationPage() {
               <img src="/illustrations/14.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-[#1566B1] mb-4 transition-colors">Notre réseau</h2>
-            <p className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
+            <p className="text-lg text-slate-600 leading-relaxed font-medium text-left">
               HandiBoost s’appuie sur un réseau d’experts professionnels de santé, paramédicaux, structures sportives et acteurs spécialisés.
             </p>
           </div>
@@ -68,7 +68,7 @@ export default function AssociationPage() {
               <img src="/illustrations/11.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-[#1566B1] mb-4 transition-colors">Notre objectif</h2>
-            <p className="text-lg text-slate-600 leading-relaxed font-medium text-justify">
+            <p className="text-lg text-slate-600 leading-relaxed font-medium text-left">
               Connecter les initiatives, éviter les doublons et proposer des solutions adaptées, accessibles partout sur le territoire, en faveur des bénéficiaires.
             </p>
           </div>
