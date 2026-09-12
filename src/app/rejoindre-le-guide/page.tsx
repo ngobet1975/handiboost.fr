@@ -142,11 +142,10 @@ export default function RejoindreGuidePage() {
                   <label className="block text-sm font-bold text-slate-700 mb-2">Type de structure *</label>
                   <select required name="type_structure" value={formData.type_structure} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:border-blue-500 outline-none font-medium text-slate-800">
                     <option value="">Sélectionnez...</option>
-                    <option value="Association sportive">Association sportive</option>
-                    <option value="Maison Sport-Santé">Maison Sport-Santé</option>
-                    <option value="Professionnel indépendant (EAPA, Kiné...)">Professionnel indépendant (EAPA, Kiné...)</option>
-                    <option value="Institution / Hôpital / Centre">Institution / Hôpital / Centre</option>
-                    <option value="Autre">Autre</option>
+                    <option value="Club">Club</option>
+                    <option value="Maison Sport Santé (MSS)">Maison Sport Santé (MSS)</option>
+                    <option value="Enseignant en APA libéral">Enseignant en APA libéral</option>
+                    <option value="Kinésithérapeute libéral">Kinésithérapeute libéral</option>
                   </select>
                 </div>
                 <div>
@@ -167,18 +166,17 @@ export default function RejoindreGuidePage() {
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Modalité d'intervention *</label>
                   <select required name="type_intervention" value={formData.type_intervention} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:border-blue-500 outline-none font-medium text-slate-800">
-                    <option value="En structure">En structure (sur place)</option>
-                    <option value="Itinérant">Itinérant (à domicile ou extérieur)</option>
-                    <option value="En distanciel">En distanciel (Visio)</option>
+                    <option value="">Sélectionnez...</option>
+                    <option value="Domicile">Domicile</option>
+                    <option value="Cabinet">Cabinet</option>
+                    <option value="Extérieur (parc, etc.)">Extérieur (parc, etc.)</option>
                     <option value="Mixte">Mixte</option>
                   </select>
                 </div>
-                {formData.type_intervention === 'Itinérant' && (
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-2">Rayon d'intervention (km) *</label>
-                    <input required type="number" name="rayon_intervention" value={formData.rayon_intervention} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:border-blue-500 outline-none font-medium text-slate-800" placeholder="Ex: 30" />
-                  </div>
-                )}
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Rayon d'intervention (km)</label>
+                  <input type="number" name="rayon_intervention" value={formData.rayon_intervention} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:border-blue-500 outline-none font-medium text-slate-800" placeholder="Laissez vide si fixe" />
+                </div>
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-2">Public accueilli (Handicap) *</label>
                   <select required name="public" value={formData.public} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:border-blue-500 outline-none font-medium text-slate-800">
@@ -194,10 +192,13 @@ export default function RejoindreGuidePage() {
                   <label className="block text-sm font-bold text-slate-700 mb-2">Tranche d'âge accueillie *</label>
                   <select required name="age" value={formData.age} onChange={handleChange} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 focus:border-blue-500 outline-none font-medium text-slate-800">
                     <option value="">Sélectionnez...</option>
-                    <option value="Enfants (0-11 ans)">Enfants (0-11 ans)</option>
-                    <option value="Ados (12-17 ans)">Ados (12-17 ans)</option>
-                    <option value="Adultes">Adultes</option>
-                    <option value="Seniors">Seniors</option>
+                    <option value="0-5 ans : petit enfant">0-5 ans : petit enfant</option>
+                    <option value="6-8 ans : jeunes">6-8 ans : jeunes</option>
+                    <option value="9-11 ans : enfants">9-11 ans : enfants</option>
+                    <option value="12-17 ans : adolescents">12-17 ans : adolescents</option>
+                    <option value="18-24 ans : jeunes adultes">18-24 ans : jeunes adultes</option>
+                    <option value="25-64 ans : adultes">25-64 ans : adultes</option>
+                    <option value="65 ans et plus : seniors">65 ans et plus : seniors</option>
                     <option value="Tous âges">Tous âges</option>
                   </select>
                 </div>

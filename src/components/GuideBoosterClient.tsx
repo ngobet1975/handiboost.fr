@@ -1,13 +1,16 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { Search, ExternalLink, MapPin, Building2, Users, Landmark, AlertTriangle, CheckCircle2, Filter } from 'lucide-react'
+import { Search, ExternalLink, MapPin, Building2, Users, Landmark, AlertTriangle, CheckCircle2, Filter, X, ChevronLeft, Map as MapIcon, Phone, Mail, Globe, ShieldCheck, Car, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { validateStructure, reportStructureError } from '@/app/admin/annuaire/actions'
 
-const Map = dynamic(() => import('@/components/Map'), { ssr: false, loading: () => <div className="w-full h-[60vh] min-h-[500px] max-h-[800px] bg-slate-100 flex items-center justify-center rounded-xl border border-slate-200">Chargement de la carte...</div> })
+const Map = dynamic(() => import('@/components/Map'), { 
+  ssr: false, 
+  loading: () => <div className="w-full h-full bg-slate-100 flex items-center justify-center font-bold text-slate-500">Chargement de la carte...</div> 
+})
 
 export interface GuideEntry {
   id: string
@@ -20,24 +23,18 @@ export interface GuideEntry {
   verified_at: string | null
 }
 
-const TYPE_CONFIG: Record<string, { label: string; icon: React.ReactNode; color: string; border: string; bg: string }> = {
-  club: { label: 'Club sportif', icon: <Users className="w-5 h-5" />, color: 'text-blue-700', border: 'border-blue-200', bg: 'bg-blue-50' },
-  professional: { label: 'Professionnel', icon: <Building2 className="w-5 h-5" />, color: 'text-purple-700', border: 'border-purple-200', bg: 'bg-purple-50' },
-  institution: { label: 'Institution', icon: <Landmark className="w-5 h-5" />, color: 'text-orange-700', border: 'border-orange-200', bg: 'bg-orange-50' },
-}
-
-export function GuideBoosterClient({ entries, structures = [], activites = [] }: { entries: GuideEntry[], structures?: any[], activites?: string[] }) {
-  const [search, setSearch] = useState('')
+export function GuideBoosterClient({ entries, structures = [], activites = [] }: { entries?: GuideEntry[], structures?: any[], activites?: string[] }) {
   const [addressSearch, setAddressSearch] = useState('')
   const [addressSuggestions, setAddressSuggestions] = useState<any[]>([])
   const [radius, setRadius] = useState<number>(30)
   const [userLocation, setUserLocation] = useState<{lat: number, lon: number} | null>(null)
-  const [isSearchingLocation, setIsSearchingLocation] = useState(false)
   
   const [typeFilter, setTypeFilter] = useState<string | null>(null)
-  const [activityFilter, setActivityFilter] = useState<string | null>(null)
+  const [interventionFilter, setInterventionFilter] = useState<string | null>(null)
   const [ageFilter, setAgeFilter] = useState<string | null>(null)
-  const [publicFilter, setPublicFilter] = useState<string | null>(null)
+  
+  const [selectedStructure, setSelectedStructure] = useState<any | null>(null)
+  const [isMobileListOpen, setIsMobileListOpen] = useState(true)
 
   const fetchSuggestions = async (query: string) => {
     setAddressSearch(query)
@@ -56,26 +53,10 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
     }
   }
 
-  const handleSearchLocation = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!addressSearch.trim()) {
-      setUserLocation(null)
-      return
-    }
-    setIsSearchingLocation(true)
-    try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressSearch)}`)
-      const data = await res.json()
-      if (data && data.length > 0) {
-        setUserLocation({ lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) })
-      } else {
-        setUserLocation(null)
-      }
-    } catch (e) {
-      setUserLocation(null)
-    } finally {
-      setIsSearchingLocation(false)
-    }
+  const handleSelectAddress = (feature: any) => {
+    setAddressSearch(feature.properties.label)
+    setUserLocation({ lat: feature.geometry.coordinates[1], lon: feature.geometry.coordinates[0] })
+    setAddressSuggestions([])
   }
 
   const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -89,397 +70,274 @@ export function GuideBoosterClient({ entries, structures = [], activites = [] }:
     return R * c
   }
 
-  const filteredMapStructures = useMemo(() => {
+  const filteredStructures = useMemo(() => {
     let result = structures || []
-    if (search) {
-      result = result.filter((s: any) => 
-        s.nom?.toLowerCase().includes(search.toLowerCase()) || 
-        s.activite?.toLowerCase().includes(search.toLowerCase())
-      )
+    
+    if (typeFilter) {
+      result = result.filter((s: any) => s.type_structure === typeFilter)
     }
-    if (userLocation && radius) {
-      // PDF instruction: "Quand le cercle de localisation se cree ne pas enlever les autres structures qui sont en dehors du cercle"
-      // We don't filter by radius here anymore. The radius is visual only.
+    if (interventionFilter) {
+      result = result.filter((s: any) => s.type_intervention === interventionFilter)
     }
-      if (activityFilter) {
-        const matchActivity = (rawActivite: string, filter: string) => {
-          const a = (rawActivite || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-          const f = filter.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-          
-          if (f.includes('art')) return a.includes('martial') || a.includes('judo') || a.includes('karat') || a.includes('boxe') || a.includes('taekwondo') || a.includes('escrime');
-          if (f.includes('athletisme')) return a.includes('athl') || a.includes('course');
-          if (f.includes('cyclisme')) return a.includes('cycl') || a.includes('velo') || a.includes('vtt');
-          if (f.includes('danse')) return a.includes('danse');
-          if (f.includes('equitation')) return a.includes('equitation') || a.includes('cheval') || a.includes('poney');
-          if (f.includes('gym')) return a.includes('gym') || a.includes('fit') || a.includes('yoga') || a.includes('pilate') || a.includes('renforcement');
-          if (f.includes('natation')) return a.includes('nautiq') || a.includes('natation') || a.includes('eau') || a.includes('piscine') || a.includes('plonge') || a.includes('aquagym');
-          if (f.includes('randonnee')) return a.includes('nature') || a.includes('randonnee') || a.includes('marche') || a.includes('montagne') || a.includes('escalade');
-          if (f.includes('balle')) return a.includes('ball') || a.includes('foot') || a.includes('basket') || a.includes('rugby') || a.includes('tennis') || a.includes('ping') || a.includes('volley') || a.includes('boccia');
-          if (f.includes('multisport')) return a.includes('multi') || a.includes('omnisport');
-          
-          return a.includes(f);
-        }
-        
-        result = result.filter((s: any) => matchActivity(s.activite, activityFilter))
-      }
-      if (ageFilter) {
-        result = result.filter((s: any) => !s.age || s.age.includes('Tous âges') || s.age.includes(ageFilter))
-      }
-      if (publicFilter) {
-        result = result.filter((s: any) => !s.public || s.public.includes('Tous types') || s.public.includes(publicFilter))
-      }
-      return result
-    }, [structures, search, userLocation, radius, activityFilter, ageFilter, publicFilter])
+    if (ageFilter) {
+      result = result.filter((s: any) => !s.age || s.age.includes('Tous âges') || s.age.includes(ageFilter))
+    }
+    
+    // Sort by distance if user location is set
+    if (userLocation) {
+      result.sort((a, b) => {
+        if (!a.latitude || !b.latitude) return 0;
+        return getDistance(userLocation.lat, userLocation.lon, a.latitude, a.longitude) - 
+               getDistance(userLocation.lat, userLocation.lon, b.latitude, b.longitude)
+      })
+    }
 
-  const filtered = useMemo(() => {
-    return entries.filter((e) => {
-      const matchSearch = search === '' || 
-        e.name.toLowerCase().includes(search.toLowerCase()) ||
-        (e.provider?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
-        (e.description?.toLowerCase().includes(search.toLowerCase()) ?? false)
-      const matchType = !typeFilter || e.type === typeFilter
-      return matchSearch && matchType
-    })
-  }, [entries, search, typeFilter])
+    return result
+  }, [structures, userLocation, typeFilter, interventionFilter, ageFilter])
 
-  const activeFilters = (typeFilter ? 1 : 0) + (activityFilter ? 1 : 0) + (ageFilter ? 1 : 0) + (publicFilter ? 1 : 0)
+  const activeFiltersCount = (typeFilter ? 1 : 0) + (interventionFilter ? 1 : 0) + (ageFilter ? 1 : 0)
 
   return (
-    <div>
-      {/* Search + Filters Block */}
-      <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-md p-6 md:p-10 mb-10">
+    <div className="fixed inset-0 z-50 flex flex-col md:flex-row bg-white overflow-hidden">
+      
+      {/* Sidebar Gauche */}
+      <div className={`w-full md:w-[420px] lg:w-[480px] h-full flex flex-col bg-white border-r border-slate-200 shadow-2xl z-10 transition-transform duration-300 absolute md:relative ${isMobileListOpen ? 'translate-y-0' : 'translate-y-[calc(100%-60px)] md:translate-y-0'}`}>
         
-        {/* Search Bar */}
-        <div className="relative mb-8">
-          <label htmlFor="guide-search" className="block text-xl font-bold text-slate-800 mb-3">
-            🔍 Rechercher par mot-clé
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-              <Search className="w-7 h-7 text-slate-400" />
-            </div>
-            <input
-              type="text"
-              id="guide-search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-50 border-3 border-slate-200 rounded-2xl py-5 pl-16 pr-6 text-xl font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400"
-              placeholder="Ex : handisport, kinésithérapeute, sport santé..."
-            />
+        {/* En-tête Sidebar */}
+        <div className="p-4 md:p-6 border-b border-slate-200 bg-white">
+          <div className="flex items-center justify-between mb-4">
+            <Link href="/" className="inline-flex items-center text-slate-500 hover:text-blue-700 font-medium transition-colors">
+              <ChevronLeft className="w-5 h-5 mr-1" /> Retour au site
+            </Link>
+            <button className="md:hidden p-2 text-slate-500 bg-slate-100 rounded-full" onClick={() => setIsMobileListOpen(!isMobileListOpen)}>
+              {isMobileListOpen ? <X size={20} /> : <MapIcon size={20} />}
+            </button>
           </div>
-        </div>
 
-        {/* Address Search */}
-        <form onSubmit={handleSearchLocation} className="relative mb-8 p-6 bg-slate-50 rounded-2xl border-2 border-slate-100">
-          <label className="block text-lg font-bold text-slate-800 mb-3">
-            📍 Trouver autour de moi (Adresse du patient)
-          </label>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <input
-                type="text"
+          <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-2">
+            <MapPin className="text-blue-600" /> Guide Booster
+          </h2>
+
+          {/* Recherche Adresse */}
+          <div className="relative mb-4">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Votre localisation</label>
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder="Saisissez votre adresse..." 
                 value={addressSearch}
                 onChange={(e) => fetchSuggestions(e.target.value)}
-                className="w-full bg-white border-2 border-slate-300 rounded-xl py-3 px-4 text-lg font-medium focus:outline-none focus:border-blue-500"
-                placeholder="Adresse, Ville ou Code Postal..."
+                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-4 py-3 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none transition-all font-medium text-slate-800 placeholder:text-slate-400"
               />
-              {addressSuggestions.length > 0 && (
-                <div className="absolute z-10 w-full mt-2 bg-white border-2 border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto">
-                  {addressSuggestions.map((sugg, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 hover:bg-blue-50 cursor-pointer text-slate-700 font-medium border-b border-slate-100 last:border-b-0"
-                      onClick={() => {
-                        setAddressSearch(sugg.properties.label)
-                        setAddressSuggestions([])
-                        setUserLocation({
-                          lon: sugg.geometry.coordinates[0],
-                          lat: sugg.geometry.coordinates[1]
-                        })
-                      }}
-                    >
-                      📍 {sugg.properties.label}
-                    </div>
-                  ))}
+              <Search className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
+            </div>
+            {addressSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-slate-200 shadow-xl z-50 overflow-hidden">
+                {addressSuggestions.map((f, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleSelectAddress(f)}
+                    className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 last:border-0 text-sm font-medium text-slate-700 transition-colors"
+                  >
+                    {f.properties.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Filtres */}
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <select value={typeFilter || ''} onChange={e => setTypeFilter(e.target.value || null)} className="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 focus:border-blue-500 outline-none truncate">
+                <option value="">Tous les types</option>
+                <option value="Club">Club</option>
+                <option value="Maison Sport Santé (MSS)">Maison Sport Santé (MSS)</option>
+                <option value="Enseignant en APA libéral">Enseignant en APA libéral</option>
+                <option value="Kinésithérapeute libéral">Kinésithérapeute libéral</option>
+              </select>
+              
+              <select value={interventionFilter || ''} onChange={e => setInterventionFilter(e.target.value || null)} className="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 focus:border-blue-500 outline-none truncate">
+                <option value="">Intervention...</option>
+                <option value="Domicile">Domicile</option>
+                <option value="Cabinet">Cabinet</option>
+                <option value="Extérieur (parc, etc.)">Extérieur</option>
+                <option value="Mixte">Mixte</option>
+              </select>
+            </div>
+            
+            <div className="flex gap-2 items-center">
+              <select value={ageFilter || ''} onChange={e => setAgeFilter(e.target.value || null)} className="flex-1 bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 focus:border-blue-500 outline-none truncate">
+                <option value="">Tous âges</option>
+                <option value="0-5 ans : petit enfant">0-5 ans</option>
+                <option value="6-8 ans : jeunes">6-8 ans</option>
+                <option value="9-11 ans : enfants">9-11 ans</option>
+                <option value="12-17 ans : adolescents">12-17 ans</option>
+                <option value="18-24 ans : jeunes adultes">18-24 ans</option>
+                <option value="25-64 ans : adultes">25-64 ans</option>
+                <option value="65 ans et plus : seniors">65 ans et plus</option>
+              </select>
+
+              {userLocation && (
+                <div className="flex-1 relative group">
+                  <label className="absolute -top-2 left-2 bg-white px-1 text-[10px] font-bold text-blue-600">Rayon ({radius}km)</label>
+                  <input type="range" min="1" max="100" value={radius} onChange={e => setRadius(parseInt(e.target.value))} className="w-full accent-blue-600 mt-2" />
                 </div>
               )}
             </div>
-            {/* Curseur rayon */}
-            <div style={{ marginTop: 12 }}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-bold text-slate-600">Rayon de recherche</span>
-                <span className="text-base font-black text-blue-700 bg-blue-50 px-3 py-1 rounded-xl border border-blue-200">{radius} km</span>
-              </div>
-              <input
-                type="range"
-                min={5}
-                max={100}
-                step={5}
-                value={radius}
-                onChange={(e) => setRadius(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-600"
-              />
-              <div className="flex justify-between text-xs text-slate-400 font-medium mt-1">
-                <span>5 km</span>
-                <span>100 km</span>
-              </div>
-            </div>
-            <Button type="submit" disabled={isSearchingLocation} className="h-auto py-3 px-6 text-lg font-bold rounded-xl bg-slate-800 hover:bg-slate-900 text-white shadow-md">
-              {isSearchingLocation ? 'Recherche...' : 'Filtrer'}
-            </Button>
-            {userLocation && (
-              <Button type="button" variant="outline" onClick={() => { setUserLocation(null); setAddressSearch(''); }} className="h-auto py-3 px-4 text-lg font-bold rounded-xl border-slate-300 hover:bg-slate-200 text-slate-700">
-                ✕
-              </Button>
+
+            {activeFiltersCount > 0 && (
+              <button onClick={() => { setTypeFilter(null); setInterventionFilter(null); setAgeFilter(null) }} className="text-xs font-bold text-red-500 hover:text-red-600 flex items-center">
+                <X size={14} className="mr-1" /> Réinitialiser les filtres
+              </button>
             )}
           </div>
-        </form>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Type filters */}
-          <div>
-            <p className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5 text-slate-500" /> Que cherchez-vous ?
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {Object.entries(TYPE_CONFIG).map(([key, conf]) => (
-                <button
-                  key={key}
-                  onClick={() => setTypeFilter(typeFilter === key ? null : key)}
-                  className={`inline-flex items-center gap-3 px-6 py-4 rounded-2xl font-bold text-lg border-3 transition-all cursor-pointer ${
-                    typeFilter === key
-                      ? `${conf.bg} ${conf.border} ${conf.color} shadow-lg scale-105 ring-2 ring-offset-2 ring-blue-300`
-                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm'
-                  }`}
-                >
-                  {conf.icon} {conf.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Activity filter */}
-          <div>
-            <p className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-              <Filter className="w-5 h-5 text-slate-500" /> Filtres de la carte
-            </p>
-            <div className="flex flex-col gap-3">
-              <select
-                value={activityFilter || ''}
-                onChange={(e) => setActivityFilter(e.target.value || null)}
-                className="w-full bg-white border-2 border-slate-200 rounded-xl py-3 px-4 font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
-              >
-                <option value="">Toutes les activités</option>
-                {activites.map((act) => (
-                  <option key={act} value={act}>
-                    {act}
-                  </option>
-                ))}
-              </select>
-              <div className="flex gap-3">
-                <select
-                  value={ageFilter || ''}
-                  onChange={(e) => setAgeFilter(e.target.value || null)}
-                  className="w-1/2 bg-white border-2 border-slate-200 rounded-xl py-3 px-4 font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
-                >
-                  <option value="">Tous les âges</option>
-                  <option value="Enfants">Enfants (0-11 ans)</option>
-                  <option value="Ados">Ados (12-17 ans)</option>
-                  <option value="Adultes">Adultes</option>
-                  <option value="Seniors">Seniors</option>
-                </select>
-                <select
-                  value={publicFilter || ''}
-                  onChange={(e) => setPublicFilter(e.target.value || null)}
-                  className="w-1/2 bg-white border-2 border-slate-200 rounded-xl py-3 px-4 font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
-                >
-                  <option value="">Tous les publics</option>
-                  <option value="Moteur">Handicap Moteur</option>
-                  <option value="Visuel">Handicap Visuel</option>
-                  <option value="Auditif">Handicap Auditif</option>
-                  <option value="Mental / Psychique">Handicap Mental / Psychique</option>
-                </select>
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* Active filters / reset */}
-        {activeFilters > 0 && (
-          <div className="mt-6 pt-6 border-t border-slate-200 flex items-center justify-between">
-            <p className="text-base font-medium text-slate-500">
-              {activeFilters} filtre{activeFilters > 1 ? 's' : ''} actif{activeFilters > 1 ? 's' : ''}
-            </p>
-            <button
-              onClick={() => { setTypeFilter(null); setActivityFilter(null); setAgeFilter(null); setPublicFilter(null); setSearch(''); }}
-              className="text-lg text-red-600 font-bold hover:underline px-4 py-2 rounded-lg hover:bg-red-50 transition-colors"
-            >
-              ✕ Tout effacer
-            </button>
-          </div>
-        )}
-      </div>
+        {/* Contenu dynamique (Liste ou Détails) */}
+        <div className="flex-1 overflow-y-auto bg-slate-50/50 p-4 relative">
+          {selectedStructure ? (
+            <div className="animate-in slide-in-from-right-4 duration-300">
+              <button onClick={() => setSelectedStructure(null)} className="mb-4 inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">
+                <ChevronLeft size={16} className="mr-1" /> Retour à la liste
+              </button>
 
-      {/* Results count */}
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">La Carte des Structures Locales</h2>
-        <p className="text-lg font-medium text-slate-500">
-          {filteredMapStructures.length} structure{filteredMapStructures.length > 1 ? 's' : ''} référencée{filteredMapStructures.length > 1 ? 's' : ''}
-        </p>
-      </div>
-
-      <div className="mb-16">
-        <Map structures={filteredMapStructures} userLocation={userLocation} searchRadius={userLocation ? radius : undefined} onMarkerClick={(s) => {
-          const el = document.getElementById(`structure-${s.id}`)
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            el.classList.add('ring-4', 'ring-blue-500', 'ring-offset-2')
-            setTimeout(() => el.classList.remove('ring-4', 'ring-blue-500', 'ring-offset-2'), 2000)
-          }
-        }} />
-      </div>
-
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Annuaires Partenaires</h2>
-        <p className="text-lg font-medium text-slate-500">
-          {filtered.length} résultat{filtered.length > 1 ? 's' : ''}{search && ` pour "${search}"`}
-        </p>
-      </div>
-
-      {/* Results Grid */}
-      {filtered.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-slate-200">
-          <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-slate-700 mb-2">Aucun résultat</h3>
-          <p className="text-slate-500">Essayez un autre terme ou supprimez les filtres.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((entry) => {
-            const typeConf = TYPE_CONFIG[entry.type ?? 'institution'] ?? TYPE_CONFIG.institution
-
-            const isVerifiedRecently = entry.verified_at && 
-              (Date.now() - new Date(entry.verified_at).getTime()) < 180 * 24 * 60 * 60 * 1000 // 6 mois
-
-            return (
-              <div
-                key={entry.id}
-                id={`structure-${entry.id}`}
-                className={`bg-white rounded-2xl border-2 ${typeConf.border} shadow-sm hover:shadow-lg transition-all flex flex-col overflow-hidden group`}
-              >
-                {/* Type bar */}
-                <div className={`${typeConf.bg} px-5 py-3 flex items-center justify-between`}>
-                  <span className={`font-bold text-sm flex items-center gap-2 ${typeConf.color}`}>
-                    {typeConf.icon} {typeConf.label}
-                  </span>
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold mb-3">
+                  {selectedStructure.type_structure}
                 </div>
+                
+                <h3 className="text-2xl font-black text-slate-900 mb-2 leading-tight">{selectedStructure.nom}</h3>
+                
+                {selectedStructure.valide && (
+                  <div className="flex items-center gap-1.5 text-emerald-600 text-sm font-bold bg-emerald-50 px-3 py-1.5 rounded-lg w-fit mb-4">
+                    <CheckCircle2 size={16} /> Structure Validée
+                  </div>
+                )}
+                
+                <p className="text-slate-600 font-medium mb-6">{selectedStructure.informations}</p>
 
-                {/* Content */}
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-extrabold text-slate-900 mb-1 group-hover:text-blue-700 transition-colors leading-tight">
-                    {entry.name}
-                  </h3>
-                  {entry.provider && (
-                    <p className="text-sm font-semibold text-slate-500 mb-3">{entry.provider}</p>
+                <div className="space-y-4">
+                  {selectedStructure.activite && (
+                    <div className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-600"><Activity size={16}/></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Activités</div>
+                        <div className="text-slate-800 font-medium">{selectedStructure.activite}</div>
+                      </div>
+                    </div>
                   )}
-                  <p className="text-slate-600 text-base leading-relaxed mb-4 flex-1">
-                    {entry.description}
-                  </p>
 
-                  {/* Verified badge */}
-                  <div className="mb-4">
-                    {isVerifiedRecently ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Vérifié le {new Date(entry.verified_at!).toLocaleDateString('fr-FR')}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
-                        <AlertTriangle className="w-3.5 h-3.5" />
-                        Vérifiez les infos sur le site officiel
-                      </span>
+                  {selectedStructure.adresse && (
+                    <div className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-600"><MapPin size={16}/></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Adresse</div>
+                        <div className="text-slate-800 font-medium leading-snug">{selectedStructure.adresse}</div>
+                        {userLocation && selectedStructure.latitude && (
+                          <div className="text-blue-600 text-sm font-bold mt-1">
+                            À {getDistance(userLocation.lat, userLocation.lon, selectedStructure.latitude, selectedStructure.longitude).toFixed(1)} km
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedStructure.type_intervention && (
+                    <div className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-600"><Car size={16}/></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Intervention</div>
+                        <div className="text-slate-800 font-medium">{selectedStructure.type_intervention}</div>
+                        {selectedStructure.rayon_intervention && <div className="text-sm text-slate-500">Rayon : {selectedStructure.rayon_intervention} km</div>}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedStructure.telephone && (
+                    <div className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0 text-blue-600"><Phone size={16}/></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Téléphone</div>
+                        <a href={`tel:${selectedStructure.telephone}`} className="text-blue-600 font-bold hover:underline">{selectedStructure.telephone}</a>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedStructure.mail && (
+                    <div className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0 text-blue-600"><Mail size={16}/></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">E-mail</div>
+                        <a href={`mailto:${selectedStructure.mail}`} className="text-blue-600 font-bold hover:underline">{selectedStructure.mail}</a>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedStructure.site && (
+                    <div className="flex gap-3 items-start">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 text-slate-600"><Globe size={16}/></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Site web</div>
+                        <a href={selectedStructure.site} target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium hover:underline flex items-center gap-1">Visiter le site <ExternalLink size={12}/></a>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Validation action */}
+                  <div className="mt-8 pt-6 border-t border-slate-100 space-y-3">
+                    <button onClick={() => { reportStructureError(selectedStructure.id); alert('Signalement envoyé') }} className="w-full py-3 rounded-xl flex justify-center items-center gap-2 bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition-colors">
+                      <AlertTriangle size={18} /> Signaler une erreur
+                    </button>
+                    {!selectedStructure.valide && (
+                      <button onClick={() => { validateStructure(selectedStructure.id); alert('Structure validée !') }} className="w-full py-3 rounded-xl flex justify-center items-center gap-2 bg-emerald-50 text-emerald-600 font-bold hover:bg-emerald-100 transition-colors">
+                        <ShieldCheck size={18} /> Marquer comme validé
+                      </button>
                     )}
                   </div>
                 </div>
-
-                {/* Actions */}
-                <div className="px-6 pb-6 flex flex-col gap-2 mt-auto">
-                  <div className="flex gap-2 w-full">
-                    <button
-                      onClick={async () => {
-                        try {
-                          await validateStructure(entry.id)
-                          alert("Merci d'avoir validé ces informations !");
-                        } catch (e) {
-                          console.error(e)
-                        }
-                      }}
-                      className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors text-sm"
-                    >
-                      <CheckCircle2 className="w-4 h-4" />
-                      Valider
-                    </button>
-                    <button
-                      onClick={async () => {
-                        try {
-                          await reportStructureError(entry.id)
-                          alert("Problème signalé, merci !");
-                          window.location.href = `mailto:handiboost.contact@gmail.com?subject=Erreur sur la structure ${entry.name}`;
-                        } catch (e) {
-                          console.error(e)
-                        }
-                      }}
-                      className="flex-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors text-sm"
-                    >
-                      <AlertTriangle className="w-4 h-4" />
-                      Signaler
-                    </button>
-                  </div>
-
-                  {entry.url && (
-                    <a
-                      href={entry.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-base transition-all ${typeConf.bg} ${typeConf.color} border-2 ${typeConf.border} hover:shadow-md hover:scale-[1.02]`}
-                    >
-                      Consulter l'annuaire <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
               </div>
-            )
-          })}
-        </div>
-      )}
-
-      {/* Disclaimer + Signal */}
-      <div className="mt-16 space-y-6">
-        <div className="bg-blue-50 border-2 border-blue-200 p-6 md:p-8 rounded-2xl">
-          <p className="text-blue-900 text-lg font-medium leading-relaxed">
-            <strong>ℹ️ Important :</strong> Ces liens renvoient vers les annuaires officiels des fédérations et institutions.
-            Contactez directement la structure pour vérifier les activités proposées et les disponibilités.
-          </p>
-        </div>
-
-        <div className="bg-white border-2 border-slate-200 p-6 md:p-8 rounded-2xl text-center flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-left">
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Vous êtes un professionnel du sport santé ou de l'APA ?</h3>
-            <p className="text-slate-600">Rejoignez le réseau Handiboost et référencez gratuitement votre structure sur la carte.</p>
-          </div>
-          <Button nativeButton={false} render={<Link href="/rejoindre-le-guide" />} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 h-12 rounded-xl whitespace-nowrap">
-            Demander mon intégration
-          </Button>
-        </div>
-
-        <div className="bg-white border-2 border-slate-200 p-6 md:p-8 rounded-2xl text-center">
-          <h3 className="text-xl font-bold text-slate-900 mb-2">Un lien ne fonctionne plus ? Une info est périmée ?</h3>
-          <p className="text-slate-600 mb-4">Aidez-nous à maintenir cet outil à jour en nous signalant le problème.</p>
-          <Button nativeButton={false} render={<Link href="/contact" />} className="bg-slate-800 hover:bg-slate-900 text-white font-bold px-8 h-12 rounded-xl">
-            <AlertTriangle className="w-4 h-4 mr-2" /> Signaler un problème
-          </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="text-sm font-bold text-slate-500 mb-2">{filteredStructures.length} structures trouvées</div>
+              {filteredStructures.map((s: any) => (
+                <div key={s.id} onClick={() => setSelectedStructure(s)} className="bg-white p-4 rounded-xl border-2 border-transparent hover:border-blue-200 shadow-sm hover:shadow-md cursor-pointer transition-all duration-200">
+                  <div className="flex items-start justify-between mb-1">
+                    <h4 className="font-bold text-slate-800 line-clamp-1">{s.nom}</h4>
+                    {s.valide && <ShieldCheck size={16} className="text-emerald-500 shrink-0 ml-2" />}
+                  </div>
+                  <p className="text-sm text-slate-600 font-medium mb-2">{s.activite}</p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-[10px] font-bold uppercase bg-slate-100 text-slate-600 px-2 py-1 rounded">{s.type_structure}</span>
+                    <span className="text-[10px] font-bold uppercase bg-blue-50 text-blue-600 px-2 py-1 rounded">{s.type_intervention}</span>
+                  </div>
+                </div>
+              ))}
+              {filteredStructures.length === 0 && (
+                <div className="text-center py-10 text-slate-500 font-medium">
+                  Aucune structure ne correspond à vos critères.
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Carte (Prend le reste de l'écran) */}
+      <div className="flex-1 relative h-[60vh] md:h-screen w-full bg-slate-100">
+        <Map 
+          structures={filteredStructures} 
+          userLocation={userLocation} 
+          searchRadius={radius} 
+          onMarkerClick={(s) => {
+            setSelectedStructure(s)
+            setIsMobileListOpen(true) // Ouvrir la liste sur mobile si clic sur carte
+          }}
+          selectedStructureId={selectedStructure?.id}
+        />
+      </div>
+
     </div>
   )
 }

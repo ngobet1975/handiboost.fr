@@ -1,50 +1,56 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Circle, useMap, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import { renderToString } from 'react-dom/server'
 import {
-  AlertTriangle, X, Mail, Search, Maximize2, Minimize2,
-  Phone, Globe, MapPin, CheckCircle2, Car, ShieldCheck, Clock
+  Activity, PersonStanding, Target, Trophy, 
+  MapPin, Accessibility, PersonStanding as Person, Goal,
+  Swords, Dumbbell, Flag, Anchor, Mountain, Crown, Map as MapIcon
 } from 'lucide-react'
-import { reportStructureError, validateStructure } from '@/app/admin/annuaire/actions'
 
-// ─── Couleurs & emojis par activité ──────────────────────────────────────────
+// Icon mapping logic
 const getActivityConfig = (activite: string) => {
-  const a = (activite || '').toLowerCase()
-  if (a.includes('equitation') || a.includes('cheval')) return { color: '#8b4513', emoji: '🐴' }
-  if (a.includes('nautiq') || a.includes('natation') || a.includes('eau') || a.includes('piscine')) return { color: '#0ea5e9', emoji: '🏊' }
-  if (a.includes('gym') || a.includes('fit') || a.includes('yoga') || a.includes('pilate')) return { color: '#ec4899', emoji: '🤸' }
-  if (a.includes('combat') || a.includes('art martial') || a.includes('judo') || a.includes('karat')) return { color: '#ef4444', emoji: '🥋' }
-  if (a.includes('ball') || a.includes('foot') || a.includes('basket') || a.includes('rugby') || a.includes('tennis')) return { color: '#f97316', emoji: '⚽' }
-  if (a.includes('athl') || a.includes('course')) return { color: '#eab308', emoji: '🏃' }
-  if (a.includes('danse')) return { color: '#8b5cf6', emoji: '💃' }
-  if (a.includes('nature') || a.includes('randonnee') || a.includes('marche') || a.includes('velo') || a.includes('cycl')) return { color: '#22c55e', emoji: '🚴' }
-  return { color: '#3b82f6', emoji: '📍' }
+  const a = (activite || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  
+  if (a.includes('multisport')) return { color: '#1e3a8a', icon: <Activity color="white" /> } // bleu marine
+  if (a.includes('apa')) return { color: '#fbcfe8', icon: <Accessibility color="white" /> } // rose pastel
+  if (a.includes('foot')) return { color: '#10b981', icon: <Target color="white" /> } // vert émeraude
+  if (a.includes('basket')) return { color: '#ea580c', icon: <Target color="white" /> } // orange foncé
+  if (a.includes('natation') || a.includes('eau') || a.includes('piscine') || a.includes('plonge')) return { color: '#06b6d4', icon: <Activity color="white" /> } // turquoise
+  if (a.includes('danse')) return { color: '#facc15', icon: <Person color="white" /> } // jaune
+  if (a.includes('athl') || a.includes('biathlon') || a.includes('triathlon')) return { color: '#451a03', icon: <Activity color="white" /> } // marron foncé
+  if (a.includes('tennis') && !a.includes('table')) return { color: '#14532d', icon: <Trophy color="white" /> } // vert sapin
+  if (a.includes('canoe')) return { color: '#06b6d4', icon: <Anchor color="white" /> } // cyan
+  if (a.includes('tir') && a.includes('arc')) return { color: '#000000', icon: <Target color="white" /> } // noir
+  if (a.includes('escalade')) return { color: '#d97706', icon: <Mountain color="white" /> } // marron clair
+  if (a.includes('equitation') || a.includes('equitherapie') || a.includes('cheval')) return { color: '#4d7c0f', icon: <Flag color="white" /> } // vert kaki
+  if (a.includes('tennis de table') || a.includes('ping')) return { color: '#fdba74', icon: <Target color="white" /> } // orange clair
+  if (a.includes('judo')) return { color: '#f87171', icon: <Activity color="white" /> } // rouge clair
+  if (a.includes('boxe')) return { color: '#991b1b', icon: <Swords color="white" /> } // rouge foncé
+  if (a.includes('rugby')) return { color: '#7f1d1d', icon: <Target color="white" /> } // bordeaux
+  if (a.includes('badminton')) return { color: '#d946ef', icon: <Trophy color="white" /> } // magenta
+  if (a.includes('gym')) return { color: '#d8b4fe', icon: <Activity color="white" /> } // violet clair
+  if (a.includes('escrime')) return { color: '#4c1d95', icon: <Swords color="white" /> } // violet foncé
+  if (a.includes('renforcement')) return { color: '#e2e8f0', icon: <Dumbbell color="#1e293b" /> } // gris clair
+  if (a.includes('voile')) return { color: '#06b6d4', icon: <Anchor color="white" /> } // cyan
+  if (a.includes('randonnee') || a.includes('marche')) return { color: '#451a03', icon: <Mountain color="white" /> } // marron foncé
+  if (a.includes('echecs')) return { color: '#f5f5dc', icon: <Crown color="#451a03" /> } // beige
+  if (a.includes('cirque')) return { color: '#facc15', icon: <Goal color="white" /> } // jaune
+  if (a.includes('handball')) return { color: '#c084fc', icon: <Target color="white" /> } // mauve
+  if (a.includes('boccia') || a.includes('petanque')) return { color: '#334155', icon: <Target color="white" /> } // gris foncé
+
+  return { color: '#3b82f6', icon: <MapPin color="white" /> } // default
 }
 
-// ─── Favicon ──────────────────────────────────────────────────────────────────
-const getFavicon = (url: string) => {
-  try {
-    const domain = new URL(url.startsWith('http') ? url : `https://${url}`).hostname
-    return `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${domain}&size=64`
-  } catch {
-    return null
-  }
-}
+const createCustomIcon = (color: string, iconElement: React.ReactNode, selected = false) => {
+  const size = selected ? 56 : 40
+  const borderColor = 'white'
+  const shadow = selected ? '0 8px 24px rgba(0,0,0,0.5)' : '0 6px 16px rgba(0,0,0,0.35)'
 
-// ─── Marqueur coloré ─────────────────────────────────────────────────────────
-const createCustomIcon = (color: string, emoji: string, faviconUrl: string | null, selected = false) => {
-  const size = selected ? 64 : 52
-  const borderColor = selected ? 'white' : 'white'
-  const shadow = selected
-    ? '0 8px 24px rgba(0,0,0,0.5)'
-    : '0 6px 16px rgba(0,0,0,0.35)'
-
-  const faviconHtml = faviconUrl
-    ? `<img src="${faviconUrl}" style="width:${selected ? 32 : 26}px;height:${selected ? 32 : 26}px;object-fit:contain;border-radius:4px;" onerror="this.style.display='none';this.nextSibling.style.display='block';" /><span style="display:none;font-size:${selected ? 22 : 18}px;line-height:1;">${emoji}</span>`
-    : `<span style="font-size:${selected ? 22 : 18}px;line-height:1;">${emoji}</span>`
+  const iconHtml = renderToString(<div style={{width: '20px', height: '20px', color: 'white'}}>{iconElement}</div>)
 
   const html = `
     <div style="
@@ -54,11 +60,11 @@ const createCustomIcon = (color: string, emoji: string, faviconUrl: string | nul
       transform:rotate(-45deg);
       display:flex;align-items:center;justify-content:center;
       box-shadow:${shadow};
-      border:${selected ? 4 : 3}px solid ${borderColor};
+      border:${selected ? 4 : 2}px solid ${borderColor};
       transition:all 0.2s;
     ">
       <div style="transform:rotate(45deg);display:flex;align-items:center;justify-content:center;">
-        ${faviconHtml}
+        ${iconHtml}
       </div>
     </div>`
 
@@ -71,188 +77,111 @@ const createCustomIcon = (color: string, emoji: string, faviconUrl: string | nul
   })
 }
 
-// ─── Barre de recherche interne ───────────────────────────────────────────────
-function MapSearch({ structures, onSelect }: { structures: any[]; onSelect: (s: any) => void }) {
+const userIcon = L.divIcon({
+  className: '',
+  html: `
+    <div style="
+      width:30px;height:30px;
+      background:#2563eb;
+      border-radius:50%;
+      border:3px solid white;
+      box-shadow:0 0 15px rgba(37, 99, 235, 0.5);
+      animation: pulse 2s infinite;
+    "></div>
+  `,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15]
+})
+
+function MapCenterer({ userLocation, structures }: { userLocation?: {lat: number, lon: number} | null, structures: any[] }) {
   const map = useMap()
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState<any[]>([])
+  
+  useEffect(() => {
+    if (userLocation) {
+      map.flyTo([userLocation.lat, userLocation.lon], 11, { duration: 1.5 })
+    } else if (structures.length > 0) {
+      const lats = structures.map(s => s.latitude).filter(l => l != null)
+      const lons = structures.map(s => s.longitude).filter(l => l != null)
+      if (lats.length > 0 && lons.length > 0) {
+        const minLat = Math.min(...lats)
+        const maxLat = Math.max(...lats)
+        const minLon = Math.min(...lons)
+        const maxLon = Math.max(...lons)
+        map.fitBounds([[minLat, minLon], [maxLat, maxLon]], { padding: [50, 50] })
+      }
+    } else {
+      map.setView([46.603354, 1.888334], 5) // France
+    }
+  }, [userLocation, map])
 
-  const handleSearch = (value: string) => {
-    setQuery(value)
-    if (value.length < 2) { setResults([]); return }
-    const q = value.toLowerCase()
-    setResults(structures.filter(s =>
-      s.nom?.toLowerCase().includes(q) ||
-      s.activite?.toLowerCase().includes(q) ||
-      s.adresse?.toLowerCase().includes(q)
-    ).slice(0, 8))
-  }
-
-  const handleSelect = (s: any) => {
-    if (s.latitude && s.longitude) map.flyTo([s.latitude, s.longitude], 14, { duration: 1.2 })
-    onSelect(s)
-    setQuery(s.nom)
-    setResults([])
-  }
-
-  return (
-    <div style={{ position: 'absolute', top: 12, left: 12, right: 12, zIndex: 1000, maxWidth: 380 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'white', borderRadius: 14, padding: '8px 14px', boxShadow: '0 4px 20px rgba(0,0,0,0.18)', border: '2px solid #e2e8f0' }}>
-        <Search size={18} color="#94a3b8" />
-        <input
-          value={query}
-          onChange={e => handleSearch(e.target.value)}
-          placeholder="Rechercher une structure ou activité..."
-          style={{ flex: 1, border: 'none', outline: 'none', fontSize: 15, fontWeight: 600, color: '#1e293b', background: 'transparent' }}
-        />
-        {query && <button onClick={() => { setQuery(''); setResults([]) }} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8' }}><X size={16} /></button>}
-      </div>
-      {results.length > 0 && (
-        <div style={{ background: 'white', borderRadius: 12, marginTop: 6, boxShadow: '0 8px 24px rgba(0,0,0,0.15)', overflow: 'hidden', border: '1.5px solid #e2e8f0' }}>
-          {results.map((s, i) => {
-            const conf = getActivityConfig(s.activite)
-            return (
-              <div key={s.id || i} onClick={() => handleSelect(s)}
-                style={{ padding: '10px 14px', cursor: 'pointer', borderBottom: i < results.length - 1 ? '1px solid #f1f5f9' : 'none', display: 'flex', alignItems: 'center', gap: 10 }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'white')}
-              >
-                <div style={{ width: 32, height: 32, borderRadius: '50%', background: conf.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>{conf.emoji}</div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: '#1e293b' }}>{s.nom}</div>
-                  <div style={{ fontSize: 12, color: '#64748b' }}>{s.activite} — {s.adresse}</div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ─── Composant pour fermer le panneau en cliquant sur la carte ────────────────
-function MapClickHandler({ onClose }: { onClose: () => void }) {
-  useMapEvents({ click: onClose })
   return null
 }
 
-// ─── Composant principal ──────────────────────────────────────────────────────
 interface MapProps {
   structures: any[]
   userLocation?: { lat: number; lon: number } | null
   searchRadius?: number
   onMarkerClick?: (structure: any) => void
+  selectedStructureId?: string | null
 }
 
-export default function Map({ structures, userLocation, searchRadius, onMarkerClick }: MapProps) {
-  const [selectedStructureId, setSelectedStructureId] = useState<string | null>(null)
-  const [isFullscreen, setIsFullscreen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const toggleFullscreen = async () => {
-    if (!document.fullscreenElement) {
-      await containerRef.current?.requestFullscreen()
-      setIsFullscreen(true)
-    } else {
-      await document.exitFullscreen()
-      setIsFullscreen(false)
-    }
-  }
-
-  useEffect(() => {
-    const handler = () => setIsFullscreen(!!document.fullscreenElement)
-    document.addEventListener('fullscreenchange', handler)
-    return () => document.removeEventListener('fullscreenchange', handler)
-  }, [])
+export default function Map({ structures, userLocation, searchRadius, onMarkerClick, selectedStructureId }: MapProps) {
+  const selectedStructure = structures.find(s => s.id === selectedStructureId)
 
   return (
-    <div
-      ref={containerRef}
-      style={{ position: 'relative' }}
-      className="w-full h-[65vh] min-h-[520px] max-h-[850px] rounded-2xl overflow-hidden border-2 border-slate-200 shadow-lg"
-    >
-      <MapContainer
-        center={[46.603354, 1.888334]}
-        zoom={6}
-        minZoom={6}
-        maxZoom={18}
-        maxBounds={[[41.0, -5.5], [51.5, 10.0]]}
-        maxBoundsViscosity={1.0}
-        scrollWheelZoom={true}
-        style={{ height: '100%', width: '100%', zIndex: 0 }}
+    <div className="w-full h-full relative" style={{ zIndex: 0 }}>
+      <MapContainer 
+        center={[46.603354, 1.888334]} 
+        zoom={5} 
+        style={{ height: '100%', width: '100%', borderRadius: 'inherit' }}
+        zoomControl={false}
       >
         <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
         />
+        
+        <MapCenterer userLocation={userLocation} structures={structures} />
+        
+        {/* User Location Marker & Radius (Rayon de recherche) */}
+        {userLocation && (
+          <>
+            <Marker position={[userLocation.lat, userLocation.lon]} icon={userIcon} />
+            {searchRadius && (
+              <Circle 
+                center={[userLocation.lat, userLocation.lon]} 
+                radius={searchRadius * 1000} 
+                pathOptions={{ color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.1, weight: 2, dashArray: '5, 10' }} 
+              />
+            )}
+          </>
+        )}
 
-        {/* Barre de recherche */}
-        <MapSearch structures={structures} onSelect={(s) => {
-          setSelectedStructureId(s.id)
-          if (onMarkerClick) onMarkerClick(s)
-        }} />
-
-        {/* Fermer panneau si clic sur la carte */}
-        <MapClickHandler onClose={() => setSelectedStructureId(null)} />
-
-        {/* Cercle rayon de recherche */}
-        {userLocation && searchRadius && (
-          <Circle
-            center={[userLocation.lat, userLocation.lon]}
-            radius={searchRadius * 1000}
-            pathOptions={{ color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.08, weight: 2, dashArray: '8 4' }}
+        {/* Structure Activity Radius (Rayon d'activité de la structure sélectionnée) */}
+        {selectedStructure?.latitude && selectedStructure?.longitude && selectedStructure?.rayon_intervention && (
+          <Circle 
+            center={[selectedStructure.latitude, selectedStructure.longitude]} 
+            radius={selectedStructure.rayon_intervention * 1000} 
+            pathOptions={{ color: '#10b981', fillColor: '#10b981', fillOpacity: 0.15, weight: 2 }} 
           />
         )}
 
-        {/* Marqueurs */}
-        {structures.map((s) => {
-          if (!s.latitude || !s.longitude) return null
-          const conf = getActivityConfig(s.activite)
-          const faviconUrl = s.site ? getFavicon(s.site) : null
+        {structures.filter(s => s.latitude && s.longitude).map(s => {
+          const config = getActivityConfig(s.activite)
           const isSelected = selectedStructureId === s.id
-          const icon = createCustomIcon(conf.color, conf.emoji, faviconUrl, isSelected)
-
+          
           return (
-            <React.Fragment key={s.id}>
-              <Marker
-                position={[s.latitude, s.longitude]}
-                icon={icon}
-                eventHandlers={{
-                  click: (e) => {
-                    e.originalEvent.stopPropagation()
-                    setSelectedStructureId(s.id)
-                    if (onMarkerClick) onMarkerClick(s)
-                  }
-                }}
-              />
-              {/* Cercle itinérant (rayon d'intervention) */}
-              {isSelected && s.est_itinerant && s.rayon_intervention && (
-                <Circle
-                  center={[s.latitude, s.longitude]}
-                  radius={s.rayon_intervention * 1000}
-                  pathOptions={{ color: '#f97316', fillColor: '#f97316', fillOpacity: 0.1, weight: 2, dashArray: '6 3' }}
-                />
-              )}
-            </React.Fragment>
+            <Marker
+              key={s.id}
+              position={[s.latitude, s.longitude]}
+              icon={createCustomIcon(config.color, config.icon, isSelected)}
+              eventHandlers={{
+                click: () => onMarkerClick && onMarkerClick(s),
+              }}
+            />
           )
         })}
       </MapContainer>
-
-      {/* Bouton plein écran */}
-      <button
-        onClick={toggleFullscreen}
-        title={isFullscreen ? 'Quitter le plein écran' : 'Plein écran'}
-        style={{
-          position: 'absolute', bottom: 16, right: 16, zIndex: 1000,
-          background: 'white', border: '2px solid #e2e8f0', borderRadius: 10,
-          padding: '8px 10px', cursor: 'pointer', boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
-          display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, fontSize: 13, color: '#1e293b'
-        }}
-      >
-        {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-        {isFullscreen ? 'Réduire' : 'Plein écran'}
-      </button>
     </div>
   )
 }
