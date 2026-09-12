@@ -32,7 +32,7 @@ export default function AssociationPage() {
           {/* Mission */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '100ms' }}>
             <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
-              <img src="/bonhomme-1.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
+              <img src="/illustrations/15.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-[#1566B1] mb-4 transition-colors">Notre mission</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
@@ -43,7 +43,7 @@ export default function AssociationPage() {
           {/* Valeurs */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '300ms' }}>
             <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
-              <img src="/bonhomme-2.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
+              <img src="/illustrations/7.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-emerald-700 transition-colors">Nos valeurs</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
@@ -54,7 +54,7 @@ export default function AssociationPage() {
           {/* Réseau */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '500ms' }}>
             <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
-              <img src="/bonhomme-3.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
+              <img src="/illustrations/14.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-amber-700 transition-colors">Notre réseau</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
@@ -65,7 +65,7 @@ export default function AssociationPage() {
           {/* Objectif */}
           <div className="group bg-white p-8 rounded-[2rem] shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 border border-slate-100 flex flex-col items-center text-center hover:-translate-y-2 transition-all duration-500 animate-in slide-in-from-bottom-10 fade-in duration-700 fill-mode-both" style={{ animationDelay: '700ms' }}>
             <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center p-2">
-              <img src="/bonhomme-4.png" alt="Personnage Handiboost" className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md" />
+              <img src="/illustrations/11.png" alt="Personnage Handiboost" className="w-full h-full object-contain scale-[2.5] transition-transform duration-500 drop-shadow-md" />
             </div>
             <h2 className="text-2xl font-black text-slate-800 mb-4 group-hover:text-purple-700 transition-colors">Notre objectif</h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
