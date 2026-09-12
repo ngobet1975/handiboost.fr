@@ -91,10 +91,10 @@ export default async function Home() {
                 <Card className="border-4 border-[#1566B1]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-[#1566B1] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#1566B1]/20 bg-white">
+                    <div className="w-full h-44 xl:h-52 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#1566B1]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '45s' }}>
                         {[...images1, ...images1].map((img, idx) => (
-                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-36 xl:h-44 w-auto object-contain mx-6 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3}s` }} />
                         ))}
                       </div>
                     </div>
@@ -112,10 +112,10 @@ export default async function Home() {
                 <Card className="border-4 border-[#FBA91C]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-[#FBA91C] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#FBA91C]/20 bg-white">
+                    <div className="w-full h-44 xl:h-52 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#FBA91C]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '38s', animationDelay: '-15s' }}>
                         {[...images2, ...images2].map((img, idx) => (
-                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.4}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-36 xl:h-44 w-auto object-contain mx-6 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.4}s` }} />
                         ))}
                       </div>
                     </div>
@@ -133,10 +133,10 @@ export default async function Home() {
                 <Card className="border-4 border-[#ED1B5F]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-[#ED1B5F] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#ED1B5F]/20 bg-white">
+                    <div className="w-full h-44 xl:h-52 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#ED1B5F]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '50s', animationDelay: '-5s' }}>
                         {[...images3, ...images3].map((img, idx) => (
-                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.8}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-36 xl:h-44 w-auto object-contain mx-6 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 0.8}s` }} />
                         ))}
                       </div>
                     </div>
@@ -154,10 +154,10 @@ export default async function Home() {
                 <Card className="border-4 border-[#654B9E]/20 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
                   <div className="h-6 bg-[#654B9E] w-full"></div>
                   <CardHeader className="pt-8 px-6 xl:pt-10 xl:px-8">
-                    <div className="w-full h-32 xl:h-36 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#654B9E]/20 bg-white">
+                    <div className="w-full h-44 xl:h-52 mb-6 xl:mb-8 flex items-center overflow-hidden rounded-xl border border-[#654B9E]/20 bg-white">
                       <div className="flex w-max animate-marquee items-center py-2" style={{ animationDuration: '42s', animationDelay: '-25s' }}>
                         {[...images4, ...images4].map((img, idx) => (
-                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-28 xl:h-32 w-auto object-contain mx-16 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 1.2}s` }} />
+                          <img key={idx} src={`/illustrations/${img}`} alt="Personnage Handiboost" className="h-36 xl:h-44 w-auto object-contain mx-6 drop-shadow-md animate-bob" style={{ animationDelay: `${(idx % 15) * 0.3 + 1.2}s` }} />
                         ))}
                       </div>
                     </div>
