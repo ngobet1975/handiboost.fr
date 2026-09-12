@@ -543,7 +543,7 @@ export default function BoostyAssistant() {
                     aria-label={s.text}
                     className="h-quick"
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '20px 12px', borderRadius: 18, background: 'rgba(255,255,255,0.05)', border: `1.5px solid ${C.aBorder}`, color: C.text, cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', fontWeight: 700, fontSize: '0.85em' }}>
-                    <span role="img" aria-hidden="true" style={{ fontSize: '2.2em' }}>{s.icon}</span>
+                    <span role="img" aria-hidden="true" style={{ fontSize: '3.8em', marginBottom: '8px' }}>{s.icon}</span>
                     <span style={{ lineHeight: 1.3 }}>{s.label}</span>
                   </button>
                 ))}
