@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { Search, ExternalLink, MapPin, Building2, Users, Landmark, AlertTriangle, CheckCircle2, Filter, X, ChevronLeft, Map as MapIcon, Phone, Mail, Globe, ShieldCheck, Car, Clock } from 'lucide-react'
+import { Search, ExternalLink, MapPin, Building2, Users, Landmark, AlertTriangle, CheckCircle2, Filter, X, ChevronLeft, Map as MapIcon, Phone, Mail, Globe, ShieldCheck, Car, Clock, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
