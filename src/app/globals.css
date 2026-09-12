@@ -178,8 +178,8 @@
   padding: 0.75rem 1rem !important;
   margin: 0.25rem !important;
 }
-.access-motor *:focus {
-  /* Ultra-visible focus ring */
+.access-motor *:focus-visible {
+  /* Ultra-visible focus ring only for keyboard navigation */
   outline: 4px solid #F7941D !important;
   outline-offset: 2px !important;
 }
@@ -241,6 +241,3 @@ body {
   outline: 3px solid #3b82f6 !important;
   outline-offset: 4px;
 }
-
-
-*:focus, *:focus-visible, a:focus, button:focus { outline: none !important; box-shadow: none !important; -webkit-tap-highlight-color: transparent !important; }
