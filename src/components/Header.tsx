@@ -28,19 +28,21 @@ export function Header() {
         Site en maintenance, attention informations non vérifiées pour le moment
       </div>
       <header className="px-6 lg:px-8 py-4 lg:py-6 flex items-center justify-between bg-white border-b-4 border-slate-200 shadow-sm relative">
-      <div className="flex items-center gap-4 lg:gap-5">
-        <Link href="/" onClick={closeMenu} className="block shrink-0">
-          <img src="/logo-handiboost.png" alt="Handiboost" className="h-12 lg:h-16 w-auto object-contain" />
-        </Link>
+      <div className="flex items-center gap-8 xl:gap-12">
+        <div className="flex items-center">
+          <Link href="/" onClick={closeMenu} className="block shrink-0">
+            <img src="/logo-handiboost.png" alt="Handiboost" className="h-12 lg:h-16 w-auto object-contain" />
+          </Link>
+        </div>
+        <nav className="hidden xl:flex items-center gap-6 2xl:gap-10 border-r-4 border-slate-200 pr-6 2xl:pr-10">
+          <Link href="/association" className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
+          <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
+          <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
+          <Link href="/actualites" className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
+          <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
+        </nav>
       </div>
-      <nav className="hidden xl:flex items-center gap-10 pr-10 border-r-4 border-slate-200">
-        <Link href="/association" className={getLinkClass('/association', 'text-blue-800')}>L'Association</Link>
-        <Link href="/pratiquants" className={getLinkClass('/pratiquants', 'text-blue-800')}>Pratiquants</Link>
-        <Link href="/professionnels" className={getLinkClass('/professionnels', 'text-purple-800')}>Professionnels</Link>
-        <Link href="/actualites" className={getLinkClass('/actualites', 'text-pink-700')}>Actualités</Link>
-        <Link href="/contact" className={getLinkClass('/contact', 'text-blue-800')}>Contact</Link>
-      </nav>
-      <div className="hidden xl:flex items-center gap-6 pl-2">
+      <div className="hidden xl:flex items-center gap-4 2xl:gap-6">
         <Button nativeButton={false} render={<Link href="/dons" />} variant="outline" className="text-xl font-extrabold border-4 border-pink-600 text-pink-700 hover:bg-pink-100 h-16 px-8 rounded-2xl transition-all">
           ❤️ Faire un don
         </Button>
